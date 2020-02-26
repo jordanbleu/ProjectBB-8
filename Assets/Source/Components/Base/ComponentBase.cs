@@ -173,7 +173,7 @@ namespace Assets.Source.Components.Base
             // if it doesn't exist, then create it
             if (systemObject == null)
             {
-                GameObject systemPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsDirectory}/System/{GameObjects.SystemObject}");
+                GameObject systemPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/System/{GameObjects.SystemObject}");
                 systemObject = Instantiate(systemPrefab);
                 systemObject.name = GameObjects.SystemObject;
             }

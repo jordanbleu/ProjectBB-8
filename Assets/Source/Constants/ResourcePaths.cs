@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Assets.Source.Constants
+﻿namespace Assets.Source.Constants
 {
     /// <summary>
     /// Paths to required resources should be defined here

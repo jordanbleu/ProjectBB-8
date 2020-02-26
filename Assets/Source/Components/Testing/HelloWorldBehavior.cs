@@ -1,5 +1,5 @@
-﻿using Assets.Source.Configuration;
-using Assets.Source.Components.Base;
+﻿using Assets.Source.Components.Base;
+using Assets.Source.Configuration;
 using UnityEngine;
 
 namespace Assets.Source.Behavior.Testing

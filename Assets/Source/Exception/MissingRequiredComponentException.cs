@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace Assets.BB8.Exception
+namespace Assets.Source.Exception
 {
     public class MissingRequiredComponentException : System.Exception
     {

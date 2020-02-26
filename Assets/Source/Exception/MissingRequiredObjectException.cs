@@ -1,4 +1,4 @@
-﻿namespace Assets.BB8.Exception
+﻿namespace Assets.Source.Exception
 {
     public class MissingRequiredObjectException : System.Exception
     {

@@ -1,7 +1,8 @@
-﻿using Assets.Source.Components.Base;
+﻿using Assets.Source.Configuration;
+using Assets.Source.Components.Base;
 using UnityEngine;
 
-namespace Assets.BB8.Behavior.Testing
+namespace Assets.Source.Behavior.Testing
 {
     // To see this in action open sample scene and click on "GameObject"
     // Then run the game
@@ -50,7 +51,7 @@ namespace Assets.BB8.Behavior.Testing
             transform.position = Vector3.zero;
 
             // here's an example of loading from the configuration repo
-            //Debug.Log($"Ayyy boiiiiiiiiiiii it's ya boi the create() method.  The configured language code is: '{ConfigurationRepository.SystemConfiguration.Language}'");
+            Debug.Log($"The configured language code is: '{ConfigurationRepository.SystemConfiguration.Language}'");
 
             base.Create();
         }

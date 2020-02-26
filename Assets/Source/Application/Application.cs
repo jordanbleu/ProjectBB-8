@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Assets.Source.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,8 +13,10 @@ namespace Assets.Source.Application
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         public static void Startup()
         {
-            Debug.Log("ass");
+            // Temporary sanity check.
+            Debug.Log($"Application started at {DateTime.Now}. ");
 
+            ConfigurationRepository.RefreshAll();
         }
 
     }

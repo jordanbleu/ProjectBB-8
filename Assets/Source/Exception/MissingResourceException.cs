@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Assets.BB8.Exception
+namespace Assets.Source.Exception
 {
     public class MissingResourceException : System.Exception
     {

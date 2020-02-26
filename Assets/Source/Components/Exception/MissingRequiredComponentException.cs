@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Assets.Source.Exception
+namespace Assets.Source.Components.Exception
 {
     public class MissingRequiredComponentException : System.Exception
     {

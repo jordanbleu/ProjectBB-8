@@ -16,5 +16,10 @@
         /// </summary>
         public static string ResourcesDirectory => $"{UnityEngine.Application.dataPath}/Resources";
 
+        /// <summary>
+        /// Points to the prefabs folder
+        /// </summary>
+        public static string PrefabsDirectory => $"{ResourcesDirectory}/Prefabs";
+
     }
 }

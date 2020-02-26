@@ -1,5 +1,6 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Configuration;
+using Assets.Source.Input.Constants;
 using UnityEngine;
 
 namespace Assets.Source.Behavior.Testing
@@ -64,6 +65,20 @@ namespace Assets.Source.Behavior.Testing
             // If you want to see some dope ass shit, change the "My Name" value in the inspector
             // while the game is running.  This is why unity is amazing.
             testStringus = $"Hello, {myName}.  Delta Tyme: {Time.deltaTime}. ";
+
+            // *** Try pressing these keys *** 
+            if (InputManager.IsKeyPressed(InputConstants.K_MENU_ENTER)) {
+                Debug.Log("you pressed the menu enter key");
+            }
+
+            if (InputManager.IsKeyReleased(InputConstants.K_MENU_ENTER)) {
+                Debug.Log("You let go of the enter key.");
+            }
+
+
+            if (InputManager.IsKeyHeld(InputConstants.K_MENU_DOWN)) {
+                Debug.Log("You are holding down the K_MENU_DOWN key.  Prepare to have the console spammed.");
+            }
 
             base.Step();
         }

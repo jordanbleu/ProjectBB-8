@@ -1,4 +1,4 @@
-﻿namespace Assets.Source.Exception
+﻿namespace Assets.Source.Components.Exception
 {
     public class MissingRequiredObjectException : System.Exception
     {

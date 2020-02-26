@@ -9,9 +9,8 @@ namespace Assets.Source.Configuration
     {
         public static SystemConfiguration SystemConfiguration { get; private set; }
 
-        // todo: These will be added later
-        //public static GamepadBindings GamepadBindings { get; private set; }
-        //public static KeyboardBindings KeyboardBindings { get; private set; }
+        public static GamepadBindings GamepadBindings { get; private set; }
+        public static KeyboardBindings KeyboardBindings { get; private set; }
 
         /// <summary>
         /// Reloads all configurations from disk into memory
@@ -20,8 +19,8 @@ namespace Assets.Source.Configuration
         {
             ConfigurationFactory factory = new ConfigurationFactory();
             SystemConfiguration = factory.LoadOrDefault<SystemConfiguration>();
-            //GamepadBindings = factory.LoadOrDefault<GamepadBindings>();
-            //KeyboardBindings = factory.LoadOrDefault<KeyboardBindings>();
+            GamepadBindings = factory.LoadOrDefault<GamepadBindings>();
+            KeyboardBindings = factory.LoadOrDefault<KeyboardBindings>();
 
         }
     }

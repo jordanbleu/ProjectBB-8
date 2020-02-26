@@ -1,10 +1,20 @@
-﻿using Assets.Source.Exception;
+﻿using Assets.Source.Components.Exception;
+using Assets.Source.Components.SystemObject;
+using Assets.Source.Constants;
+using Assets.Source.Input;
 using UnityEngine;
 
 namespace Assets.Source.Components.Base
 {
     public abstract class ComponentBase : MonoBehaviour
     {
+        /// <summary>
+        /// Provides access to the global input manager
+        /// </summary>
+        protected InputManager InputManager { get; private set; }
+
+        private GameObject systemObject;
+
         #region Resource Helper Methods
         /// <summary>
         /// Loads a component from the current gameObject, throwing an exception if one isn't found.
@@ -69,7 +79,7 @@ namespace Assets.Source.Components.Base
         /// </summary>
         protected T GetRequiredResource<T>(string path) where T : UnityEngine.Object
         {
-            T resource = Resources.Load<T>(path)
+            T resource = Resources.Load<T>(path) as T
                 ?? throw new MissingResourceException(path);
 
             return resource;
@@ -107,8 +117,11 @@ namespace Assets.Source.Components.Base
         #endregion
 
         #region overrides
-        // Wrap unity's behavior functionaity in our own overridable implementation
-        private void Awake() { Construct(); }
+        private void Awake()
+        {
+            InputManager = GetRequiredComponent<SystemObjectBehavior>(FindOrCreateSystemObject()).InputManager;
+            Construct(); 
+        }
         private void Start() { Create(); }
         private void Update() { Step(); }
         private void OnDestroy() { Destroy(); }
@@ -145,5 +158,27 @@ namespace Assets.Source.Components.Base
         public virtual void Activate() { }
         #endregion
 
+        #region SystemObject
+        /// <summary>
+        /// Call to get or create the system object, which houses things like the InputHandlers, etc
+        /// </summary>
+        protected GameObject FindOrCreateSystemObject()
+        {
+            // try to find the system object...
+            if (systemObject == null)
+            {
+                systemObject = GameObject.Find(GameObjects.SystemObject);
+            }
+
+            // if it doesn't exist, then create it
+            if (systemObject == null)
+            {
+                GameObject systemPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsDirectory}/System/{GameObjects.SystemObject}");
+                systemObject = Instantiate(systemPrefab);
+                systemObject.name = GameObjects.SystemObject;
+            }
+            return systemObject;
+        }
+        #endregion
     }
 }

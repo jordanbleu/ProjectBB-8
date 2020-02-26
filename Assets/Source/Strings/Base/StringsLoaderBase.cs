@@ -34,7 +34,7 @@ namespace Assets.Source.Strings.Base
         }
 
         // Deserializes the XML file into a list of strings
-        public StringResourceList DeserializeStrings(string path)
+        private StringResourceList DeserializeStrings(string path)
         {
             StringResourceList strings;
 

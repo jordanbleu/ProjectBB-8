@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<strings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <string name="test1">This is test 1</string>
+  <string name="test2">This is test 2</string>
+  <string name="test3">This is test 3</string>
+</strings>

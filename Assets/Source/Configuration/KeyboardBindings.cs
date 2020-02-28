@@ -4,9 +4,6 @@ using Assets.Source.Input.Constants;
 using Assets.Source.Input.Interfaces;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Source.Configuration
@@ -24,6 +21,12 @@ namespace Assets.Source.Configuration
             { InputConstants.K_MENU_ENTER,   new KeyCodeValue(Stringify(KeyCode.Return))     },
             { InputConstants.K_MENU_BACK,    new KeyCodeValue(Stringify(KeyCode.Escape))     },
 
+            // Player Controls
+            { InputConstants.K_MOVE_LEFT,   new KeyCodeValue(Stringify(KeyCode.A))      },
+            { InputConstants.K_MOVE_RIGHT,  new KeyCodeValue(Stringify(KeyCode.D))      },
+            { InputConstants.K_MOVE_DOWN,   new KeyCodeValue(Stringify(KeyCode.S))      },
+            { InputConstants.K_MOVE_UP,     new KeyCodeValue(Stringify(KeyCode.W))      },
+            { InputConstants.K_SHOOT,       new KeyCodeValue(Stringify(KeyCode.Space))  },
         };
 
         private static string Stringify(KeyCode key)

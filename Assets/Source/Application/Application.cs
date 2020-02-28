@@ -9,9 +9,6 @@ namespace Assets.Source.Application
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterAssembliesLoaded)]
         public static void Startup()
         {
-            // Temporary sanity check.
-            Debug.Log($"Application started at {DateTime.Now}. ");
-
             ConfigurationRepository.RefreshAll();
         }
 

@@ -21,8 +21,8 @@ namespace Assets.Source.Configuration
             { InputConstants.K_MENU_BACK,   new KeyCodeValue(GamepadConstants.GP_BBUTTON) },
 
             // Player Controls
-            { InputConstants.K_MOVE_LEFT,       new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_H, KeyCodeValue.AxisDirections.Positive) },
-            { InputConstants.K_MOVE_RIGHT,      new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_H, KeyCodeValue.AxisDirections.Negative) },
+            { InputConstants.K_MOVE_LEFT,       new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_H, KeyCodeValue.AxisDirections.Negative) },
+            { InputConstants.K_MOVE_RIGHT,      new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_H, KeyCodeValue.AxisDirections.Positive) },
             { InputConstants.K_MOVE_DOWN,       new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_V, KeyCodeValue.AxisDirections.Negative) },
             { InputConstants.K_MOVE_UP,         new KeyCodeValue(GamepadConstants.GP_LEFTSTICK_V, KeyCodeValue.AxisDirections.Positive) },
             { InputConstants.K_ATTACK_PRIMARY,  new KeyCodeValue(GamepadConstants.GP_ABUTTON) },

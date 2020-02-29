@@ -39,6 +39,11 @@ namespace Assets.Source.Components.Player
             // todo: vertical movement
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
 
+            #region Dashing Simple Implementation
+            //Very simple implementation of dashing, not final product
+            //This version just teleports the shit a little to the left/right
+            //Final version should include actual movement
+
             float dashDistance = .5f; //TODO: make this a constant somewhere
             if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
             {
@@ -48,6 +53,7 @@ namespace Assets.Source.Components.Player
             {
                 rigidBody.position += Vector2.right * dashDistance;
             }
+            #endregion
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY)) {
                 GameObject bullet = Instantiate(bulletPrefab);

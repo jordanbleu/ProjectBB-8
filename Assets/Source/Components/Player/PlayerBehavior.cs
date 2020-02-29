@@ -39,6 +39,16 @@ namespace Assets.Source.Components.Player
             // todo: vertical movement
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
 
+            float dashDistance = .5f; //TODO: make this a constant somewhere
+            if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
+            {
+                rigidBody.position += Vector2.left * dashDistance;
+            }
+            if (InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT))
+            {
+                rigidBody.position += Vector2.right * dashDistance;
+            }
+
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY)) {
                 GameObject bullet = Instantiate(bulletPrefab);
                 // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us

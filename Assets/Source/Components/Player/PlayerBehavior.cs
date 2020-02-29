@@ -39,13 +39,12 @@ namespace Assets.Source.Components.Player
             // todo: vertical movement
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
 
-
-            if (InputManager.IsKeyPressed(InputConstants.K_SHOOT)) {
+            if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY)) {
                 GameObject bullet = Instantiate(bulletPrefab);
                 // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
                 bullet.transform.position = transform.position;
             }
-
+                       
 
             base.Step();
         }

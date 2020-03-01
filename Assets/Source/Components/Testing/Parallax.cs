@@ -21,7 +21,7 @@ public class Parallax : ComponentBase
 
     public override void Construct()
     {
-        children = GetComponentsInChildren<GameObject>();
+        //children = GetComponentsInChildren<GameObject>();
         base.Construct();
     }
 

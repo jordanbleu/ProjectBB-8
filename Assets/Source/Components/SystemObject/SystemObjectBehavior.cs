@@ -25,10 +25,10 @@ namespace Assets.Source.Components.SystemObject
         public void Awake()
         {
             // todo:  This should be set via a settings value (trello card exists)
-            //InputManager = new InputManager(new KeyboardInputListener());
+            InputManager = new InputManager(new KeyboardInputListener());
 
             // To Test gamepad input, uncomment this line **********************************************************************************************
-            InputManager = new InputManager(new GamepadInputListener());
+            //InputManager = new InputManager(new GamepadInputListener());
         }
 
         public void Update()

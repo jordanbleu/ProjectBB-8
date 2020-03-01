@@ -114,6 +114,49 @@ namespace Assets.Source.Components.Base
 
             return tranformObject.gameObject;
         }
+
+        /// <summary>
+        /// Instantiates a prefab, maintaining the prefab's object name (dropping unity's "(Clone)" suffix).  The
+        /// prefab will be instantiated in the prefab's default position
+        /// </summary>
+        /// <param name="prefab">Prefab to instantiate</param>
+        /// <returns>The Instance</returns>
+        protected static GameObject InstantiatePrefab(GameObject prefab)
+        {
+            GameObject instance = Instantiate(prefab);
+            instance.name = prefab.name;
+            return instance;
+        }
+
+        /// <summary>
+        /// Instantiates a prefab, maintainins the prefab's object name (dropping unity's "(Clone)" sufix).
+        /// </summary>
+        /// <param name="prefab">Prefab to instantiate</param>
+        /// <param name="parentTransform">The parent object in the hierarchy</param>
+        /// <returns>The Instance</returns>
+        protected static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform)
+        {
+            GameObject instance = Instantiate(prefab, parentTransform);
+            instance.name = prefab.name;
+            return instance;
+        }
+
+        /// <summary>
+        /// Instantiates a prefab, maintainins the prefab's object name (dropping unity's "(Clone)" sufix).
+        /// Re-positions the object to the specified <paramref name="position"/> after instantiation
+        /// </summary>
+        /// <param name="prefab">Prefab to instantiate</param>
+        /// <param name="parentTransform">The parent object in the hierarchy</param>
+        /// <param name="position">The position to relocate the instance to</param>
+        /// <returns>The Instance</returns>
+        /// 
+        protected static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform, Vector2 position)
+        {
+            GameObject instance = Instantiate(prefab, parentTransform);
+            instance.name = prefab.name;
+            instance.transform.position = position;
+            return instance;
+        }
         #endregion
 
         #region overrides

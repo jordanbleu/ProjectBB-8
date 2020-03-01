@@ -1,4 +1,6 @@
 ﻿using Assets.Source.Components.Base;
+using Assets.Source.Components.Projectile;
+using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -20,7 +22,7 @@ namespace Assets.Source.Components.Player
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
 
-            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/PlayerBullet");
+            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
 
             base.Construct();
         }
@@ -41,17 +43,22 @@ namespace Assets.Source.Components.Player
 
 
             if (InputManager.IsKeyPressed(InputConstants.K_SHOOT)) {
-                GameObject bullet = Instantiate(bulletPrefab);
+                GameObject bullet = InstantiatePrefab(bulletPrefab);
+                bullet.transform.position = transform.position.Copy();
                 // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
                 bullet.transform.position = transform.position;
             }
-
-
             base.Step();
         }
 
-
-
+        public void ReactToProjectileHit(Collision2D collision)
+        {
+            // If something hits the player that is not the player bullet, we got hit
+            if (!collision.otherCollider.gameObject.TryGetComponent<PlayerBulletBehavior>(out _)) 
+            { 
+                Debug.Log($"Oof you got hit by {collision.gameObject.name} fam.");
+            }
+        }
 
     }
 }

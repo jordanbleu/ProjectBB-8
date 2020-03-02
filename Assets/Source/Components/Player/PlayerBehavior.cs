@@ -1,5 +1,7 @@
 ﻿using Assets.Source.Components.Actor;
 using Assets.Source.Components.Base;
+using Assets.Source.Components.Camera;
+using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -7,28 +9,35 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ComponentBase
+    public class PlayerBehavior : ComponentBase, IProjectileReactor
     {
         private readonly float MOVE_SPEED = 2f;
 
         // Components
         private Rigidbody2D rigidBody;
         private ActorBehavior actorBehavior;
-        private SpriteRenderer spriteRenderer;
 
         // Prefab references
         private GameObject bulletPrefab;
-        private GameObject explosionObject;
+        private GameObject explosionPrefab;
+
+        // Hierarchy References
+        private GameObject cameraObject;
+
+        // Other object's Components
+        private CameraEffectComponent cameraEffector;
 
         public override void Construct()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
-            spriteRenderer = GetRequiredComponent<SpriteRenderer>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
+            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
-            explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+            cameraObject = GetRequiredObject("PlayerVCam");
+            cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
+
             base.Construct();
         }
 
@@ -80,10 +89,18 @@ namespace Assets.Source.Components.Player
             // todo: this is just placeholder stuff
             if (actorBehavior.Health <= 0) 
             {
-                InstantiatePrefab(explosionObject, transform.position);
+                InstantiatePrefab(explosionPrefab, transform.position);
                 Destroy(gameObject);
             }        
         }
 
+        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
+        {
+            if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
+            {
+                actorBehavior.Health -= baseDamage;
+                cameraEffector.TriggerImpulse1();
+            }
+        }
     }
 }

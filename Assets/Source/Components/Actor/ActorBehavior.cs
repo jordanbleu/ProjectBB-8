@@ -1,5 +1,4 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Reactor.Interfaces;
 using UnityEngine;
 
 namespace Assets.Source.Components.Actor
@@ -12,16 +11,14 @@ namespace Assets.Source.Components.Actor
     /// responsible for checking the status 
     /// </para>
     /// </summary>
-    public class ActorBehavior : ComponentBase, IProjectileReactor
+    public class ActorBehavior : ComponentBase
     {
         [SerializeField]
         private int _health;
-        public int Health => _health;
-
-        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
-        {
-            _health -= baseDamage;
+        public int Health 
+        {            
+            get => _health; 
+            set => _health = value; 
         }
-
     }
 }

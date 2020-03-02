@@ -15,6 +15,10 @@
         public const string K_MOVE_RIGHT = "K_MOVE_RIGHT";
         public const string K_MOVE_DOWN  = "K_MOVE_DOWN";
         public const string K_MOVE_UP    = "K_MOVE_UP";
-        public const string K_SHOOT = "K_SHOOT";
+        public const string K_ATTACK_PRIMARY = "K_ATTACK_PRIMARY";
+        public const string K_PAUSE = "K_PAUSE";
+        public const string K_DASH_LEFT = "K_DASH_LEFT";
+        public const string K_DASH_RIGHT = "K_DASH_RIGHT";
+
     }
 }

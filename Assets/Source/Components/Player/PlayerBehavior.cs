@@ -1,6 +1,5 @@
-﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Projectile;
-using Assets.Source.Components.Reactor.Interfaces;
+﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -14,21 +13,33 @@ namespace Assets.Source.Components.Player
 
         // Components
         private Rigidbody2D rigidBody;
+        private ActorBehavior actorBehavior;
+        private SpriteRenderer spriteRenderer;
 
         // Prefab references
         private GameObject bulletPrefab;
+        private GameObject explosionObject;
 
         public override void Construct()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
+            actorBehavior = GetRequiredComponent<ActorBehavior>();
+            spriteRenderer = GetRequiredComponent<SpriteRenderer>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
 
+            explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
             base.Construct();
         }
 
-
         public override void Step()
+        {
+            UpdatePlayerControls();
+            UpdateActorStatus();
+            base.Step();
+        }
+
+        private void UpdatePlayerControls()
         {
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
@@ -38,26 +49,23 @@ namespace Assets.Source.Components.Player
             float verticalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_UP) * MOVE_SPEED) -
                 (InputManager.GetAxisValue(InputConstants.K_MOVE_DOWN) * MOVE_SPEED);
 
-            // todo: vertical movement
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
 
 
-            if (InputManager.IsKeyPressed(InputConstants.K_SHOOT)) {
-                GameObject bullet = InstantiatePrefab(bulletPrefab);
-                bullet.transform.position = transform.position.Copy();
-                // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
-                bullet.transform.position = transform.position;
+            if (InputManager.IsKeyPressed(InputConstants.K_SHOOT))
+            {
+                GameObject bullet = InstantiatePrefab(bulletPrefab, transform.position);
             }
-            base.Step();
         }
 
-        public void ReactToProjectileHit(Collision2D collision)
+        private void UpdateActorStatus()
         {
-            // If something hits the player that is not the player bullet, we got hit
-            if (!collision.otherCollider.gameObject.TryGetComponent<PlayerBulletBehavior>(out _)) 
-            { 
-                Debug.Log($"Oof you got hit by {collision.gameObject.name} fam.");
-            }
+            // todo: this is just placeholder stuff
+            if (actorBehavior.Health <= 0) 
+            {
+                InstantiatePrefab(explosionObject, transform.position);
+                Destroy(gameObject);
+            }        
         }
 
     }

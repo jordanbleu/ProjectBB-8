@@ -146,11 +146,11 @@ namespace Assets.Source.Components.Base
         /// Re-positions the object to the specified <paramref name="position"/> after instantiation
         /// </summary>
         /// <param name="prefab">Prefab to instantiate</param>
-        /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <param name="position">The position to relocate the instance to</param>
+        /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
         /// 
-        protected static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform, Vector2 position)
+        protected static GameObject InstantiatePrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;

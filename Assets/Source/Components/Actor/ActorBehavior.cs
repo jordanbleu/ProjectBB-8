@@ -23,12 +23,5 @@ namespace Assets.Source.Components.Actor
             _health -= baseDamage;
         }
 
-        public override void Step()
-        {
-            if (_health <= 0) {
-                Debug.LogError("YOU LOST THE GAME!?!?!?!");
-            }
-            base.Step();
-        }
     }
 }

@@ -16,8 +16,8 @@ public class AsteroidLevelBehavior : ComponentBase
 
     public void SpawnAsteroid()
     {
-        float x = UnityEngine.Random.Range(-2.5f, 2.5f);
-        float y = UnityEngine.Random.Range(1.5f, 2.5f);
-        InstantiatePrefab(asteroidPrefab, null, new Vector2(x, y));
+        float x = Random.Range(-1.5f, 1.5f);
+        float y = Random.Range(1.5f, 2.5f);
+        InstantiatePrefab(asteroidPrefab, new Vector3(x, y, transform.position.z));
     }
 }

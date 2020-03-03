@@ -21,7 +21,7 @@ Sam Grieser
 
 ## Concept
 
-The game is a space shooter with a super overly dramatic / cheesy 80s style badass story.  
+The game is a space shooter with a super overly dramatic / cheesy 80s style badass story.  See the  ```/Documentation/StoryOverview.md``` file for a bit more details.
 
 
 ## Gameplay
@@ -31,142 +31,225 @@ The game is a space shooter with a super overly dramatic / cheesy 80s style bada
 * Upgradable Ship (?)
 * Side missions
 
-## Story Overview
+## Links
+* **GitHub**: https://github.com/jordanbleu/ProjectBB-8
+* **Trello**: https://trello.com/b/i2WahbPS/project-bb-8
 
-### Level 1
+## Development
 
-* Player is attacking an enemy ship with a squad of guys
-* Player's ship is nearly fully upgraded
-* Player meets his three handlers
-  * His commander
-  * A technical advisor for his ship
-  * A cute nurse who monitors his vitals 
-* Suddenly a huge ship with a massive plasma cannon destroys the whole squad
-* player crashes into an abandoned planet
+* Use the trello board to figure out what to do
+* Pull a card over to your column
+* Create a branch off of master named whatever you want 
+* Make code change, commit, push, create pull request
+* Move trello card over to "done"
 
-### Post Level 1 cutscene
+___
 
-* Oh shit player is alive!?
-* Commander tells him that the giant plasma is coming straight for earth!
-* Player gets up, nurse warns him against it 
-* Player is too badass to listen
-* Finds a crashed ship, and fixes it up
-* Flies back into space 
+## Unity Project Structure
 
-### Level 2
+#### Animations
 
-* Player fights enemies in space with his new shitty ship
-* Ship talks to player, is a huge smartass
-  * Ship is a cargo ship and isn't meant for combat
-  * Voices his displeasure at this
-* Ship malfunctions sometimes
-* Player finds giant spider boss and does a brief boss battle (but it gets away)
-* Ship unlocks new dodge ability
+Animation files (but **not** sprite sheets) go inside the here.  There should be a folder added for each animator that contains the actual animations and the animator controller.  Sprite sheets will be added to the sprites folder.
+
+#### Rendering
+
+This folder likely won't ever need to be touched at all.  It contains the LWRP (LightWeight Render Pipeline) data assets, which get applied to scenes automatically if you create them.
+
+#### Resources
+
+> Everything in this folder will be included in the game build.
+
+This folder contains resources that can be loaded in code on the fly.  This includes things such as prefabs, static files, etc.  It can also be used to load things such as textures but i'm not sure why we'd need to do that.
+
+Resources contains several sub-folders:
+
+* Prefabs: Prefabs should be added to categorized folders no more than 1 layer deep
+
+Example:
+
+*Resources > Prefabs > **Projectiles > Asteroid***
+
+Exceptions can be made to this rule but the idea is to limit how deep the folder structure goes so we can limit the amount of magic strings in code we need to access these files.
+
+#### Scenes
+
+All scenes should be saved in this folder.  All scenes that are not going to be included in the final build can be placed in the "testingScenes" folder.
+
+#### Source
+
+This is where all the code goes (Except unit tests).  We will come back to this.
+
+#### Sprites
+
+All sprites and sprite sheets should go inside the sprites folder.  Any non-production ready sprite should be placed inside the "Testing" folder so nobody gets confused and uses a placeholder sprite.
+
+#### Unit Tests
+
+This folder contains code for unit tests specifically.  This folder shows as a second project in visual studio because of it's separate Assembly Definition file (.asmdef).
+
+There's also a **_testResoruces** folder here.  This can be used for static files that are part of unit tests.
+
+#### ProjectBB-8 file
+
+This is an **Assembly Definition** file.  These are similar to .csproj files but they only compile bits and pieces of the code base.  This is how unity is able to compile so insanely fast.  
+
+See:
+https://docs.unity3d.com/Manual/ScriptCompilationAssemblyDefinitionFiles.html
+
+Eventually we may wish to look into breakout out our project into separate assemblies to make it build quicker but as of right now, i'd avoid touching this file.  If we add any external references, unity will automatically add their references to this file for us.
+
+___
+
+## Code Standards
+
+### Folder / Namespace structure
+
+> Every single piece of game code should exist in the "source" folder.
+
+It's actually extremely difficult to add code outside of this folder because the assembly definition is set up so that visual studio mounts this folder as its root in the project. 
+
+Things outside this folder will not build.  
+
+### Code Structure
+
+> Abstractions go inside the base folders, implementations go in the root of the folder
+
+Folders Allowed:
+
+* **Base**: abstract classes
+* **Constants**: Static constant classes related to this group of code
+* **Interfaces**: Interfaces only
+* **Factory**: Factory classes
+
+Any other classes should be instantiatable implementations.  We don't need sub-folders to organize these implementations any further.  If there's still confusion, either add a new folder to the root of the source / components folder or make the names better.  
+
+Components follow the same rule except their folders are within the components folder.  The components folder itself additionally follows this rule as well.
 
 
-### Level 3
+> Namespaces should follow this same structure
 
-* Player enters an asteroid field.  Now needs to fight enemies and dodge asteroids
-* Ship continues being a smart ass
-* At the end, the player catches up to the giant spider boss and fights it
-* Also unlocks an upgrade module, so player can pick what component to upgrade
+Namespaces should follow the exact same structure as the folders.
 
-### Level 4
+> Every class which inherits from ```ComponentBase``` needs to go inside the *Components* folder
 
-* Player fights through more waves of enemies 
-* Unlocks a missile weapon for his ship
+(more on this later)
 
-### Level 5
+> Classes which are not components can be added to folders in the Source folder, and should be unit tested if possible
 
-* Player fights through more enemies.  Some enemies can only be destroyed with bombs.
-* Fights a new boss that has parts that can only be destroyed with bombs
-  * Also that somehow utilizes the dash attack
+Non-Unity specific code can be added outside the Components folder.  Test driven development becomes possible here and should be used whenever we can.  
 
-### Level 6 
+> Extension classes should go in the "Extensions" folder and be named in an obvious way
 
-* Ship continues being a smartass 
-* General tells you that you're getting close, but you're entering the dark zone 
-* This level is spent in super darkness, fighting enemies
-* Fight a giant robot snake boss at the end (that you fight in the dark)
-* Unlock double blasters
+Extension classes should be named like ______Extensions.  This gets weird though.  If you're extending the string class you should name it StringExtensions, but for Vector3 / Vector2 its okay to just put the code inside VectorExtensions because Vector3 is a sub class of Vector2.
 
-### Level 7
+> Avoid Magic Strings and Magic Numbers
 
-* Level is filled with extra tiny enemies that kamikaze you
-* Come to an area where oxygen is limited
-* player goes unconcscious
-* Ship is a smart ass, but despite hating you, he revives you
-  * "Don't think its because I like you.  I just don't want us to die"
-* Player unlocks Magnetic Blast, which repels all projectiles back to enemies
+For things like UI and dialogue, **NEVER USE HARD CODED STRINGS**.  Strings such as these need to be added to strings xmls in case we ever wish to localize our game.  
 
-### Level 8
+For references, etc. prefer to use a private constant string, even if the string is only used once.  The memory footprint is the same, and it keeps things readable.
 
-* More space shooting
-* Fight boss which doesn't take any direct damage, only from projectiles 
-  * Requires using the magneto blast
+Same thing with integers or floats.  I'd rather see a constant at the top saying PLAYER_START_HEALTH so i don't need to sift through code to see what the player start health is.
 
-### Level 9 
+### Components
 
-* More space shooting
-* Nurse tells you "something fishy is going on.  Watch your back"
-* Ship tells you he doesn't trust any of those people
-* Unlock Remote bomb
+> Every single "component" class should be somewhere within the "Components" folder, and everything within the "Components" folder should be a component class
 
-### Level 10
+A **component class** is a class that can be dragged and dropped onto game objects in Unity.  Having all of these classes in this folder makes it beautifully obvious what can be dragged onto objects in unity.
 
-* More space shooting lol
-* fight a boss that requires detonating remote bombs into a tricky weak spot 
-* recieve a space transmission from the main villian of the game
-* He eggs you on, tells you to come get him with your weak pathetic excuse for a ship
-* The ship takes offense to this, says "lets kick his ass" or whatever
-* Ship is starting to warm up to you
-* Also, unlock a shield
+The "base folders" rule still applies to the component classes too though.  We can have a "base" folder inside a component class folder, or whatever, as long as we're not dinguses who try to drag a base class onto an object.
 
-### Level 11 
+In our case, these classes will almost always inherit from ```ComponentBase```.  Component Base is a class that sits between our components and the Unity "MonoBehaviour" class in the inheritance structure. 
 
-* This level takes place close to the sun.  Heat slowly damages your ship, requiring you to collect health pickups constantly
-* Player unlocks a plasma cannon that only works 3 times per level (?)
-* Nurse tells you that she has to tell you something
-* She says that before she tells you, you have to know that she's in love with you
-* ...but she's also rigged your ship to self destruct
-* She gets shot by someone off screen and dies
+**Random Pro tip**: Be careful creating component scripts via unity (rather than visual studio).  Unity doesn't add namespaces, so you'll have to add one manually.
 
-### Level 12
+#### ComponentBase
 
-* A timer begins.  The player needs to destroy the ship before it reaches earth
-  * Also before he self destructs
-* The general reveals that he was the one who shot the nurse
-* He commends you for making it this far
-* The general was working for the main villian the whole time
-* You were never meant to survive this long
-* The technical advisor also chimes in
-* That giant ship youre chasing is HIS CREATION!
-* Ship chimes in, says he thinks he can disable the self destruct, but you cannot take any damage at all
-* Not a problem because there's not enemies around right
-* Two freaking ships appear
-* The general says "Do you like our fancy war ships?"
-* Him and the technical advisor laugh
-* Fight the two ships, and have to not take any damage at all or you die (the shield helps here)
-* Kill the two ships
-* Your ship is now determined, and is like "Lets go kick this guys ass!"
+```ComponentBase``` gives us a few main benefits:
+ 
+* It allows us to write global helper methods.  These include things like .```GetRequiredComponent<T>``` which automatically performs null checking if we expect a component to exist on an object.
+* It gives us the ability to control every single component on a global level.  Things such as global exception handling or game speed manipulation are now much easier.  
+* Overriding values for Step, create, etc. is much easier than remembering the arbitrary method names "Update", "Activate", etc.
 
-### Level 13
+Basically, every single component should inherit from ComponentBase.  The one exception we have so far is for the ```SystemObjectBehavior```, which can't because it gets created *from* ComponentBase which causes infinite recursion.
 
-* This is it.  The final battle. 
-* Earth is in the background.  You must destroy the final massive big ass ship
-* Sometimes it'll shoot missiles towards the earth, you have to shoot them down
-* You are requried to use the right weapon in the right situations, all gameplay mechanics are used 
-* Destroy ship 
-* Your ship gets hit with debris
-* The ship's AI chip was damaged, so your ship can't speak very well. 
-* You go spiralling out of control
-* Crash into the earth
-* The ship is mostly destroyed, but the ship manages to say "It was an honor...friend" or something dramatic
-* Ship goes offline
-* Player freaks out, is very upset
-* Smashes fists against the ship
-* Suddenly ship comes back to life
-* Says something smart ass like "Please do not hit me, who do you think i am!?"
-* Player flies away from earth into space, happily ever after
-* Credits roll
+```ComponentBase``` has a few overridable methods: 
+
+* **Construct**: This is the closest thing to a constructor we are allowed to use in Unity.  Here we set up references, etc.  At this point in code, the structure of everything is set up but things aren't rendered yet. (Unity's equivalent of Awake())
+* **Create**: This happas after Construct, when the object is ready to start doing things.  Here you can put code such as initializing positions, etc. (Unity's equivalent of Start())
+* **Step**: This is the main game loop.  This code is called every single frame.  (Unity's equivalent of Update())
+* **Destroy**: This code runs just before an object is destroyed.  (Unity's equivalent of OnDestroy())
+* **Activate**: This code runs when an object is activated (Unity's equivalent of OnEnable())
+
+Another important job of the ComponentBase is keeping track of the ```SystemObject```.
+
+#### SystemObject / SystemObjectBehavior
+
+The system object is an important object, and it should be an object that always exists no matter what.  It never needs to be manually added to the unity hierarchy because it gets created by ```ComponentBase``` whenever one is created.  
+
+The system object is simply a prefab that gets created.  But it contains our InputManager which tracks user inputs automatically.  The InputManager can be accessed from any ComponentBase via the ```InputManager``` property.  If the System Object needs to be accessed directly, you can use the ```FindOrCreateSystemObject()``` method.
+
+#### InputManager
+
+> Do not ever use unity's input system on its own.  It is stupid and dumb.
+
+When checking inputs, you should set up key bindings, and is the ComponentBase's ```InputManager``` property, along with one of the following methods:
+
+* ```IsKeyDown()```: Check if a key is currently held down this frame
+* ```IsKeyHit()```: Checks if a key is currently pressed this frame but wasn't pressed last frame (aka, key was PRESSED)
+* ```IsKeyReleased```: Checks if a key is currrently up, but was down last frame
+* ```GetAxis```: This will return a raw input value.  For buttons, this simply returns 1 for pressed or 0 for not pressed.  However for things like controller joysticks, this will returna value *between* 0 and 1.
+
+### Code Style
+
+> The first thing in any component should be the inspector variables
+
+These are the most exposed variables and thus should be the easiest to find. 
+
+Additionally...  
+
+> Inspector variables should never ever be public
+
+Public fields goes against one of the main pillars of object oriented programming (encapsulation) and I hate that Unity encourages that.  If the inspector variable will be used only within the current component, do this:
+
+```C#
+  [SerializeField]
+  private string testStringus;
+```
+
+If an inspector value should be exposed to the public or protected, do this:
+
+```C#
+  [SerializeField]
+  private string _publicInspectorString;
+  public string PublicInspectorString
+  {
+      get => _publicInspectorString; 
+      set => _publicInspectorString = value; 
+  }
+```
+
+This is an ugly giant block of code right?  That leaves us to the next thing:
+
+> Avoid inspector values unless they are useful
+
+It'd be nice if our code base was smart enought to set itself up without us.  If a reference can be grabbed programatically, don't use inspector variables.  Utilize code such as ```GetRequiredComponent```, ```GetRequiredObject```, etc.
+
+The preference is to have prefabs be completely usable with zero configuration on the inspector.  This will save us time setting up tons of levels.
+
+> Summary Tags
+
+Pretty much every class should have a summary tag.  Public methods on classes generally should as well.  
+
+Private members don't need summary tags, but a comment isn't bad.  I should be able to figure out a class' purpose without looking at code.  
+
+> When in doubt, just follow the .NET standard
+
+Just google it.
+
+
+
+
+
+
+
 

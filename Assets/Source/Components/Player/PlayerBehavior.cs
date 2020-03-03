@@ -1,5 +1,6 @@
-﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Projectile;
+﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
+using Assets.Source.Components.Camera;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -8,27 +9,46 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ComponentBase
+    public class PlayerBehavior : ComponentBase, IProjectileReactor
     {
         private readonly float MOVE_SPEED = 2f;
 
         // Components
         private Rigidbody2D rigidBody;
+        private ActorBehavior actorBehavior;
 
         // Prefab references
         private GameObject bulletPrefab;
+        private GameObject explosionPrefab;
+
+        // Hierarchy References
+        private GameObject cameraObject;
+
+        // Other object's Components
+        private CameraEffectComponent cameraEffector;
 
         public override void Construct()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
+            actorBehavior = GetRequiredComponent<ActorBehavior>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
+            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+
+            cameraObject = GetRequiredObject("PlayerVCam");
+            cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
 
             base.Construct();
         }
 
-
         public override void Step()
+        {
+            UpdatePlayerControls();
+            UpdateActorStatus();
+            base.Step();
+        }
+
+        private void UpdatePlayerControls()
         {
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
@@ -38,7 +58,6 @@ namespace Assets.Source.Components.Player
             float verticalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_UP) * MOVE_SPEED) -
                 (InputManager.GetAxisValue(InputConstants.K_MOVE_DOWN) * MOVE_SPEED);
 
-            // todo: vertical movement
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
 
             #region Dashing Simple Implementation
@@ -63,17 +82,25 @@ namespace Assets.Source.Components.Player
                 // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
                 bullet.transform.position = transform.position;
             }
-            base.Step();
         }
 
-        public void ReactToProjectileHit(Collision2D collision)
+        private void UpdateActorStatus()
         {
-            // If something hits the player that is not the player bullet, we got hit
-            if (!collision.otherCollider.gameObject.TryGetComponent<PlayerBulletBehavior>(out _)) 
-            { 
-                Debug.Log($"Oof you got hit by {collision.gameObject.name} fam.");
+            // todo: this is just placeholder stuff
+            if (actorBehavior.Health <= 0) 
+            {
+                InstantiatePrefab(explosionPrefab, transform.position);
+                Destroy(gameObject);
+            }        
+        }
+
+        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
+        {
+            if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
+            {
+                actorBehavior.Health -= baseDamage;
+                cameraEffector.TriggerImpulse1();
             }
         }
-
     }
 }

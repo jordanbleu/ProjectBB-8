@@ -2,63 +2,60 @@
 using Assets.Source.Constants;
 using UnityEngine;
 
-public class Parallaxer : ComponentBase
+namespace Assets.Source.Components.Environment
 {
-    private readonly int LAYERS_PER_GROUP = 3; //just in case we decide to change it eventually
-    private readonly string PARALLAX_PREFAB_DIRECTORY = $"{ResourcePaths.PrefabsFolder}/Environment";
-    private readonly int SORTING_ORDER = -10; //we want these images to be behind everything else
-
-    [System.Serializable]
-    public struct ParallaxInfo
+    public class ParallaxComponent : ComponentBase
     {
-        public string name;
-        public Sprite sprite;
-        [Range(1, 1000)]
-        [Tooltip("1 will not move at all, 1000 will move the fastest. Calculates speed using log of this value")]
-        public float parallaxEffect;
-    };
+        private readonly int LAYERS_PER_GROUP = 3; //just in case we decide to change it eventually
+        private readonly int SORTING_ORDER = -10; //we want these images to be behind everything else
 
-    [Tooltip("Each Parallax Info is the information needed to generate one layer of the parallax effect")]
-    public ParallaxInfo[] parallaxInfos;
-
-    public override void Construct()
-    {
-        Transform startingPos = Camera.main.transform;
-        transform.position = startingPos.position;
-
-        ConstructParallaxGroups();
-
-        base.Construct();
-    }
-
-    private void ConstructParallaxGroups()
-    {
-        int tempSortingOrder = SORTING_ORDER;
-        int index = 0;
-        foreach (ParallaxInfo parallaxInfo in parallaxInfos)
+        [System.Serializable]
+        public struct ParallaxInfo
         {
-            GameObject parallaxGroupPrefab = InstantiatePrefab(GetRequiredResource<GameObject>($"{PARALLAX_PREFAB_DIRECTORY}/ParallaxGroup"), transform.position);
-            parallaxGroupPrefab.name = $"{parallaxInfo.name}Group";
+            public string name;
+            public Sprite sprite;
+            [Range(1, 1000)]
+            [Tooltip("1 will not move at all, 1000 will move the fastest. Calculates speed using log of this value")]
+            public float parallaxEffect;
+        };
 
-            ParallaxGroup parallaxGroup = parallaxGroupPrefab.GetComponent<ParallaxGroup>();
-            parallaxGroup.Parallaxer = this;
-            parallaxGroup.Sprite = parallaxInfo.sprite;
-            parallaxGroup.ParallaxEffect = parallaxInfo.parallaxEffect;
-            parallaxGroup.Name = parallaxInfo.name;
-            parallaxGroup.SortingOrder = tempSortingOrder;
+        [Tooltip("Each Parallax Info is the information needed to generate one layer of the parallax effect")]
+        public ParallaxInfo[] parallaxInfos;
 
-            tempSortingOrder++;
-            index++;
+        public override void Construct()
+        {
+            Transform startingPos = UnityEngine.Camera.main.transform;
+            transform.position = startingPos.position;
+
+            ConstructParallaxGroups();
+
+            base.Construct();
+        }
+
+        private void ConstructParallaxGroups()
+        {
+            GameObject parallaxGroupResource = GetRequiredResource<GameObject>($"{ResourcePaths.EnvironmentPrefabsFolder}/ParallaxGroup");
+            int tempSortingOrder = SORTING_ORDER;
+
+            foreach (ParallaxInfo parallaxInfo in parallaxInfos)
+            {
+                GameObject parallaxGroupPrefab = InstantiatePrefab(parallaxGroupResource, transform.position);
+                parallaxGroupPrefab.name = $"{parallaxInfo.name}Group";
+
+                ParallaxGroupComponent parallaxGroupComponent = parallaxGroupPrefab.GetComponent<ParallaxGroupComponent>();
+                parallaxGroupComponent.Parallaxer = this;
+                parallaxGroupComponent.Sprite = parallaxInfo.sprite;
+                parallaxGroupComponent.ParallaxEffect = parallaxInfo.parallaxEffect;
+                parallaxGroupComponent.Name = parallaxInfo.name;
+                parallaxGroupComponent.SortingOrder = tempSortingOrder;
+
+                tempSortingOrder++;
+            }
+        }
+
+        public int GetLayersInGroup()
+        {
+            return LAYERS_PER_GROUP;
         }
     }
-
-    public int GetLayersInGroup()
-    {
-        return LAYERS_PER_GROUP;
-    }
-
-    public string GetPrefabDirectory()
-    {
-        return PARALLAX_PREFAB_DIRECTORY;
-    }
-}
+}   

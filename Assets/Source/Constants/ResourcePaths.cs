@@ -23,5 +23,10 @@
         /// </summary>
         public static string PrefabsFolder => $"Prefabs";
 
+        /// <summary>
+        /// Points to the environment folder within the prefabs folder for more speicifc prefabs
+        /// </summary>
+        public static string EnvironmentPrefabsFolder = $"{PrefabsFolder}/Environment";
+
     }
 }

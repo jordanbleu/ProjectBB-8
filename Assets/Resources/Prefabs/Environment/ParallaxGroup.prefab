@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9116710293916564297}
-  - component: {fileID: 8195606559181747766}
+  - component: {fileID: 1992491579966116173}
   m_Layer: 0
   m_Name: ParallaxGroup
   m_TagString: Untagged
@@ -31,7 +31,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8195606559181747766
+--- !u!114 &1992491579966116173
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -40,13 +40,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 6783084206135342163}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a5033657bff44bba85bbfd52e60df3d, type: 3}
+  m_Script: {fileID: 11500000, guid: df8e4c818132a45928fa10e6477fce9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  dimensions: {x: 10, y: 20}
-  parallaxLayerInfo:
-    sprite: {fileID: 0}
-    parallaxEffect: 0
-  cam: {fileID: 0}
-  children: []
-  sprites: []

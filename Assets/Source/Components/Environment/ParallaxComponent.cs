@@ -22,14 +22,13 @@ namespace Assets.Source.Components.Environment
         [Tooltip("Each Parallax Info is the information needed to generate one layer of the parallax effect")]
         public ParallaxInfo[] parallaxInfos;
 
-        public override void Construct()
+        public override void Create()
         {
+            ConstructParallaxGroups();
             Transform startingPos = UnityEngine.Camera.main.transform;
             transform.position = startingPos.position;
 
-            ConstructParallaxGroups();
-
-            base.Construct();
+            base.Create();
         }
 
         private void ConstructParallaxGroups()
@@ -43,7 +42,7 @@ namespace Assets.Source.Components.Environment
                 parallaxGroupPrefab.name = $"{parallaxInfo.name}Group";
 
                 ParallaxGroupComponent parallaxGroupComponent = parallaxGroupPrefab.GetComponent<ParallaxGroupComponent>();
-                parallaxGroupComponent.Parallaxer = this;
+                parallaxGroupComponent.ParallaxComponent = this;
                 parallaxGroupComponent.Sprite = parallaxInfo.sprite;
                 parallaxGroupComponent.ParallaxEffect = parallaxInfo.parallaxEffect;
                 parallaxGroupComponent.Name = parallaxInfo.name;

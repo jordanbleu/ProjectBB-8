@@ -6,36 +6,35 @@ namespace Assets.Source.Components.Environment
 {
     public class ParallaxGroupComponent : ComponentBase
     {
-        public ParallaxComponent Parallaxer { get; set; }
+        public ParallaxComponent ParallaxComponent { get; set; }
         public Sprite Sprite { get; set; }
         public string Name { get; set; }
         public float ParallaxEffect { get; set; }
         public int SortingOrder { get; set; }
 
-        public override void Construct()
+        public override void Create()
         {
             ConstructParallaxBehavior();
 
-            //adjusting the sorting order ensures that one groups images are on top of the other - smaller # means farther back in the render order
-            SpriteRenderer spriteRenderer = GetRequiredComponent<SpriteRenderer>();
-            spriteRenderer.sortingOrder = SortingOrder;
-
-            base.Construct();
+            base.Create();
         }
 
         private void ConstructParallaxBehavior()
         {
             GameObject parallaxLayerResource = GetRequiredResource<GameObject>($"{ResourcePaths.EnvironmentPrefabsFolder}/ParallaxLayer");
 
-            for (int i = 0; i < Parallaxer.GetLayersInGroup(); i++)
+            if (ParallaxComponent != null)
             {
-                GameObject parallaxLayerPrefab = InstantiatePrefab(parallaxLayerResource, transform.position);
-                parallaxLayerPrefab.name = $"{Name}Layer{i}";
+                for (int i = 0; i < ParallaxComponent.GetLayersInGroup(); i++)
+                {
+                    GameObject parallaxLayerPrefab = InstantiatePrefab(parallaxLayerResource, transform.position);
+                    parallaxLayerPrefab.name = $"{Name}Layer{i}";
 
-                ParallaxBehavior parallaxLayer = parallaxLayerPrefab.GetComponent<ParallaxBehavior>();
-                parallaxLayer.ParallaxGroupComponent = this;
-                parallaxLayer.Name = Name;
-                parallaxLayer.PositionNum = i;
+                    ParallaxBehavior parallaxLayer = parallaxLayerPrefab.GetComponent<ParallaxBehavior>();
+                    parallaxLayer.ParallaxGroupComponent = this;
+                    parallaxLayer.Name = Name;
+                    parallaxLayer.PositionNum = i;
+                }
             }
         }
     }

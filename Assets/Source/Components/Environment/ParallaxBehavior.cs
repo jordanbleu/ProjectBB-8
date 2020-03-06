@@ -16,20 +16,27 @@ namespace Assets.Source.Components.Environment
         private float timePassed;
         private float distance;
         private Vector3 adjustedPosition;
+        private SpriteRenderer spriteRenderer;
 
         public override void Construct()
         {
-            SpriteRenderer spriteRenderer = GetRequiredComponent<SpriteRenderer>();
+            spriteRenderer = GetRequiredComponent<SpriteRenderer>();
+            
+            base.Construct();
+        }
+
+        public override void Create()
+        {
             spriteRenderer.sprite = ParallaxGroupComponent.Sprite;
             spriteRenderer.sortingOrder = ParallaxGroupComponent.SortingOrder;
             height = spriteRenderer.bounds.size.y;
 
-            totalGroupHeight = height * ParallaxGroupComponent.Parallaxer.GetLayersInGroup();
+            totalGroupHeight = height * ParallaxGroupComponent.ParallaxComponent.GetLayersInGroup();
             adjustedPosition = new Vector3(transform.position.x, transform.position.y + (height * PositionNum));
             transform.position = adjustedPosition;
             startpos = transform.position.y;
 
-            base.Construct();
+            base.Create();
         }
 
         public override void Step()

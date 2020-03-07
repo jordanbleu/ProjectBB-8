@@ -19,13 +19,13 @@ public class Parallax : ComponentBase
     public int layers = 2;
     public Sprite[] sprites;
 
-    public override void Construct()
+    public override void PerformAwake()
     {
         //children = GetComponentsInChildren<GameObject>();
-        base.Construct();
+        base.PerformAwake();
     }
 
-    public override void Create()
+    public override void PerformStart()
     {
         Vector3 camPosition = cam.transform.position;
         //Transform firstChildTransform = children[1].transform;
@@ -36,16 +36,16 @@ public class Parallax : ComponentBase
         //firstChildTransform.position = new Vector3(camPosition.x, camPosition.y, firstChildTransform.position.z);
         //secondChildTransform.position = new Vector3(firstChildTransform.position.x, firstChildTransform.position.y + );
 
-        base.Create();
+        base.PerformStart();
     }
 
-    public override void Destroy()
+    public override void PerformOnDestroy()
     {
-        base.Destroy();
+        base.PerformOnDestroy();
     }
 
-    public override void Step()
+    public override void PerformUpdate()
     {
-        base.Step();
+        base.PerformUpdate();
     }
 }

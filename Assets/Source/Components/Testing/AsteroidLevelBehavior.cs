@@ -8,10 +8,10 @@ using UnityEngine;
 public class AsteroidLevelBehavior : ComponentBase
 {
     private GameObject asteroidPrefab;
-    public override void Construct()
+    public override void PerformAwake()
     {
         asteroidPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Asteroid}");
-        base.Construct();
+        base.PerformAwake();
     }
 
     public void SpawnAsteroid()

@@ -15,26 +15,26 @@ public class ParallaxLayer : ComponentBase
     private Parallax parallax;
     public int childOrder;
 
-    public override void Construct()
+    public override void PerformAwake()
     {
         parallax = GetComponentInParent<Parallax>();
-        base.Construct();
+        base.PerformAwake();
     }
 
-    public override void Create()
+    public override void PerformStart()
     {
         startpos = transform.position.y;
         SpriteRenderer spriteRenderer = GetRequiredComponent<SpriteRenderer>();
         height = spriteRenderer.bounds.size.y;
-        base.Create();
+        base.PerformStart();
     }
 
-    public override void Destroy()
+    public override void PerformOnDestroy()
     {
-        base.Destroy();
+        base.PerformOnDestroy();
     }
 
-    public override void Step()
+    public override void PerformUpdate()
     {
         timePassed += Time.deltaTime;
         distance = timePassed * parallaxEffect;
@@ -60,6 +60,6 @@ public class ParallaxLayer : ComponentBase
             Debug.Log("starpos += " + amountToAdd);
         }
 
-        base.Step();
+        base.PerformUpdate();
     }
 }

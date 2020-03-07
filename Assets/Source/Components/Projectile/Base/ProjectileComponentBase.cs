@@ -17,16 +17,16 @@ namespace Assets.Source.Components.Projectile.Base
 
         protected Rigidbody2D RigidBody { get; private set; }
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             RigidBody = GetRequiredComponent<Rigidbody2D>();
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             DestroyOffScreen();
-            base.Step();
+            base.PerformUpdate();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)

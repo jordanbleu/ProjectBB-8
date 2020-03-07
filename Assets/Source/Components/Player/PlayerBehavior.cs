@@ -2,6 +2,7 @@
 using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Reactor.Interfaces;
+using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -27,7 +28,7 @@ namespace Assets.Source.Components.Player
         // Other object's Components
         private CameraEffectComponent cameraEffector;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
@@ -38,14 +39,14 @@ namespace Assets.Source.Components.Player
             cameraObject = GetRequiredObject("PlayerVCam");
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
 
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             UpdatePlayerControls();
             UpdateActorStatus();
-            base.Step();
+            base.PerformUpdate();
         }
 
         private void UpdatePlayerControls()
@@ -90,6 +91,12 @@ namespace Assets.Source.Components.Player
             if (actorBehavior.Health <= 0) 
             {
                 InstantiatePrefab(explosionPrefab, transform.position);
+                GameObject canvas = FindOrCreateCanvas();
+                
+                // How to show a UI menu
+                CanvasMenuSelectorComponent ui = GetRequiredComponent<CanvasMenuSelectorComponent>(canvas);
+                ui.ShowMenu<GameOverMenuComponent>();
+                
                 Destroy(gameObject);
             }        
         }

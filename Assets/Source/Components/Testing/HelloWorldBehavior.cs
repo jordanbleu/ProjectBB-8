@@ -19,8 +19,6 @@ namespace Assets.Source.Behavior.Testing
         // Can add headers like so:
         [Header("This is some text")]
         private string myName;
-
-
         private SpriteRenderer exampleComponent;
 
         public override void Construct()

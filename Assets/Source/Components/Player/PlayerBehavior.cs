@@ -33,7 +33,6 @@ namespace Assets.Source.Components.Player
         // Physics
         private Vector2 externalVelocity;
 
-        public string DEBUG_PLS_DELETE;
 
         public override void PerformAwake()
         {
@@ -137,7 +136,6 @@ namespace Assets.Source.Components.Player
             if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
 
-            DEBUG_PLS_DELETE = $"X: {externalVelocity.x}, Y: {externalVelocity.y}";
         }
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
@@ -146,18 +144,32 @@ namespace Assets.Source.Components.Player
             {
                 actorBehavior.Health -= baseDamage;
 
+                // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
+
                 // Hit from the left side
                 if (collision.otherCollider.transform.position.x <= transform.position.x)
                 {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1.5f);
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1f);
                     cameraEffector.Trigger_Impact_Left();
                 }
                 // Hit from the right side
                 else 
                 {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1.5f);
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1f);
                     cameraEffector.Trigger_Impact_Right();
                 }
+
+                // Hit from the ass
+                if (collision.otherCollider.transform.position.y <= transform.position.y)
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + 1f);
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
+                }
+
 
             }
         }

@@ -20,7 +20,8 @@ namespace Assets.Source.Components.Environment
         };
 
         [Tooltip("Each Parallax Info is the information needed to generate one layer of the parallax effect")]
-        public ParallaxInfo[] parallaxInfos;
+        [SerializeField]
+        private ParallaxInfo[] parallaxInfos;
 
         public override void Create()
         {

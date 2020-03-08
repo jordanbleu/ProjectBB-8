@@ -30,7 +30,7 @@ namespace Assets.Source.Components.Environment
                     GameObject parallaxLayerPrefab = InstantiatePrefab(parallaxLayerResource, transform.position);
                     parallaxLayerPrefab.name = $"{Name}Layer{i}";
 
-                    ParallaxBehavior parallaxLayer = parallaxLayerPrefab.GetComponent<ParallaxBehavior>();
+                    ParallaxLayerComponent parallaxLayer = parallaxLayerPrefab.GetComponent<ParallaxLayerComponent>();
                     parallaxLayer.ParallaxGroupComponent = this;
                     parallaxLayer.Name = Name;
                     parallaxLayer.PositionNum = i;

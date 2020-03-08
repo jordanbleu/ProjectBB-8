@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Environment
 {
-    public class ParallaxBehavior : ComponentBase
+    public class ParallaxLayerComponent : ComponentBase
     {
         public string Name { private get; set; }
         public int PositionNum { private get; set; }

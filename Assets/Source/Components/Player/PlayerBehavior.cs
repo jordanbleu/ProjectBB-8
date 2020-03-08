@@ -13,6 +13,7 @@ namespace Assets.Source.Components.Player
     public class PlayerBehavior : ComponentBase, IProjectileReactor
     {
         private readonly float MOVE_SPEED = 2f;
+        private readonly float STABILIZATION_RATE = 0.01f;
 
         // Components
         private Rigidbody2D rigidBody;
@@ -28,6 +29,11 @@ namespace Assets.Source.Components.Player
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
+
+        // Physics
+        private Vector2 externalVelocity;
+
+        public string DEBUG_PLS_DELETE;
 
         public override void PerformAwake()
         {
@@ -49,6 +55,7 @@ namespace Assets.Source.Components.Player
         {
             UpdatePlayerControls();
             UpdateActorStatus();
+            UpdateExternalVelocity();
             base.PerformUpdate();
         }
 
@@ -62,7 +69,7 @@ namespace Assets.Source.Components.Player
             float verticalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_UP) * MOVE_SPEED) -
                 (InputManager.GetAxisValue(InputConstants.K_MOVE_DOWN) * MOVE_SPEED);
 
-            rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
+            rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
 
             #region Dashing Simple Implementation
             //Very simple implementation of dashing, not final product
@@ -105,18 +112,50 @@ namespace Assets.Source.Components.Player
             }        
         }
 
+        private void UpdateExternalVelocity()
+        {
+            // Normalize
+            if (externalVelocity.x > 0)
+            {
+                externalVelocity = externalVelocity.Copy(x: externalVelocity.x - STABILIZATION_RATE);
+            }
+            else if (externalVelocity.x < 0)
+            {
+                externalVelocity = externalVelocity.Copy(x: externalVelocity.x + STABILIZATION_RATE);
+            }
+
+            if (externalVelocity.y > 0)
+            {
+                externalVelocity = externalVelocity.Copy(y: externalVelocity.y - STABILIZATION_RATE);
+            }
+            else if (externalVelocity.y < 0)
+            {
+                externalVelocity = externalVelocity.Copy(y: externalVelocity.y + STABILIZATION_RATE);
+            }
+
+            // Prevents overshoot
+            if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
+            if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
+
+            DEBUG_PLS_DELETE = $"X: {externalVelocity.x}, Y: {externalVelocity.y}";
+        }
+
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
 
+                // Hit from the left side
                 if (collision.otherCollider.transform.position.x <= transform.position.x)
                 {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1.5f);
                     cameraEffector.Trigger_Impact_Left();
                 }
+                // Hit from the right side
                 else 
                 {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1.5f);
                     cameraEffector.Trigger_Impact_Right();
                 }
 

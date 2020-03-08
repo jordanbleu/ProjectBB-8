@@ -12,8 +12,12 @@ namespace Assets.Source.Components.UI.Base
         /// </summary>
         public GameObject FirstSelectedItem => _firstSelectedItem;
 
+        protected CanvasMenuSelectorComponent menuSelector;
+
         public override void PerformAwake()
         {
+            menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
+
             if (FirstSelectedItem == null)
             {
                 throw new UnityException($"Menu Component {this.gameObject.name} must specify a gameobject for 'First Selected Item'.  " +
@@ -22,6 +26,15 @@ namespace Assets.Source.Components.UI.Base
             base.PerformAwake();
         }
 
+        /// <summary>
+        /// Override this method  to add code for when this menu is opened
+        /// </summary>
+        public virtual void OnMenuOpened() { }
+
+        /// <summary>
+        /// Override this method to add code for when this menu is closed
+        /// </summary>
+        public virtual void OnMenuClosed() { }
 
     }
 }

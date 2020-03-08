@@ -1,6 +1,5 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Components.UI.Base;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -8,33 +7,31 @@ namespace Assets.Source.Components.UI
 {
     public class CanvasMenuSelectorComponent : ComponentBase
     {
-
         // todo:  Handling multiple open menus will be tricky but very doable.  We just need to scrape all the buttons and 
         // set IsInteractable or whatever to false, which will disable them.  For now, lets not bother with adding that logic, 
         // and assume only one menu can be open at a time.
 
         public void ShowMenu<TMenuComponent>() where TMenuComponent : MenuComponentBase 
         {
-            CloseAllMenus();
+            CloseMenus();
             var menu = GetMenuComponent<TMenuComponent>();
             menu.gameObject.SetActive(true);
+            
+            // This is a hacky way to send a default selected menu option
+            UnityEngine.EventSystems.EventSystem.current.firstSelectedGameObject = menu.FirstSelectedItem;
             UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(menu.FirstSelectedItem);
+
+            menu.OnMenuOpened();
         }
 
-        // I don't think this functionality is needed but here is is just in case (untested)
-        //public void CloseMenu<TMenuComponent>() where TMenuComponent : MenuComponentBase
-        //{
-        //    var menu = GetMenuComponent<TMenuComponent>();
-        //    menu.gameObject.SetActive(false);
-        //}
-
-        public void CloseAllMenus()
+        public void CloseMenus()
         {
             var menuComponents = GetComponentsInChildren<MenuComponentBase>(true);
 
             foreach (var menuComponent in menuComponents) 
             {
-                menuComponent.gameObject.SetActive(false);            
+                menuComponent.gameObject.SetActive(false);
+                menuComponent.OnMenuClosed();
             }
         }
 

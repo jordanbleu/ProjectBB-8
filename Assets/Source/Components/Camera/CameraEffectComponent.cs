@@ -42,6 +42,15 @@ namespace Assets.Source.Components.Camera
             animator.SetTrigger("trigger_impulse_1");        
         }
 
+        public void Trigger_Impact_Left()
+        {
+            animator.SetTrigger("trigger_impact_left");
+        }
+
+        public void Trigger_Impact_Right()
+        {
+            animator.SetTrigger("trigger_impact_right");
+        }
 
     }
 }

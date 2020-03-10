@@ -3,7 +3,8 @@
     "references": [
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "ProjectBB-8"
+        "ProjectBB-8",
+        "Unity.TextMeshPro"
     ],
     "includePlatforms": [
         "Editor"

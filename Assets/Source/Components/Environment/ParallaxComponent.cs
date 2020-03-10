@@ -23,13 +23,13 @@ namespace Assets.Source.Components.Environment
         [SerializeField]
         private ParallaxInfo[] parallaxInfos;
 
-        public override void PerformStart()
+        public override void ComponentStart()
         {
             ConstructParallaxGroups();
             Transform startingPos = UnityEngine.Camera.main.transform;
             transform.position = startingPos.position;
 
-            base.PerformStart();
+            base.ComponentStart();
         }
 
         private void ConstructParallaxGroups()

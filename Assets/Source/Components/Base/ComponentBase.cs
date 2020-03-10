@@ -164,43 +164,43 @@ namespace Assets.Source.Components.Base
         private void Awake()
         {
             InputManager = GetRequiredComponent<SystemObjectBehavior>(FindOrCreateSystemObject()).InputManager;
-            PerformAwake(); 
+            ComponentAwake(); 
         }
-        private void Start() { PerformStart(); }
-        private void Update() { PerformUpdate(); }
-        private void OnDestroy() { PerformOnDestroy(); }
-        private void OnEnable() { PerformOnEnable(); }
+        private void Start() { ComponentStart(); }
+        private void Update() { ComponentUpdate(); }
+        private void OnDestroy() { ComponentOnDestroy(); }
+        private void OnEnable() { ComponentOnEnable(); }
         
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Awake Method. 
         /// <para>This should be used for things such as setting references to components, etc</para>
         /// </summary>
-        public virtual void PerformAwake() { }
+        public virtual void ComponentAwake() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Start method
         /// <para>Used for setting up an object in the scene after all items are built and ready.</para>
         /// </summary>
-        public virtual void PerformStart() { }
+        public virtual void ComponentStart() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Update method
         /// <para>This is used for updates that happen every frame</para>
         /// </summary>
-        public virtual void PerformUpdate() { }
+        public virtual void ComponentUpdate() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's OnDestroy() method
         /// <para>Used for freeing up resources, etc</para>
         /// </summary>
-        public virtual void PerformOnDestroy() { }
+        public virtual void ComponentOnDestroy() { }
 
         /// <summary>
         /// Override this method to add functionality to monobehaviour's OnEnable() method
         /// <para>This code is executed when an object is toggled to "active"</para>
         /// </summary>
-        public virtual void PerformOnEnable() { }
+        public virtual void ComponentOnEnable() { }
         #endregion
 
         #region SystemObject

@@ -15,7 +15,8 @@ namespace Assets.Source.TextWriterStyle.Factory
                 {
                     _commandRepository = new Dictionary<string, Type>()
                     {
-
+                        { "color", typeof(ColorStyle) },
+                        { "currentdate", typeof(CurrentDateStyle) }
                     };
                 }
                 return _commandRepository;

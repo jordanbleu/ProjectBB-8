@@ -136,7 +136,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Hello sir this is some dialogue text for the example thing!  Booty.
+  m_text: Whats up guys Jordan Bleu here with another text writer prefab placeholder
+    text.
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 17142c9a26e7fb74799eae2e4f64cb84, type: 2}
   m_sharedMaterial: {fileID: 2578001405939020468, guid: 17142c9a26e7fb74799eae2e4f64cb84,
@@ -182,7 +183,7 @@ MonoBehaviour:
   m_enableWordWrapping: 1
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
-  m_firstOverflowCharacterIndex: 61
+  m_firstOverflowCharacterIndex: 56
   m_linkedTextComponent: {fileID: 0}
   m_isLinkedTextComponent: 0
   m_isTextTruncated: 0
@@ -206,10 +207,10 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_textInfo:
     textComponent: {fileID: 5551650731870489955}
-    characterCount: 67
+    characterCount: 80
     spriteCount: 0
     spaceCount: 12
-    wordCount: 12
+    wordCount: 13
     linkCount: 0
     lineCount: 3
     pageCount: 1

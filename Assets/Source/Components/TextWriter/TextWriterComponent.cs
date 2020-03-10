@@ -43,8 +43,8 @@ namespace Assets.Source.Components.TextWriter
         public int Delay { get; set; } = DEFAULT_DELAY;
 
         // The text we are typing out right now
-        //private string text = "{color:hex=#FF0000}Red {color:hex=#00FF00}Green {color:hex=#0000FF}Bleu.  {color:hex=#FFFFFF}Todays date is {currentDate}";
-        private string text = "Todays date is {currentDate}";
+        private string text = "{color:hex=#FF0000}Red {color:hex=#00FF00}Green {color:hex=#0000FF}Bleu.  {color:hex=#FFFFFF}Todays date is {currentDate}.";
+        //private string text = @"Todays date is: {currentDate}.";
 
         // our currently typed characters
         private StringBuilder chars = new StringBuilder();
@@ -71,7 +71,7 @@ namespace Assets.Source.Components.TextWriter
                         while (charIndex < text.Length)
                         {
                             charIndex++;
-                            Char commandChar = text[charIndex];
+                            char commandChar = text[charIndex];
 
                             if (commandChar.Equals('}'))
                             {
@@ -102,8 +102,6 @@ namespace Assets.Source.Components.TextWriter
                             {
                                 SpliceResult(result, charIndex);
                             }
-
-                            charIndex--; //?
                         }
                     }
                     else // Just a normal character
@@ -186,8 +184,10 @@ namespace Assets.Source.Components.TextWriter
         /// <param name="charIndex"></param>
         private void SpliceResult(string result, int charIndex)
         {
-            string textPart1 = text.Substring(0, charIndex);
-            string textPart2 = text.Substring(charIndex, text.Length - charIndex);
+            // This skips over the }
+            string textPart1 = text.Substring(0, charIndex+1);
+            string textPart2 = text.Substring(charIndex + 1, text.Length - charIndex - 1);
+
             text = $"{textPart1}{result}{textPart2}";
         }
     }

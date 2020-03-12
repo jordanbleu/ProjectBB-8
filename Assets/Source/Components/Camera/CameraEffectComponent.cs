@@ -24,16 +24,16 @@ namespace Assets.Source.Components.Camera
 
         private Animator animator;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             animator = GetRequiredComponent<Animator>();
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             animator.SetFloat("camera_effect", (float)_cameraMode);
-            base.Step();
+            base.PerformUpdate();
         }
 
         // todo: not sure if this is the best way to do this but its probably fine
@@ -42,6 +42,15 @@ namespace Assets.Source.Components.Camera
             animator.SetTrigger("trigger_impulse_1");        
         }
 
+        public void Trigger_Impact_Left()
+        {
+            animator.SetTrigger("trigger_impact_left");
+        }
+
+        public void Trigger_Impact_Right()
+        {
+            animator.SetTrigger("trigger_impact_right");
+        }
 
     }
 }

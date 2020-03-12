@@ -14,6 +14,7 @@ namespace Assets.Source.Components.Base
         protected InputManager InputManager { get; private set; }
 
         private GameObject systemObject;
+        private GameObject canvasObject;
 
         #region Resource Helper Methods
         /// <summary>
@@ -163,42 +164,43 @@ namespace Assets.Source.Components.Base
         private void Awake()
         {
             InputManager = GetRequiredComponent<SystemObjectBehavior>(FindOrCreateSystemObject()).InputManager;
-            Construct(); 
+            PerformAwake(); 
         }
-        private void Start() { Create(); }
-        private void Update() { Step(); }
-        private void OnDestroy() { Destroy(); }
-        private void OnEnable() { Activate(); }
+        private void Start() { PerformStart(); }
+        private void Update() { PerformUpdate(); }
+        private void OnDestroy() { PerformOnDestroy(); }
+        private void OnEnable() { PerformOnEnable(); }
+        
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Awake Method. 
         /// <para>This should be used for things such as setting references to components, etc</para>
         /// </summary>
-        public virtual void Construct() { }
+        public virtual void PerformAwake() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Start method
         /// <para>Used for setting up an object in the scene after all items are built and ready.</para>
         /// </summary>
-        public virtual void Create() { }
+        public virtual void PerformStart() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's Update method
         /// <para>This is used for updates that happen every frame</para>
         /// </summary>
-        public virtual void Step() { }
+        public virtual void PerformUpdate() { }
 
         /// <summary>
         /// Override this method to add functionality to the monobehavior's OnDestroy() method
         /// <para>Used for freeing up resources, etc</para>
         /// </summary>
-        public virtual void Destroy() { }
+        public virtual void PerformOnDestroy() { }
 
         /// <summary>
         /// Override this method to add functionality to monobehaviour's OnEnable() method
         /// <para>This code is executed when an object is toggled to "active"</para>
         /// </summary>
-        public virtual void Activate() { }
+        public virtual void PerformOnEnable() { }
         #endregion
 
         #region SystemObject
@@ -222,6 +224,30 @@ namespace Assets.Source.Components.Base
             }
             return systemObject;
         }
+        #endregion
+
+        #region Canvas
+        /// <summary>
+        /// Call to get or create the canvas prefab
+        /// </summary>
+        protected GameObject FindOrCreateCanvas()
+        {
+            // try to find the canvas
+            if (canvasObject == null)
+            {
+                canvasObject = GameObject.Find(GameObjects.Canvas);
+            }
+
+            // if it doesn't exist, then create it
+            if (canvasObject == null)
+            {
+                GameObject canvasPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/System/{GameObjects.Canvas}");
+                canvasObject = InstantiatePrefab(canvasPrefab);
+                canvasObject.name = GameObjects.Canvas;
+            }
+            return canvasObject;
+        }
+
         #endregion
     }
 }

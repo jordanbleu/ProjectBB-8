@@ -14,12 +14,12 @@ namespace Assets.Source.Components.Projectile
 
         private GameObject explosionObject;
 
-        public override void Create()
+        public override void PerformStart()
         {
             System.Random random = new System.Random(DateTime.Now.Millisecond);
             RigidBody.velocity = new Vector2(random.NextFloatInRange(-0.5f, 0.5f), random.NextFloatInRange(-0.1f, -MAX_SPEED));
             explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_2");
-            base.Create();
+            base.PerformStart();
         }
 
         public override void DestroyProjectile(Collision2D collision)

@@ -2,6 +2,7 @@
 using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Reactor.Interfaces;
+using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -26,26 +27,29 @@ namespace Assets.Source.Components.Player
 
         // Other object's Components
         private CameraEffectComponent cameraEffector;
+        private CanvasMenuSelectorComponent menuSelector;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
-
+            
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
             cameraObject = GetRequiredObject("PlayerVCam");
+            
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
+            menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             UpdatePlayerControls();
             UpdateActorStatus();
-            base.Step();
+            base.PerformUpdate();
         }
 
         private void UpdatePlayerControls()
@@ -82,6 +86,12 @@ namespace Assets.Source.Components.Player
                 // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
                 bullet.transform.position = transform.position;
             }
+
+            if (InputManager.IsKeyPressed(InputConstants.K_PAUSE)) 
+            {
+                // Opens the pause menu
+                menuSelector.ShowMenu<PauseMenuComponent>();
+            }
         }
 
         private void UpdateActorStatus()
@@ -90,6 +100,7 @@ namespace Assets.Source.Components.Player
             if (actorBehavior.Health <= 0) 
             {
                 InstantiatePrefab(explosionPrefab, transform.position);
+                menuSelector.ShowMenu<GameOverMenuComponent>();                
                 Destroy(gameObject);
             }        
         }
@@ -99,7 +110,16 @@ namespace Assets.Source.Components.Player
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
-                cameraEffector.TriggerImpulse1();
+
+                if (collision.otherCollider.transform.position.x <= transform.position.x)
+                {
+                    cameraEffector.Trigger_Impact_Left();
+                }
+                else 
+                {
+                    cameraEffector.Trigger_Impact_Right();
+                }
+
             }
         }
     }

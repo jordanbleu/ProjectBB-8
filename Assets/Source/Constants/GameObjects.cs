@@ -6,6 +6,8 @@
     public static class GameObjects
     {
         public const string SystemObject = "SystemObject";
+        public const string Canvas = "Canvas";
+
         public const string PlayerBullet = "PlayerBullet";
         public const string Asteroid = "Asteroid";
     }

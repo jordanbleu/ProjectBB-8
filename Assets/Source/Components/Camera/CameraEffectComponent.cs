@@ -24,16 +24,16 @@ namespace Assets.Source.Components.Camera
 
         private Animator animator;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             animator = GetRequiredComponent<Animator>();
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             animator.SetFloat("camera_effect", (float)_cameraMode);
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         // todo: not sure if this is the best way to do this but its probably fine

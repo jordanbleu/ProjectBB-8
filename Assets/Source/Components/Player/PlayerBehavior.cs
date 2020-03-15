@@ -29,7 +29,7 @@ namespace Assets.Source.Components.Player
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
@@ -42,14 +42,14 @@ namespace Assets.Source.Components.Player
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             UpdatePlayerControls();
             UpdateActorStatus();
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         private void UpdatePlayerControls()

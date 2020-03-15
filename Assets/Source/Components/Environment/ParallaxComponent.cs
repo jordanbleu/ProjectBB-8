@@ -10,10 +10,11 @@ namespace Assets.Source.Components.Environment
         private readonly int SORTING_ORDER = -10; //we want these images to be behind everything else
 
         [System.Serializable]
-        public struct ParallaxInfo
+        private struct ParallaxInfo
         {
             public string name;
             public Sprite sprite;
+
             [Range(1, 1000)]
             [Tooltip("1 will not move at all, 1000 will move the fastest. Calculates speed using log of this value")]
             public float parallaxEffect;
@@ -23,13 +24,13 @@ namespace Assets.Source.Components.Environment
         [SerializeField]
         private ParallaxInfo[] parallaxInfos;
 
-        public override void Create()
+        public override void ComponentStart()
         {
             ConstructParallaxGroups();
             Transform startingPos = UnityEngine.Camera.main.transform;
             transform.position = startingPos.position;
 
-            base.Create();
+            base.ComponentStart();
         }
 
         private void ConstructParallaxGroups()

@@ -13,6 +13,7 @@ namespace Assets.Source.Components.Player
     public class PlayerBehavior : ComponentBase, IProjectileReactor
     {
         private readonly float MOVE_SPEED = 2f;
+        private readonly float STABILIZATION_RATE = 0.01f;
 
         // Components
         private Rigidbody2D rigidBody;
@@ -28,6 +29,10 @@ namespace Assets.Source.Components.Player
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
+
+        // Physics
+        private Vector2 externalVelocity;
+
 
         public override void PerformAwake()
         {
@@ -49,6 +54,7 @@ namespace Assets.Source.Components.Player
         {
             UpdatePlayerControls();
             UpdateActorStatus();
+            UpdateExternalVelocity();
             base.PerformUpdate();
         }
 
@@ -62,7 +68,7 @@ namespace Assets.Source.Components.Player
             float verticalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_UP) * MOVE_SPEED) -
                 (InputManager.GetAxisValue(InputConstants.K_MOVE_DOWN) * MOVE_SPEED);
 
-            rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta);
+            rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
 
             #region Dashing Simple Implementation
             //Very simple implementation of dashing, not final product
@@ -105,20 +111,65 @@ namespace Assets.Source.Components.Player
             }        
         }
 
+        private void UpdateExternalVelocity()
+        {
+            // Normalize
+            if (externalVelocity.x > 0)
+            {
+                externalVelocity = externalVelocity.Copy(x: externalVelocity.x - STABILIZATION_RATE);
+            }
+            else if (externalVelocity.x < 0)
+            {
+                externalVelocity = externalVelocity.Copy(x: externalVelocity.x + STABILIZATION_RATE);
+            }
+
+            if (externalVelocity.y > 0)
+            {
+                externalVelocity = externalVelocity.Copy(y: externalVelocity.y - STABILIZATION_RATE);
+            }
+            else if (externalVelocity.y < 0)
+            {
+                externalVelocity = externalVelocity.Copy(y: externalVelocity.y + STABILIZATION_RATE);
+            }
+
+            // Prevents overshoot
+            if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
+            if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
+
+        }
+
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
 
+                // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
+
+                // Hit from the left side
                 if (collision.otherCollider.transform.position.x <= transform.position.x)
                 {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1f);
                     cameraEffector.Trigger_Impact_Left();
                 }
+                // Hit from the right side
                 else 
                 {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1f);
                     cameraEffector.Trigger_Impact_Right();
                 }
+
+                // Hit from the ass
+                if (collision.otherCollider.transform.position.y <= transform.position.y)
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + 1f);
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
+                }
+
 
             }
         }

@@ -1,11 +1,11 @@
-﻿using Assets.Source.Components.Base;
+﻿using Assets.Source.Components.LevelDirector.Base;
 using Assets.Source.Constants;
 using UnityEngine;
 
 /// <summary>
 /// All this does is randomly generate asteroids.  Kinda cool though!
 /// </summary>
-public class AsteroidLevelBehavior : ComponentBase
+public class AsteroidLevelBehavior : LevelDirectorComponentBase
 {
     private GameObject asteroidPrefab;
     public override void ComponentAwake()

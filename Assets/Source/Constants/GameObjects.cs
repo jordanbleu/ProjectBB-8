@@ -10,5 +10,7 @@
 
         public const string PlayerBullet = "PlayerBullet";
         public const string Asteroid = "Asteroid";
+        public const string TextWriter = "TextWriter";
+        public const string TextWriterPipeline = "TextWriterPipeline";
     }
 }

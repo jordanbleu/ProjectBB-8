@@ -20,7 +20,7 @@ namespace Assets.Source.Components.Timer
 
         private float currentTime = 0.0f;
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             currentTime += Time.deltaTime * 1000;
 
@@ -30,7 +30,7 @@ namespace Assets.Source.Components.Timer
                 OnIntervalReached?.Invoke();
             }
             
-            base.Step();
+            base.PerformUpdate();
         }
 
         public void UpdateInterval(float interval)

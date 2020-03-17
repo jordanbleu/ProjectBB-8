@@ -34,7 +34,7 @@ namespace Assets.Source.Components.Player
         private Vector2 externalVelocity;
 
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
@@ -47,15 +47,15 @@ namespace Assets.Source.Components.Player
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             UpdatePlayerControls();
             UpdateActorStatus();
             UpdateExternalVelocity();
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         private void UpdatePlayerControls()

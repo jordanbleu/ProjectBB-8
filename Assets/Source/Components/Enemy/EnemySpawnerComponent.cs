@@ -31,7 +31,7 @@ namespace Assets.Source.Components.Enemy
         private GameObject player;
         private float distanceToPlayer = 0.0f;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             player = GetRequiredObject(GameObjects.Player);
             distanceToPlayer = transform.position.y - player.transform.position.y;
@@ -41,10 +41,10 @@ namespace Assets.Source.Components.Enemy
                 enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Enemy}");
             }
 
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             if(enemy == null)
             {
@@ -61,7 +61,7 @@ namespace Assets.Source.Components.Enemy
                 SpawnEnemySequential();
             }
 
-            base.Step();
+            base.PerformUpdate();
         }
 
         private void SpawnEnemySequential()

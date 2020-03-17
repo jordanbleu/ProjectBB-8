@@ -11,12 +11,12 @@ namespace Assets.Source.Components.Enemy.Base
         private float timeUntilNextShot;
         private float distanceAwayFromPlayer;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             player = GetRequiredObject(GameObjects.Player);
             distanceAwayFromPlayer = transform.position.y - player.transform.position.y;
             timeUntilNextShot = TimeBetweenShots;
-            base.Construct();
+            base.PerformAwake();
         }
 
         /// <summary>

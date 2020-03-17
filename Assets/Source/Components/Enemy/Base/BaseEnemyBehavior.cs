@@ -13,14 +13,14 @@ namespace Assets.Source.Components.Enemy.Base
         protected GameObject enemyBulletPrefab;
         private GameObject explosionPrefab;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.EnemyBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
-            base.Construct();
+            base.PerformAwake();
         }
 
         /// <summary>

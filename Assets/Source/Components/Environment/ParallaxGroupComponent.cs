@@ -12,11 +12,11 @@ namespace Assets.Source.Components.Environment
         public float ParallaxEffect { get; set; }
         public int SortingOrder { get; set; }
 
-        public override void Create()
+        public override void PerformStart()
         {
             ConstructParallaxBehavior();
 
-            base.Create();
+            base.PerformStart();
         }
 
         private void ConstructParallaxBehavior()

@@ -6,11 +6,11 @@ namespace Assets.Source.Components.Enemy
 {
     public class SimpleEnemyBehavior : BaseEnemyBehavior
     {
-        public override void Step()
+        public override void PerformUpdate()
         {
             UpdateActorBehavior();
             UpdateActorStatus();
-            base.Step();
+            base.PerformUpdate();
         }
 
         public override void UpdateActorBehavior()

@@ -18,14 +18,14 @@ namespace Assets.Source.Components.Environment
         private Vector3 adjustedPosition;
         private SpriteRenderer spriteRenderer;
 
-        public override void Construct()
+        public override void PerformAwake()
         {
             spriteRenderer = GetRequiredComponent<SpriteRenderer>();
             
-            base.Construct();
+            base.PerformAwake();
         }
 
-        public override void Create()
+        public override void PerformStart()
         {
             spriteRenderer.sprite = ParallaxGroupComponent.Sprite;
             spriteRenderer.sortingOrder = ParallaxGroupComponent.SortingOrder;
@@ -36,10 +36,10 @@ namespace Assets.Source.Components.Environment
             transform.position = adjustedPosition;
             startpos = transform.position.y;
 
-            base.Create();
+            base.PerformStart();
         }
 
-        public override void Step()
+        public override void PerformUpdate()
         {
             //doing it this way will make it so that if we want to pause the game we change Time.timescale to 0 and this will freeze the parallax
             timePassed += Time.deltaTime;
@@ -55,7 +55,7 @@ namespace Assets.Source.Components.Environment
                 distance = 0;
             }
 
-            base.Step();
+            base.PerformUpdate();
         }
     }
 }

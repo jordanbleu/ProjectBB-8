@@ -13,7 +13,7 @@ public class BasicMovementBehavior : ComponentBase
     [SerializeField]
     private float translateSpeed = 0.1f;
 
-    public override void PerformUpdate()
+    public override void ComponentUpdate()
     {
 
         if (InputManager.IsKeyHeld(InputConstants.K_MENU_LEFT))
@@ -35,7 +35,7 @@ public class BasicMovementBehavior : ComponentBase
         }
 
 
-        base.PerformUpdate();
+        base.ComponentUpdate();
     }
 
 }

@@ -21,7 +21,7 @@ namespace Assets.Source.Behavior.Testing
         private string myName;
         private SpriteRenderer exampleComponent;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             // Construct should be used to set up references to components, game objects, etc
             // Unity Behaviors cannot have actual constructors or it'll break things
@@ -38,10 +38,10 @@ namespace Assets.Source.Behavior.Testing
             Debug.Log($"Hello my dudes, we hit the construct method. The attached" +
                 $" sprite renderer's color value is: {exampleComponent.color.ToString()}");
 
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformStart()
+        public override void ComponentStart()
         {
             // Create can be used to set stuff up after we've gotten all our references.
             // It gets called after the Construct method.
@@ -52,10 +52,10 @@ namespace Assets.Source.Behavior.Testing
             // here's an example of loading from the configuration repo
             Debug.Log($"The configured language code is: '{ConfigurationRepository.SystemConfiguration.Language}'");
 
-            base.PerformStart();
+            base.ComponentStart();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             // Step is called for every frame
 
@@ -78,31 +78,31 @@ namespace Assets.Source.Behavior.Testing
                 Debug.Log("You are holding down the K_MENU_DOWN key.  Prepare to have the console spammed.");
             }
 
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         
 
         // Destroy gets called whenever OnDestroy() is called -or- whenever the game closes
         // This isn't often used though. 
-        public override void PerformOnDestroy()
+        public override void ComponentOnDestroy()
         {
             Debug.Log("Destroy was called");
 
             // Clean up resources, etc
 
-            base.PerformOnDestroy();
+            base.ComponentOnDestroy();
         }
 
 
         // To see this one, you can run the unity game and toggle the checkbox 
         // for the game object in the inspector
-        public override void PerformOnEnable()
+        public override void ComponentOnEnable()
         {
             Debug.Log("What is up guys, we have hit the activate method");
             // We should make it a habbit to leave in the call to the 
             // base methods even though they don't currently do anything
-            base.PerformOnEnable();
+            base.ComponentOnEnable();
         }
 
         

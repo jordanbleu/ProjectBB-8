@@ -17,7 +17,7 @@ namespace Assets.Source.Strings.Base
         /// <summary>
         /// Call load to return a dictionary of strings. 
         /// </summary>
-        /// <param name="path">The path after the 'strings/en' folder (or whatever the language code is)</param>
+        /// <param name="path">The path after the 'strings/en' folder (or whatever the language code is).  Include the .xml</param>
         public void Load(string path)
         {
             StringResourceList strings;

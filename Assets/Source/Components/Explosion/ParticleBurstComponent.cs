@@ -7,19 +7,19 @@ namespace Assets.Source.Components.Explosion
     {
         private ParticleSystem particlesSystemComponent;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             particlesSystemComponent = GetRequiredComponent<ParticleSystem>();
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             if (!particlesSystemComponent.IsAlive())
             {
                 Destroy(gameObject);
             }
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
     }

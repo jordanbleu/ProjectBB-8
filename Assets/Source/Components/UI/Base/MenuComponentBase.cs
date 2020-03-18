@@ -14,7 +14,7 @@ namespace Assets.Source.Components.UI.Base
 
         protected CanvasMenuSelectorComponent menuSelector;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
@@ -23,7 +23,7 @@ namespace Assets.Source.Components.UI.Base
                 throw new UnityException($"Menu Component {this.gameObject.name} must specify a gameobject for 'First Selected Item'.  " +
                     $"Drag and drop the object via the inspector window.");
             }
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
         /// <summary>

@@ -17,16 +17,16 @@ namespace Assets.Source.Components.Projectile.Base
 
         protected Rigidbody2D RigidBody { get; private set; }
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             RigidBody = GetRequiredComponent<Rigidbody2D>();
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             DestroyOffScreen();
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         private void OnCollisionEnter2D(Collision2D collision)
@@ -46,11 +46,11 @@ namespace Assets.Source.Components.Projectile.Base
         private void DestroyOffScreen()
         {
             // todo: these are just arbitrary numbers for now
-            if (transform.position.y > 3)
+            if (transform.position.y > 5)
             {
                 Destroy(gameObject);
             }
-            else if (transform.position.y < -3)
+            else if (transform.position.y < -5)
             {
                 Destroy(gameObject);
             }

@@ -117,6 +117,31 @@ namespace Assets.Source.Components.Base
         }
 
         /// <summary>
+        /// Return a component that is expected in a parent object.  Throws an exception if 
+        /// it does not exist.
+        /// </summary>
+        /// <typeparam name="T">The component Type</typeparam>
+        /// <param name="otherObject">the object to check from</param>
+        /// <returns>The component</returns>
+        protected T GetRequiredComponentInParent<T>(GameObject otherObject) where T : MonoBehaviour
+        {
+            return otherObject.GetComponentInParent<T>()
+                ?? throw new MissingRequiredComponentException(otherObject, typeof(T));            
+        }
+
+        /// <summary>
+        /// Return a component that is expected in a parent object.  Throws an exception if 
+        /// it does not exist.
+        /// </summary>
+        /// <typeparam name="T">The component Type</typeparam>
+        /// <param name="otherObject">the object to check</param>
+        /// <returns>The component</returns>
+        protected T GetRequiredComponentInParent<T>() where T : MonoBehaviour
+        {
+            return GetRequiredComponentInParent<T>(this.gameObject);
+        }
+
+        /// <summary>
         /// Instantiates a prefab, maintaining the prefab's object name (dropping unity's "(Clone)" suffix).  The
         /// prefab will be instantiated in the prefab's default position
         /// </summary>

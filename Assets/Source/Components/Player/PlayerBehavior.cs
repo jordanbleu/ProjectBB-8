@@ -147,7 +147,7 @@ namespace Assets.Source.Components.Player
                 // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
 
                 // Hit from the left side
-                if (collision.otherCollider.transform.position.x <= transform.position.x)
+                if (collision.otherCollider.transform.position.x < transform.position.x)
                 {
                     externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1f);
                     cameraEffector.Trigger_Impact_Left();
@@ -160,7 +160,7 @@ namespace Assets.Source.Components.Player
                 }
 
                 // Hit from the ass
-                if (collision.otherCollider.transform.position.y <= transform.position.y)
+                if (collision.otherCollider.transform.position.y < transform.position.y)
                 {
                     externalVelocity = externalVelocity.Copy(y: externalVelocity.x + 1f);
                 }

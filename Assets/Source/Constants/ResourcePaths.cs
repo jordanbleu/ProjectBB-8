@@ -8,7 +8,7 @@
         /// <summary>
         /// Points to the full path to the strings folder
         /// </summary>
-        public static string StringsDirectory => $"{ResourcesDirectory}/Strings"; 
+        public static string StringsDirectory => $"{UnityEngine.Application.dataPath}/Strings"; 
 
 
         /// <summary>

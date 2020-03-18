@@ -9,7 +9,7 @@ namespace Assets.Source.Components.Projectile
     {
         private readonly float MOVE_SPEED = 4.0f;
 
-        protected override int BaseDamage => 25;
+        protected override int BaseDamage => 20;
 
         public override void PerformStart()
         {

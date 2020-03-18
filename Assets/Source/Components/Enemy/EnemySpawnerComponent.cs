@@ -6,13 +6,6 @@ namespace Assets.Source.Components.Enemy
 {
     public class EnemySpawnerComponent : ComponentBase
     {
-        //this doesn't do anything for now but it will once additional functionality is added.
-        public enum SpawnTypes
-        {
-            Sequential,
-            Instant
-        }
-
         [SerializeField]
         private SpawnTypes spawnType = SpawnTypes.Sequential;
 
@@ -25,11 +18,18 @@ namespace Assets.Source.Components.Enemy
         [SerializeField]
         private float spawnInterval = 4.0f;
 
-        private bool finishedSpawning = false;
-        private float timeSinceLastSpawn = 0f;
         private GameObject enemy;
         private GameObject player;
+        private bool finishedSpawning = false;
+        private float timeSinceLastSpawn = 0f;
         private float distanceToPlayer = 0.0f;
+
+        //this doesn't do anything for now but it will once additional functionality is added.
+        public enum SpawnTypes
+        {
+            Sequential,
+            Instant
+        }
 
         public override void PerformAwake()
         {
@@ -46,19 +46,27 @@ namespace Assets.Source.Components.Enemy
 
         public override void PerformUpdate()
         {
-            if(enemy == null)
+            switch (spawnType)
             {
-                timeSinceLastSpawn += Time.deltaTime;
-                if (finishedSpawning)
-                {
-                    Destroy(gameObject);
-                }
-            }
+                case SpawnTypes.Instant:
+                    SpawnEnemyInstant();
+                    break;
+                case SpawnTypes.Sequential:
+                    if (enemy == null)
+                    {
+                        timeSinceLastSpawn += Time.deltaTime;
+                        if (finishedSpawning)
+                        {
+                            Destroy(gameObject);
+                        }
+                    }
 
-            if(timeSinceLastSpawn >= spawnInterval)
-            {
-                timeSinceLastSpawn = 0f;
-                SpawnEnemySequential();
+                    if (timeSinceLastSpawn >= spawnInterval)
+                    {
+                        timeSinceLastSpawn = 0f;
+                        SpawnEnemySequential();
+                    }
+                    break;
             }
 
             base.PerformUpdate();
@@ -78,7 +86,8 @@ namespace Assets.Source.Components.Enemy
 
         private void SpawnEnemyInstant()
         {
-            //todo: Spawn all enemies at same time and space them out
+            finishedSpawning = !finishedSpawning;
+            //todo: Spawn all enemies at same time and space them out or something
         }
 
 

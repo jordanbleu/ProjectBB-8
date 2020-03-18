@@ -9,14 +9,14 @@ namespace Assets.Source.Components.Enemy.Base
 {
     public abstract class EnemyAIBase : ComponentBase
     {
-        protected GameObject player;
-        
-        protected Rigidbody2D rigidBody;
-        protected ActorBehavior actorBehavior;
         private readonly float STABILIZATION_RATE = 0.01f;
 
         private GameObject explosionPrefab;
+
         protected Vector2 externalVelocity;
+        protected Rigidbody2D rigidBody;
+        protected ActorBehavior actorBehavior;
+        protected GameObject player;
 
         public override void PerformAwake()
         {
@@ -26,14 +26,8 @@ namespace Assets.Source.Components.Enemy.Base
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
-            
             base.PerformAwake();
         }
-
-        /// <summary>
-        /// Should be overriden to add logic in how the enemy will act, given various game inputs
-        /// </summary>
-        public virtual void UpdateActorBehavior() { }
 
         /// <summary>
         /// Checks the health of the enemy, then creates an explosion and destroyes self after health reaches 0
@@ -48,14 +42,13 @@ namespace Assets.Source.Components.Enemy.Base
             }
         }
 
+        /// <summary>
+        /// Gets the current transform position of the player
+        /// </summary>
+        /// <returns></returns>
         protected Vector3 GetPlayerLocation()
         {
-            Vector3 playerLocation = new Vector3();
-            if (player != null)
-            {
-                playerLocation = player.transform.position;
-            }
-            return playerLocation;
+            return player.transform.position;
         }
 
         protected void UpdateExternalVelocity()

@@ -1,11 +1,8 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Constants;
 using Assets.Source.Strings;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Source.Components.TextWriter
@@ -24,11 +21,6 @@ namespace Assets.Source.Components.TextWriter
         {
             textWriterPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/TextWriter/{GameObjects.TextWriter}");
             base.ComponentAwake();
-        }
-
-        public override void ComponentStart()
-        {
-            base.ComponentStart();
         }
 
         public override void ComponentUpdate()

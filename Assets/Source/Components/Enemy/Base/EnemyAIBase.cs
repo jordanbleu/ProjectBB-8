@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using Assets.Source.Components.Base;
 using Assets.Source.Constants;
-using System;
 using Assets.Source.Components.Actor;
 using Assets.Source.Extensions;
 
@@ -18,7 +17,7 @@ namespace Assets.Source.Components.Enemy.Base
         protected ActorBehavior actorBehavior;
         protected GameObject player;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             //todo: design a better way to have a reference to the play since every spawned enemy will have to try and "find" the player
             player = GetRequiredObject(GameObjects.Player);
@@ -26,7 +25,7 @@ namespace Assets.Source.Components.Enemy.Base
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
         /// <summary>

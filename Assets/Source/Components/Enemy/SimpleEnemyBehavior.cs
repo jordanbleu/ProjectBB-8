@@ -24,25 +24,25 @@ namespace Assets.Source.Components.Enemy
         private float currentShootCooldown;
         private float currentStunCooldown = 0.0f;
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.EnemyBullet}");
             currentShootCooldown = SHOOT_COOLDOWN;
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformStart()
+        public override void ComponentStart()
         {
             distanceToPlayer = GetPlayerLocation() - transform.position;
-            base.PerformStart();
+            base.ComponentStart();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             UpdateActorBehavior();
             UpdateActorStatus();
             UpdateExternalVelocity();
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         private void UpdateActorBehavior()

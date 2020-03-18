@@ -11,10 +11,10 @@ namespace Assets.Source.Components.Projectile
 
         protected override int BaseDamage => 20;
 
-        public override void PerformStart()
+        public override void ComponentStart()
         {
             RigidBody.velocity = -RigidBody.velocity.Copy(y: MOVE_SPEED);
-            base.PerformStart();
+            base.ComponentStart();
         }
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)

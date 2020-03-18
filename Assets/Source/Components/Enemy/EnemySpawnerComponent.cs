@@ -31,7 +31,7 @@ namespace Assets.Source.Components.Enemy
             Instant
         }
 
-        public override void PerformAwake()
+        public override void ComponentAwake()
         {
             player = GetRequiredObject(GameObjects.Player);
             distanceToPlayer = transform.position.y - player.transform.position.y;
@@ -41,10 +41,10 @@ namespace Assets.Source.Components.Enemy
                 enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Enemy}");
             }
 
-            base.PerformAwake();
+            base.ComponentAwake();
         }
 
-        public override void PerformUpdate()
+        public override void ComponentUpdate()
         {
             switch (spawnType)
             {
@@ -69,7 +69,7 @@ namespace Assets.Source.Components.Enemy
                     break;
             }
 
-            base.PerformUpdate();
+            base.ComponentUpdate();
         }
 
         private void SpawnEnemySequential()

@@ -19,6 +19,10 @@ namespace Assets.Source.Components.Projectile
             System.Random random = new System.Random(DateTime.Now.Millisecond);
             RigidBody.velocity = new Vector2(random.NextFloatInRange(-0.5f, 0.5f), random.NextFloatInRange(-0.1f, -MAX_SPEED));
             explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_2");
+
+            float scale = UnityEngine.Random.Range(1f, 3f);
+            transform.localScale = transform.localScale.Copy(x:scale, y:scale);
+
             base.ComponentStart();
         }
 

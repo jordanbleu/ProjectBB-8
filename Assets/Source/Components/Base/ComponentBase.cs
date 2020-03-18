@@ -11,7 +11,7 @@ namespace Assets.Source.Components.Base
         /// <summary>
         /// Provides access to the global input manager
         /// </summary>
-        protected InputManager InputManager { get; private set; }
+        protected InputManager InputManager { get => GetRequiredComponent<SystemObjectBehavior>(FindOrCreateSystemObject()).InputManager; }
 
         private GameObject systemObject;
         private GameObject canvasObject;
@@ -188,7 +188,6 @@ namespace Assets.Source.Components.Base
         #region overrides
         private void Awake()
         {
-            InputManager = GetRequiredComponent<SystemObjectBehavior>(FindOrCreateSystemObject()).InputManager;
             ComponentAwake(); 
         }
         private void Start() { ComponentStart(); }

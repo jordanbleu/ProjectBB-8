@@ -46,11 +46,11 @@ namespace Assets.Source.Components.Projectile.Base
         private void DestroyOffScreen()
         {
             // todo: these are just arbitrary numbers for now
-            if (transform.position.y > 3)
+            if (transform.position.y > 5)
             {
                 Destroy(gameObject);
             }
-            else if (transform.position.y < -3)
+            else if (transform.position.y < -5)
             {
                 Destroy(gameObject);
             }

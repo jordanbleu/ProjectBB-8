@@ -24,17 +24,30 @@ namespace Assets.Source.Components.SystemObject
 
         public void Awake()
         {
-            // todo:  This should be set via a settings value (trello card exists)
+            // todo:  This should be set via a settings value 
             InputManager = new InputManager(new KeyboardInputListener());
 
-            // To Test gamepad input, uncomment this line **********************************************************************************************
-            //InputManager = new InputManager(new GamepadInputListener());
         }
 
         public void Update()
         {
-            // This is a horrendous way to do this 
-            // todo: this is a hack and should be fixed later
+
+            // todo:  Temporary hotkey to allow swapping inputs on the fly.  Pressing Ctrl + I swaps inputs
+            if (UnityEngine.Input.GetKey(KeyCode.LeftControl) && UnityEngine.Input.GetKeyDown(KeyCode.I))
+            {
+                if (InputManager.GetActiveListener() is GamepadInputListener)
+                {
+                    Debug.Log("Swapping input mode to Keyboard");
+                    InputManager = new InputManager(new KeyboardInputListener());
+                }
+                else
+                {
+                    Debug.Log("Swapping input mode to Gamepad");
+                    InputManager = new InputManager(new GamepadInputListener());
+                }
+            }
+
+            // todo: fix this
             if (InputManager.GetActiveListener() is GamepadInputListener gamepadInputListener)
             {
                 gamepadInputListener.UpdateInputList();

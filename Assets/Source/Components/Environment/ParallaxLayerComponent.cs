@@ -54,7 +54,7 @@ namespace Assets.Source.Components.Environment
                 timePassed = 0;
                 distance = 0;
             }
-
+            
             base.ComponentUpdate();
         }
     }

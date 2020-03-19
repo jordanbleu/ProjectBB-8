@@ -1,20 +1,19 @@
-﻿using Assets.Source.Components.Projectile.Base;
+﻿using UnityEngine;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Extensions;
-using UnityEngine;
 
 namespace Assets.Source.Components.Projectile
 {
-    public class PlayerBulletBehavior : ProjectileComponentBase, IProjectileReactor
+    public class EnemyBulletBehavior : ProjectileComponentBase, IProjectileReactor
     {
-        private readonly float MOVE_SPEED = 6f;
+        private readonly float MOVE_SPEED = 4.0f;
 
-        protected override int BaseDamage => 10;
+        protected override int BaseDamage => 20;
 
         public override void ComponentStart()
         {
-            RigidBody.velocity = RigidBody.velocity.Copy(y: MOVE_SPEED);
-
+            RigidBody.velocity = -RigidBody.velocity.Copy(y: MOVE_SPEED);
             base.ComponentStart();
         }
 

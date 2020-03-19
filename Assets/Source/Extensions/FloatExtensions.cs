@@ -16,6 +16,5 @@
             var max = ofValue + units;
             return (value >= min) && (value <= max);
         }
-
     }
 }

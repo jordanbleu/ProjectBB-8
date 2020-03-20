@@ -44,6 +44,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnType: 0
-  enemyPrafabToSpawn: {fileID: 0}
+  enemyPrafabToSpawn: {fileID: 5657678810976465282, guid: a0bf242d0613a42968505a8fee6fa792,
+    type: 3}
   spawnCount: 2
   spawnInterval: 4

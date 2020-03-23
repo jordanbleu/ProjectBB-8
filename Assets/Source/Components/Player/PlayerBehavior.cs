@@ -1,7 +1,6 @@
 ﻿using Assets.Source.Components.Actor;
 using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
-using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -10,7 +9,7 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ComponentBase, IProjectileReactor
+    public class PlayerBehavior : ComponentBase
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
@@ -18,6 +17,7 @@ namespace Assets.Source.Components.Player
         // Components
         private Rigidbody2D rigidBody;
         private ActorBehavior actorBehavior;
+        private Animator animator;
 
         // Prefab references
         private GameObject bulletPrefab;
@@ -38,12 +38,13 @@ namespace Assets.Source.Components.Player
         {
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
-            
+            animator = GetRequiredComponent<Animator>();
+
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
             cameraObject = GetRequiredObject("PlayerVCam");
-            
+
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
@@ -68,6 +69,8 @@ namespace Assets.Source.Components.Player
             float verticalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_UP) * MOVE_SPEED) -
                 (InputManager.GetAxisValue(InputConstants.K_MOVE_DOWN) * MOVE_SPEED);
 
+            animator.SetInteger("horizontal_move", Mathf.RoundToInt(horizontalMoveDelta));
+
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
 
             #region Dashing Simple Implementation
@@ -86,14 +89,13 @@ namespace Assets.Source.Components.Player
             }
             #endregion
 
-            if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY)) {
+            if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
+            {
                 GameObject bullet = InstantiatePrefab(bulletPrefab);
-                bullet.transform.position = transform.position.Copy();
-                // todo: Add InstantiatePrefab method to ComponentBase which ooes this for us
                 bullet.transform.position = transform.position;
             }
 
-            if (InputManager.IsKeyPressed(InputConstants.K_PAUSE)) 
+            if (InputManager.IsKeyPressed(InputConstants.K_PAUSE))
             {
                 // Opens the pause menu
                 menuSelector.ShowMenu<PauseMenuComponent>();
@@ -103,12 +105,12 @@ namespace Assets.Source.Components.Player
         private void UpdateActorStatus()
         {
             // todo: this is just placeholder stuff
-            if (actorBehavior.Health <= 0) 
+            if (actorBehavior.Health <= 0)
             {
                 InstantiatePrefab(explosionPrefab, transform.position);
-                menuSelector.ShowMenu<GameOverMenuComponent>();                
+                menuSelector.ShowMenu<GameOverMenuComponent>();
                 Destroy(gameObject);
-            }        
+            }
         }
 
         private void UpdateExternalVelocity()
@@ -138,7 +140,7 @@ namespace Assets.Source.Components.Player
 
         }
 
-        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
+        public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
@@ -153,7 +155,7 @@ namespace Assets.Source.Components.Player
                     cameraEffector.Trigger_Impact_Left();
                 }
                 // Hit from the right side
-                else 
+                else
                 {
                     externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1f);
                     cameraEffector.Trigger_Impact_Right();
@@ -169,9 +171,8 @@ namespace Assets.Source.Components.Player
                 {
                     externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
                 }
-
-
             }
         }
+
     }
 }

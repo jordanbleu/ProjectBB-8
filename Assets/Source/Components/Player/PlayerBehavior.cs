@@ -137,7 +137,6 @@ namespace Assets.Source.Components.Player
             // Prevents overshoot
             if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
-
         }
 
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)

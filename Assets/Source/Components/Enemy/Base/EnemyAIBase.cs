@@ -3,10 +3,15 @@ using Assets.Source.Components.Base;
 using Assets.Source.Constants;
 using Assets.Source.Components.Actor;
 using Assets.Source.Extensions;
+using Assets.Source.Components.Projectile.Base;
 
 namespace Assets.Source.Components.Enemy.Base
 {
-    public abstract class EnemyAIBase : ComponentBase
+    /// <summary>
+    /// The base shared logic between all enemies. Also turns an enemy ship into a "projectile" so that if the player
+    /// runs into an enemy they will collide
+    /// </summary>
+    public abstract class EnemyAIBase : ProjectileComponentBase
     {
         private readonly float STABILIZATION_RATE = 0.01f;
 
@@ -35,7 +40,6 @@ namespace Assets.Source.Components.Enemy.Base
         {
             if (actorBehavior.Health <= 0)
             {
-                Debug.Log("Enemy Destroyed");
                 InstantiatePrefab(explosionPrefab, transform.position);
                 Destroy(gameObject);
             }

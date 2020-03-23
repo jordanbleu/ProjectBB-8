@@ -24,6 +24,8 @@ namespace Assets.Source.Components.Enemy
         private float currentShootCooldown;
         private float currentStunCooldown = 0.0f;
 
+        protected override int BaseDamage => 30;
+
         public override void ComponentAwake()
         {
             enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.EnemyBullet}");
@@ -39,8 +41,8 @@ namespace Assets.Source.Components.Enemy
 
         public override void ComponentUpdate()
         {
+            base.UpdateActorStatus();
             UpdateActorBehavior();
-            UpdateActorStatus();
             UpdateExternalVelocity();
             base.ComponentUpdate();
         }

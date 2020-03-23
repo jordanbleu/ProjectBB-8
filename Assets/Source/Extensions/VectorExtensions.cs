@@ -70,8 +70,5 @@ namespace Assets.Source.Extensions
                 z: z ?? 0
             );
         }
-
-
-
     }
 }

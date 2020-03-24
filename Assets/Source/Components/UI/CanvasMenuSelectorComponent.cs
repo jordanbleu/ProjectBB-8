@@ -2,11 +2,23 @@
 using Assets.Source.Components.UI.Base;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 namespace Assets.Source.Components.UI
 {
     public class CanvasMenuSelectorComponent : ComponentBase
     {
+
+        public override void ComponentAwake()
+        {
+            if (FindObjectOfType<EventSystem>() == null)
+            {
+                var eventSystem = new GameObject("EventSystem", typeof(EventSystem), typeof(StandaloneInputModule));
+                EventSystem.current = eventSystem.GetComponent<EventSystem>();
+            }
+            base.ComponentAwake();
+        }
+
         // todo:  Handling multiple open menus will be tricky but very doable.  We just need to scrape all the buttons and 
         // set IsInteractable or whatever to false, which will disable them.  For now, lets not bother with adding that logic, 
         // and assume only one menu can be open at a time.
@@ -18,8 +30,8 @@ namespace Assets.Source.Components.UI
             menu.gameObject.SetActive(true);
             
             // This is a hacky way to send a default selected menu option
-            UnityEngine.EventSystems.EventSystem.current.firstSelectedGameObject = menu.FirstSelectedItem;
-            UnityEngine.EventSystems.EventSystem.current.SetSelectedGameObject(menu.FirstSelectedItem);
+            EventSystem.current.firstSelectedGameObject = menu.FirstSelectedItem;
+            EventSystem.current.SetSelectedGameObject(menu.FirstSelectedItem);
 
             menu.OnMenuOpened();
         }

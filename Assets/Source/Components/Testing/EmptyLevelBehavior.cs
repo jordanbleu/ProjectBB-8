@@ -1,15 +1,12 @@
-﻿using Assets.Source.Components.LevelDirector.Base;
+﻿using Assets.Source.Components.Base;
 
 namespace Assets.Source.Components.Testing
 {
-    public class EmptyLevelBehavior : LevelDirectorComponentBase
+    public class EmptyLevelBehavior : ComponentBase
     {
-
         public override void ComponentStart()
         {
-            InitiateDialogueExchange("Testing/test.xml");        
+            //InitiateDialogueExchange("Testing/test.xml");        
         }
-
-
     }
 }

@@ -1,7 +1,9 @@
 ﻿using Assets.Source.Components.Exception;
 using Assets.Source.Components.SystemObject;
+using Assets.Source.Components.TextWriter;
 using Assets.Source.Constants;
 using Assets.Source.Input;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Source.Components.Base
@@ -31,7 +33,7 @@ namespace Assets.Source.Components.Base
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <param name="otherObject"></param>
-        protected T GetRequiredComponent<T>(GameObject otherObject)
+        public static T GetRequiredComponent<T>(GameObject otherObject)
         {
             T component;
             try
@@ -60,7 +62,7 @@ namespace Assets.Source.Components.Base
         /// the requested component.  Returns the first instance found.
         /// </summary>
         /// <typeparam name="T">Component Type</typeparam>
-        protected T GetRequiredComponentInChildren<T>(GameObject otherObject)
+        public static T GetRequiredComponentInChildren<T>(GameObject otherObject)
         {
             T component;
 
@@ -78,7 +80,7 @@ namespace Assets.Source.Components.Base
         /// <summary>
         /// Loads a resource from unity's resources directory, or throws an exception if it is not found
         /// </summary>
-        protected T GetRequiredResource<T>(string path) where T : UnityEngine.Object
+        public static T GetRequiredResource<T>(string path) where T : UnityEngine.Object
         {
             T resource = Resources.Load<T>(path) as T
                 ?? throw new MissingResourceException(path);
@@ -90,7 +92,7 @@ namespace Assets.Source.Components.Base
         /// Finds an object located on the base of the hierarchy, or throws an exception if not found
         /// </summary>
         /// <param name="name">Name of the object to find</param>
-        protected GameObject GetRequiredObject(string name)
+        public static GameObject GetRequiredObject(string name)
         {
             GameObject obj = GameObject.Find(name)
                 ?? throw new MissingRequiredObjectException(name);
@@ -108,7 +110,7 @@ namespace Assets.Source.Components.Base
         /// <summary>
         /// Gets a required child game object off the specified game object, or throws an exception if not found
         /// </summary>
-        protected GameObject GetRequiredChild(GameObject otherObject, string name)
+        public static GameObject GetRequiredChild(GameObject otherObject, string name)
         {
             Transform tranformObject = otherObject.transform.Find(name)
                 ?? throw new MissingRequiredChildException(otherObject, name);
@@ -123,7 +125,7 @@ namespace Assets.Source.Components.Base
         /// <typeparam name="T">The component Type</typeparam>
         /// <param name="otherObject">the object to check from</param>
         /// <returns>The component</returns>
-        protected T GetRequiredComponentInParent<T>(GameObject otherObject) where T : MonoBehaviour
+        public static T GetRequiredComponentInParent<T>(GameObject otherObject) where T : MonoBehaviour
         {
             return otherObject.GetComponentInParent<T>()
                 ?? throw new MissingRequiredComponentException(otherObject, typeof(T));            
@@ -147,7 +149,7 @@ namespace Assets.Source.Components.Base
         /// </summary>
         /// <param name="prefab">Prefab to instantiate</param>
         /// <returns>The Instance</returns>
-        protected static GameObject InstantiatePrefab(GameObject prefab)
+        public static GameObject InstantiatePrefab(GameObject prefab)
         {
             GameObject instance = Instantiate(prefab);
             instance.name = prefab.name;
@@ -160,7 +162,7 @@ namespace Assets.Source.Components.Base
         /// <param name="prefab">Prefab to instantiate</param>
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
-        protected static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform)
+        public static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
@@ -176,13 +178,38 @@ namespace Assets.Source.Components.Base
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
         /// 
-        protected static GameObject InstantiatePrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
+        public static GameObject InstantiatePrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
             instance.transform.position = position;
             return instance;
         }
+
+        /// <summary>
+        /// Call this method to immediately display a string of dialogue text, loaded via XML resource
+        /// </summary>
+        /// <param name="stringsFile"></param>
+        public static GameObject InitiateDialogueExchange(string stringsFile)
+        {
+            // A prefab won't work here because we need to set properties before instantiating
+            GameObject obj = new GameObject(GameObjects.TextWriterPipeline);
+            TextWriterPipelineComponent pipeline = obj.AddComponent<TextWriterPipelineComponent>();
+            pipeline.LoadText(stringsFile);
+            return Instantiate(obj);
+        }
+
+        /// <summary>
+        /// Returns true if the specified component <typeparamref name="T"/> is active 
+        /// on the hierarchy currently
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool ComponentExists<T>() where T : UnityEngine.Component
+        {
+            return Object.FindObjectsOfType<T>().Any();
+        }
+
         #endregion
 
         #region overrides

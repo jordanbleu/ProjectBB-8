@@ -42,7 +42,11 @@ namespace Assets.Source.Components.Enemy
 
         private void LookAtPlayer()
         {
-            transform.up = player.transform.position - transform.position;
+            // todo: fix this
+            if (player != null)
+            { 
+                transform.up = player.transform.position - transform.position;
+            }
         }
 
         private void UpdateActorBehavior()

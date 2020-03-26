@@ -51,7 +51,11 @@ namespace Assets.Source.Components.Enemy.Base
         /// <returns></returns>
         protected Vector3 GetPlayerLocation()
         {
-            return player.transform.position;
+            if (player != null)
+            { 
+                return player.transform.position;
+            }
+            return Vector3.zero; //todo: fix this
         }
 
         protected void UpdateExternalVelocity()

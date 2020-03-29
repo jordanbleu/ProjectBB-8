@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4344484983143791477}
   - component: {fileID: 7105537250157932772}
   - component: {fileID: 5623244143731643903}
-  - component: {fileID: 552970852493454551}
   - component: {fileID: 3645464880467755614}
+  - component: {fileID: 1308398907608617488}
   m_Layer: 0
   m_Name: EnemyBullet
   m_TagString: Untagged
@@ -74,7 +74,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: 648ed37be97344f6fa7827ee532da93b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f365b868cd296a746b542a8fd21f21ac, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,32 +106,6 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
---- !u!61 &552970852493454551
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1394819448221332960}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.1, y: 0.29}
-    newSize: {x: 0.1, y: 0.2}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  serializedVersion: 2
-  m_Size: {x: 0.1, y: 0.2}
-  m_EdgeRadius: 0
 --- !u!114 &3645464880467755614
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -144,6 +118,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef55521d4e7c34ba1a821f6e2439977a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!58 &1308398907608617488
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1394819448221332960}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  serializedVersion: 2
+  m_Radius: 0.04
 --- !u!1 &5789844846794147190
 GameObject:
   m_ObjectHideFlags: 0

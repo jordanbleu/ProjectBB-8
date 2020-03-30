@@ -11,7 +11,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
     {
         public void PhaseBegin(ILevelContext context)
         {
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Enemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             
             GameObject enemy1 = ComponentBase.InstantiatePrefab(enemy);
             enemy1.transform.position = new Vector3(0, .5f, 1);

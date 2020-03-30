@@ -38,7 +38,7 @@ namespace Assets.Source.Components.Enemy
 
             if (enemyPrafabToSpawn == null)
             {
-                enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Enemy}");
+                enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             }
 
             base.ComponentAwake();

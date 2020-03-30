@@ -14,9 +14,10 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
         public void PhaseBegin(ILevelContext context)
         {
             // This method is used to spawn enemies, initialize the phase, etc
-            GameObject kamikazePrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.KamikazeEnemy}");
-            var inst = ComponentBase.InstantiatePrefab(kamikazePrefab);
-            inst.transform.position = new Vector3(0, .5f, 1);
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
+            
+            GameObject inst = ComponentBase.InstantiatePrefab(enemy);
+            inst.transform.position = new Vector3(0, .5f, 1); 
         }
 
 
@@ -25,7 +26,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
             // This method is used for spawning more enemies, or checking if the phase is completed
 
             // Check to see if any kamikaze enemies exist 
-            if (!ComponentBase.ComponentExists<KamikazeEnemyBehavior>())
+            if (!ComponentBase.ComponentExists<SimpleEnemyBehavior>())
             {
                 // todo: prevent from calling complete phase directly
                 context.FlagAsComplete();            

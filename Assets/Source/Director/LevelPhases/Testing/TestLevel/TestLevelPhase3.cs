@@ -2,7 +2,7 @@
 using Assets.Source.Director.Interfaces;
 using UnityEngine;
 
-namespace Assets.Source.Components.Director.Testing.TestLevel
+namespace Assets.Source.Director.Testing.TestLevel
 {
     public class TestLevelPhase3 : ILevelPhase
     {

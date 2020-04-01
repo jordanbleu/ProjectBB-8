@@ -308,9 +308,21 @@ namespace Assets.Source.Components.Base
         /// for all level specific instances, including asteroids, enemies, etc
         /// </summary>
         /// <returns></returns>
-        protected GameObject FindLevelObject()
+        public static GameObject FindLevelObject()
         {
-            return GetRequiredComponent<DirectorComponent>().gameObject;        
+            DirectorComponent[] directors = UnityEngine.Object.FindObjectsOfType<DirectorComponent>();
+            return directors.Single().gameObject;
+        }
+
+        /// <summary>
+        /// Helper method that will instantate an object within the level object
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InstantiateLevelPrefab(GameObject prefab, Vector3? position = null, Transform parentTransform = null)
+        {
+            Vector3 pos = position ?? Vector3.zero;
+            Transform parent = parentTransform ?? FindLevelObject().transform;
+            return InstantiatePrefab(prefab, pos, parent);
         }
         #endregion
     }

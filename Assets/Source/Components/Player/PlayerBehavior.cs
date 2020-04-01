@@ -91,7 +91,7 @@ namespace Assets.Source.Components.Player
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
             {
-                GameObject bullet = InstantiatePrefab(bulletPrefab);
+                GameObject bullet = InstantiateLevelPrefab(bulletPrefab);
                 bullet.transform.position = transform.position;
             }
 
@@ -107,7 +107,7 @@ namespace Assets.Source.Components.Player
             // todo: this is just placeholder stuff
             if (actorBehavior.Health <= 0)
             {
-                InstantiatePrefab(explosionPrefab, transform.position);
+                InstantiateLevelPrefab(explosionPrefab, transform.position);
                 menuSelector.ShowMenu<GameOverMenuComponent>();
                 Destroy(gameObject);
             }

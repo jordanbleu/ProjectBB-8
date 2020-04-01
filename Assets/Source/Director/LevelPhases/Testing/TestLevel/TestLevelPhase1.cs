@@ -4,7 +4,7 @@ using Assets.Source.Constants;
 using Assets.Source.Director.Interfaces;
 using UnityEngine;
 
-namespace Assets.Source.Components.Director.Testing.TestLevel
+namespace Assets.Source.Director.Testing.TestLevel
 {
     // todo:  I think we might need a naming scheme to easier tell what order these are in, 
     // i was thinking numbers but that will make it harder to add things in between phases
@@ -15,7 +15,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
             // This method is used to spawn enemies, initialize the phase, etc
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             
-            GameObject inst = ComponentBase.InstantiatePrefab(enemy);
+            GameObject inst = ComponentBase.InstantiateLevelPrefab(enemy);
             inst.transform.position = new Vector3(0, .5f, 1); 
         }
 

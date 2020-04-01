@@ -40,7 +40,7 @@ namespace Assets.Source.Components.Enemy.Base
         {
             if (actorBehavior.Health <= 0)
             {
-                InstantiatePrefab(explosionPrefab, transform.position);
+                InstantiateLevelPrefab(explosionPrefab, transform.position);
                 Destroy(gameObject);
             }
         }

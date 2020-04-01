@@ -1,4 +1,5 @@
-﻿using Assets.Source.Components.Exception;
+﻿using Assets.Source.Components.Director.Base;
+using Assets.Source.Components.Exception;
 using Assets.Source.Components.SystemObject;
 using Assets.Source.Components.TextWriter;
 using Assets.Source.Constants;
@@ -299,6 +300,18 @@ namespace Assets.Source.Components.Base
             return canvasObject;
         }
 
+        #endregion
+
+        #region Level
+        /// <summary>
+        /// Find the Level object, and ensures it has an attached Director component.  This object should serve as the parent 
+        /// for all level specific instances, including asteroids, enemies, etc
+        /// </summary>
+        /// <returns></returns>
+        protected GameObject FindLevelObject()
+        {
+            return GetRequiredComponent<DirectorComponent>().gameObject;        
+        }
         #endregion
     }
 }

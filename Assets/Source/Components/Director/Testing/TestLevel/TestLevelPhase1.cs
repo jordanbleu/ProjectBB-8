@@ -1,8 +1,7 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Interfaces;
 using Assets.Source.Components.Enemy;
 using Assets.Source.Constants;
-using System.Linq;
+using Assets.Source.Director.Interfaces;
 using UnityEngine;
 
 namespace Assets.Source.Components.Director.Testing.TestLevel
@@ -36,7 +35,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
         public void PhaseComplete(ILevelContext context)
         {
             Debug.Log("Phase 1 completed, you killed the guy!");
-            context.BeginPhase<TestLevelPhase2>();
+            context.BeginPhase(new TestLevelPhase2());
         }
 
     }

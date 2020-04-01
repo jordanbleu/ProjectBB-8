@@ -1,4 +1,4 @@
-﻿namespace Assets.Source.Components.Director.Interfaces
+﻿namespace Assets.Source.Director.Interfaces
 {
     /// <summary>
     /// A level phase represents a single unit / section of a level.  It has completion criteria 

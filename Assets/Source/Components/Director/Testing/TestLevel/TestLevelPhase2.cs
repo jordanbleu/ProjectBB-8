@@ -1,7 +1,7 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Interfaces;
 using Assets.Source.Components.Enemy;
 using Assets.Source.Constants;
+using Assets.Source.Director.Interfaces;
 using System.Linq;
 using UnityEngine;
 
@@ -32,7 +32,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
         public void PhaseComplete(ILevelContext context)
         {
             Debug.Log("Phase 2 complteed.  You are a god among men.");
-            context.BeginPhase<TestLevelPhase3>();
+            context.BeginPhase(new TestLevelPhase3());
         }
 
     }

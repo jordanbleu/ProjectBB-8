@@ -1,5 +1,5 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Interfaces;
+using Assets.Source.Director.Interfaces;
 using UnityEngine;
 
 namespace Assets.Source.Components.Director.Testing.TestLevel

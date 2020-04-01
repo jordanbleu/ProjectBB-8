@@ -163,7 +163,7 @@ namespace Assets.Source.Components.Base
         /// <param name="prefab">Prefab to instantiate</param>
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
-        public static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform)
+        public static GameObject InstantiateRootPrefab(GameObject prefab, Transform parentTransform)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
@@ -179,7 +179,7 @@ namespace Assets.Source.Components.Base
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
         /// 
-        public static GameObject InstantiatePrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
+        public static GameObject InstantiateRootPrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
@@ -322,7 +322,7 @@ namespace Assets.Source.Components.Base
         {
             Vector3 pos = position ?? Vector3.zero;
             Transform parent = parentTransform ?? FindLevelObject().transform;
-            return InstantiatePrefab(prefab, pos, parent);
+            return InstantiateRootPrefab(prefab, pos, parent);
         }
         #endregion
     }

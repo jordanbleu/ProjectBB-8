@@ -7,6 +7,6 @@ namespace Assets.Source.Input.Interfaces
         /// <summary>
         /// The list of bindings and their key codes or gamepad codes
         /// </summary>
-        Dictionary<string, KeyCodeValue> Bindings { get; set; }
+        Dictionary<string, IEnumerable<KeyCodeValue>> Bindings { get; set; }
     }
 }

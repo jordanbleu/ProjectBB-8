@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6245715318476089245}
   - component: {fileID: 1714802284597820816}
   m_Layer: 0
-  m_Name: Explosion_2
+  m_Name: PlayerBulletExplosion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8184090877033800939}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.50016516, y: -0.21974033, z: -13.228613}
+  m_LocalPosition: {x: -0.50016516, y: -0.21974033, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -128,8 +128,8 @@ ParticleSystem:
     startLifetime:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1
-      minScalar: 0.5
+      scalar: 0.58
+      minScalar: 0.1
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -181,8 +181,8 @@ ParticleSystem:
     startSpeed:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 2
-      minScalar: 0.5
+      scalar: 0.3
+      minScalar: 0.2
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -297,8 +297,8 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 0.2
-      minScalar: 0.01
+      scalar: 0.15
+      minScalar: 0.005
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -989,7 +989,7 @@ ParticleSystem:
         serializedVersion: 2
         minMaxState: 3
         scalar: 30
-        minScalar: 10
+        minScalar: 15
         maxCurve:
           serializedVersion: 2
           m_Curve:
@@ -1374,33 +1374,33 @@ ParticleSystem:
       maxColor: {r: 1, g: 1, b: 1, a: 1}
       maxGradient:
         serializedVersion: 2
-        key0: {r: 0.6415094, g: 0.36009255, b: 0.41224253, a: 1}
-        key1: {r: 0.4716981, g: 0.34042364, b: 0.36594924, a: 1}
-        key2: {r: 0, g: 0, b: 0, a: 0}
-        key3: {r: 0, g: 0, b: 0, a: 0}
+        key0: {r: 0.7075472, g: 0.24363652, b: 0.2949716, a: 0}
+        key1: {r: 0.6037736, g: 0.16321962, b: 0.12815951, a: 1}
+        key2: {r: 0.254717, g: 0.061276253, b: 0.091930464, a: 0.6816085}
+        key3: {r: 0, g: 0, b: 0, a: 0.39607844}
         key4: {r: 0, g: 0, b: 0, a: 0}
         key5: {r: 0, g: 0, b: 0, a: 0}
         key6: {r: 0, g: 0, b: 0, a: 0}
         key7: {r: 0, g: 0, b: 0, a: 0}
-        ctime0: 0
-        ctime1: 65535
-        ctime2: 0
+        ctime0: 9638
+        ctime1: 35081
+        ctime2: 65535
         ctime3: 0
         ctime4: 0
         ctime5: 0
         ctime6: 0
         ctime7: 0
-        atime0: 0
-        atime1: 65535
-        atime2: 0
-        atime3: 0
+        atime0: 193
+        atime1: 8867
+        atime2: 40863
+        atime3: 65535
         atime4: 0
         atime5: 0
         atime6: 0
         atime7: 0
         m_Mode: 0
-        m_NumColorKeys: 2
-        m_NumAlphaKeys: 2
+        m_NumColorKeys: 3
+        m_NumAlphaKeys: 4
       minGradient:
         serializedVersion: 2
         key0: {r: 1, g: 1, b: 1, a: 1}
@@ -1545,7 +1545,7 @@ ParticleSystem:
     speedRange: {x: 0, y: 1}
     tilesX: 1
     tilesY: 1
-    animationType: 0
+    animationType: 1
     rowIndex: 0
     cycles: 1
     uvChannelMask: -1

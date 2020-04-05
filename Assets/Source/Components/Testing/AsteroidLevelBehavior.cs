@@ -20,6 +20,6 @@ public class AsteroidLevelBehavior : ComponentBase
         float x = Random.Range(-1.5f, 1.5f);
         float y = Random.Range(3f, 4f);
         // todo:  Do we want to spawn level items under a "Level" object?  This keeps the hierarchy cleaner for sure
-        InstantiateRootPrefab(asteroidPrefab, new Vector3(x, y, transform.position.z), transform);
+        InstantiatePrefab(asteroidPrefab, new Vector3(x, y, transform.position.z), transform);
     }
 }

@@ -11,18 +11,18 @@ namespace Assets.Source.Director.Testing.TestLevel
     {
         public void PhaseBegin(ILevelContext context)
         {
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.KamikazeEnemy}");
             
-            GameObject enemy1 = ComponentBase.InstantiateLevelPrefab(enemy);
-            enemy1.transform.position = new Vector3(0, .5f, 1);
+            GameObject enemy1 = ComponentBase.InstantiateInLevel(enemy);
+            enemy1.transform.position = new Vector3(1, 2f, 0);
 
-            GameObject enemy2 = ComponentBase.InstantiateLevelPrefab(enemy);
-            enemy2.transform.position = new Vector3(0, .5f, 1);
+            GameObject enemy2 = ComponentBase.InstantiateInLevel(enemy);
+            enemy2.transform.position = new Vector3(-1, 3f, 0);
         }
         
         public void PhaseUpdate(ILevelContext context)
         {
-            if (!UnityEngine.Object.FindObjectsOfType<SimpleEnemyBehavior>().Any()) 
+            if (!UnityEngine.Object.FindObjectsOfType<KamikazeEnemyBehavior>().Any()) 
             {
                 context.FlagAsComplete();
             }

@@ -16,16 +16,15 @@ namespace Assets.Source.Director.Testing.TestLevel
         public void PhaseBegin(ILevelContext context)
         {
             GameObject asteroidPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Asteroid}");
-
+            
             // Create an asteroid spawner which will generate a random asteroid ever buncha milliseconds
-            asteroidSpawner = ComponentBase.InstantiateLevelPrefab(new GameObject("AsteroidSpawner", typeof(AutoSpawnerComponent)));
+            asteroidSpawner = ComponentBase.InstantiateInLevel("AsteroidSpawner", Vector3.zero, typeof(AutoSpawnerComponent));
             ComponentBase.GetRequiredComponent<AutoSpawnerComponent>(asteroidSpawner).Initialize(500, asteroidPrefab);
-
 
             // This method is used to spawn enemies, initialize the phase, etc
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             
-            GameObject inst = ComponentBase.InstantiateLevelPrefab(enemy);
+            GameObject inst = ComponentBase.InstantiateInLevel(enemy);
             inst.transform.position = new Vector3(0, .5f, 1); 
         }
 
@@ -34,7 +33,7 @@ namespace Assets.Source.Director.Testing.TestLevel
         {
             // This method is used for spawning more enemies, or checking if the phase is completed
 
-            // Check to see if any kamikaze enemies exist 
+            // Check to see if any enemies exist 
             if (!ComponentBase.ComponentExists<SimpleEnemyBehavior>())
             {
                 // todo: prevent from calling complete phase directly

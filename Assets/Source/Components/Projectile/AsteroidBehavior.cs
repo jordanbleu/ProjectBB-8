@@ -41,7 +41,7 @@ namespace Assets.Source.Components.Projectile
         {
             Debug.Log($"Asteroid Collided with {collision.gameObject} and was destroyed");
             
-            GameObject explosion = InstantiateLevelPrefab(explosionObject, transform.position);
+            GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
             
             // Scale size of the explosion to be the same as the asteroids scale
 

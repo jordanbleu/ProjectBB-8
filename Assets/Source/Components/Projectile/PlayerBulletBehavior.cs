@@ -37,7 +37,7 @@ namespace Assets.Source.Components.Projectile
             // todo:  Eventaully to get the game to feel more satisfying we'll need to add impulse effects
             //cameraEffect.TriggerImpulse1(); 
             GameObject playerBulletExplosion = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/PlayerBulletExplosion");
-            InstantiateLevelPrefab(playerBulletExplosion, transform.position);
+            InstantiateInLevel(playerBulletExplosion, transform.position);
             base.ComponentOnDestroy();
         }
     }

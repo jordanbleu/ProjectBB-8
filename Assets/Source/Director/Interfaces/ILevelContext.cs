@@ -1,4 +1,4 @@
-﻿namespace Assets.Source.Components.Director.Interfaces
+﻿namespace Assets.Source.Director.Interfaces
 {
     public interface ILevelContext
     {
@@ -27,9 +27,8 @@
         /// Begins a new phase of a level.  This will call PhaseBegin on the current level phase,
         /// and kick off the phase updates.
         /// </summary>
-        /// <param name="phase"></param>
-        void BeginPhase<TPhase>() where TPhase : ILevelPhase, new();
-        
+        void BeginPhase(ILevelPhase phase);
+
         /// <summary>
         /// Signals to the Director that the phase is completed, and <seealso cref="CompletePhase"/>
         /// should be called when ready

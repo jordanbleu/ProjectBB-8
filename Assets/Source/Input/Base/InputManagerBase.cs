@@ -32,7 +32,7 @@ namespace Assets.Source.Input.Base
         /// </summary>
         public bool IsKeyHeld(string binding)
         {
-            return activeListener.IsKeyDown(binding);
+            return activeListener.IsKeyHeld(binding);
         }
 
         /// <summary>

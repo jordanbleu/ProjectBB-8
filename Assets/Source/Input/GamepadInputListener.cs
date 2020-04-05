@@ -2,6 +2,7 @@
 using Assets.Source.Configuration.Exception;
 using Assets.Source.Input.Interfaces;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Assets.Source.Input
@@ -22,10 +23,10 @@ namespace Assets.Source.Input
 
         public GamepadInputListener()
         {
-            var axisBindings = GetKeyBindings().Bindings.Where(b => b.Value.ReadAsAxis);
+            var axisBindings = GetKeyBindings().Bindings.Where(b => b.Value.First().ReadAsAxis);
 
             // populate the key code list
-            foreach (KeyValuePair<string, KeyCodeValue> kvp in axisBindings)
+            foreach (KeyValuePair<string, IEnumerable<KeyCodeValue>> kvp in axisBindings)
             {
                 axisDictionary.Add(kvp.Key, false);
             }
@@ -80,7 +81,7 @@ namespace Assets.Source.Input
             return 0f;
         }
 
-        public bool IsKeyDown(string binding)
+        public bool IsKeyHeld(string binding)
         {
             KeyCodeValue keyCodeValue = GetKeyCodeValue(binding)
                 ?? throw new InvalidConfigurationException<GamepadBindings>($"Unable to find a keybinding for {binding}");
@@ -151,11 +152,27 @@ namespace Assets.Source.Input
 
         private KeyCodeValue GetKeyCodeValue(string binding)
         {
-            if (GetKeyBindings().Bindings.TryGetValue(binding, out KeyCodeValue keyCodeValue))
+            if (TryGetKeyBinding(binding, out KeyCodeValue keyCodeValue))
             {
                 return keyCodeValue;
             }
             throw new InvalidConfigurationException<GamepadBindings>($"Unable to find key binding for {binding}");
+        }
+
+        // Pulls the bound value for the gamepad input.  Note - Only one binding will be used for gamepad inputs
+        private bool TryGetKeyBinding(string binding, out KeyCodeValue keyCodeValues) {
+            if (GetKeyBindings().Bindings.TryGetValue(binding, out IEnumerable<KeyCodeValue> values))
+            {
+                if (values.Count() > 1) {
+                    UnityEngine.Debug.LogWarning($"Warning!  Multiple keys are bound to binding '{binding}'.  The first one will be used" +
+                        "and the rest will be ignored.");
+                }
+
+                keyCodeValues = values.First();
+                return true;
+            }
+            keyCodeValues = null;
+            return false;
         }
 
 
@@ -163,6 +180,7 @@ namespace Assets.Source.Input
         {
             return GetKeyCodeValue(binding).KeyCode;
         }
+
 
     }
 

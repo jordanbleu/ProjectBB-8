@@ -1,28 +1,27 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Interfaces;
 using Assets.Source.Components.TextWriter;
 using Assets.Source.Components.UI.Base;
-using Assets.Source.Constants;
-using System;
+using Assets.Source.Director;
+using Assets.Source.Director.Enums;
+using Assets.Source.Director.Interfaces;
 using UnityEngine;
 
 namespace Assets.Source.Components.Director.Base
 {
-    public abstract class DirectorComponentBase : ComponentBase
+    public class DirectorComponent : ComponentBase
     {
-        // todo: if we ever need another implementation of ILevelContext, I think we should make this not abstract, and do the start phase / context stuff a different way
+        [SerializeField]
+        private LevelRepository.Level level = LevelRepository.Level.TestLevel;
 
         /// <summary>
         /// The context is an abstraction layer between the director and the level phase
         /// </summary>
-        protected abstract ILevelContext Context { get; }
-
-        protected abstract void SetStartPhase();
-
+        protected ILevelContext Context { get; private set; }
 
         public override void ComponentAwake()
         {
-            SetStartPhase();
+            Context = new LevelContext();
+            Context.BeginPhase(LevelRepository.FindStartPhase(level));
             base.ComponentAwake();
         }
 
@@ -45,7 +44,6 @@ namespace Assets.Source.Components.Director.Base
             return (!ComponentExists<TextWriterPipelineComponent>() &&
                     !ComponentExists<TextWriterComponent>() &&
                     !ComponentExists<MenuComponentBase>());
-            
         }
 
     }

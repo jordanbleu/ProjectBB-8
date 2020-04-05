@@ -85,7 +85,7 @@ namespace Assets.Source.Components.Enemy
 
                 if (ShouldShoot())
                 {
-                    GameObject bullet = InstantiatePrefab(enemyBulletPrefab);
+                    GameObject bullet = InstantiateLevelPrefab(enemyBulletPrefab);
                     bullet.transform.position = transform.position.Copy();
                 }
             }

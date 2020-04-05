@@ -43,7 +43,7 @@ namespace Assets.Source.Components.TextWriter
         {
             string message = texts.Pop();
 
-            textWriterObject = InstantiatePrefab(textWriterPrefab, FindOrCreateCanvas().transform);
+            textWriterObject = InstantiateRootPrefab(textWriterPrefab, FindOrCreateCanvas().transform);
             textWriterObject.transform.localPosition = new Vector3(0, -80, 0);
 
             TextWriterComponent textWriter = GetRequiredComponent<TextWriterComponent>(textWriterObject);

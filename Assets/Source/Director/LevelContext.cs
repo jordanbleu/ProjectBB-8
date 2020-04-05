@@ -1,6 +1,6 @@
-﻿using Assets.Source.Components.Director.Interfaces;
+﻿using Assets.Source.Director.Interfaces;
 
-namespace Assets.Source.Components.Director
+namespace Assets.Source.Director
 {
     public class LevelContext : ILevelContext
     {
@@ -22,10 +22,9 @@ namespace Assets.Source.Components.Director
             IsCompleted = true;
         }
 
-        public void BeginPhase<TPhase>() where TPhase : ILevelPhase, new()
+        public void BeginPhase(ILevelPhase phase)
         {
-            TPhase startPhase = new TPhase();
-            CurrentPhase = startPhase;
+            CurrentPhase = phase;
             IsCompleted = false;
             CurrentPhase.PhaseBegin(this);
         }

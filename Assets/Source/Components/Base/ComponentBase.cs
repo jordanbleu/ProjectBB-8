@@ -1,4 +1,5 @@
-﻿using Assets.Source.Components.Exception;
+﻿using Assets.Source.Components.Director.Base;
+using Assets.Source.Components.Exception;
 using Assets.Source.Components.SystemObject;
 using Assets.Source.Components.TextWriter;
 using Assets.Source.Constants;
@@ -162,7 +163,7 @@ namespace Assets.Source.Components.Base
         /// <param name="prefab">Prefab to instantiate</param>
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
-        public static GameObject InstantiatePrefab(GameObject prefab, Transform parentTransform)
+        public static GameObject InstantiateRootPrefab(GameObject prefab, Transform parentTransform)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
@@ -178,7 +179,7 @@ namespace Assets.Source.Components.Base
         /// <param name="parentTransform">The parent object in the hierarchy</param>
         /// <returns>The Instance</returns>
         /// 
-        public static GameObject InstantiatePrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
+        public static GameObject InstantiateRootPrefab(GameObject prefab,  Vector3 position, Transform parentTransform=null)
         {
             GameObject instance = Instantiate(prefab, parentTransform);
             instance.name = prefab.name;
@@ -299,6 +300,30 @@ namespace Assets.Source.Components.Base
             return canvasObject;
         }
 
+        #endregion
+
+        #region Level
+        /// <summary>
+        /// Find the Level object, and ensures it has an attached Director component.  This object should serve as the parent 
+        /// for all level specific instances, including asteroids, enemies, etc
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject FindLevelObject()
+        {
+            DirectorComponent[] directors = UnityEngine.Object.FindObjectsOfType<DirectorComponent>();
+            return directors.Single().gameObject;
+        }
+
+        /// <summary>
+        /// Helper method that will instantate an object within the level object
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InstantiateLevelPrefab(GameObject prefab, Vector3? position = null, Transform parentTransform = null)
+        {
+            Vector3 pos = position ?? Vector3.zero;
+            Transform parent = parentTransform ?? FindLevelObject().transform;
+            return InstantiateRootPrefab(prefab, pos, parent);
+        }
         #endregion
     }
 }

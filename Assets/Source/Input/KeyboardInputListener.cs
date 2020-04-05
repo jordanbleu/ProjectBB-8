@@ -1,7 +1,10 @@
 ﻿using Assets.Source.Configuration;
 using Assets.Source.Configuration.Exception;
+using Assets.Source.Extensions;
 using Assets.Source.Input.Interfaces;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Assets.Source.Input
@@ -19,29 +22,58 @@ namespace Assets.Source.Input
             return bindings;
         }
 
+        /// <summary>
+        /// Returns the combined axis values for all input types bound to this input.
+        /// <para>
+        /// for example, if i have "move up" bound to the left AND right analog sticks for some reason,
+        /// the combined inputs from each will be returned, but clamped between 0 and 1.  
+        /// This means if I move both analog sticks up, I'll get 1.  If i move one up and one
+        /// downn, I'll get 0, etc
+        /// </para>
+        /// </summary>
+        /// <param name="binding"></param>
+        /// <returns></returns>
         public float GetAxis(string binding)
         {
-            KeyCode keyCode = GetKeyCode(binding);
+            IEnumerable<KeyCode> keyCode = GetKeyCodes(binding);
 
-            return UnityEngine.Input.GetKey(keyCode) ? 1 : 0;
-
+            return Mathf.Clamp(GetKeyCodes(binding)
+                .Select(code => UnityEngine.Input.GetKey(code))
+                .Select(value => value.ToFloat())
+                .Sum(), 0, 1);
         }
 
-        public bool IsKeyDown(string binding)
+        /// <summary>
+        /// Checks if any input with this binding is currently being held down this frame
+        /// <para>
+        /// </summary>
+        public bool IsKeyHeld(string binding)
         {
-            return UnityEngine.Input.GetKey(GetKeyCode(binding));
+            IEnumerable<KeyCode> keyCodes = GetKeyCodes(binding);
+            return keyCodes.Any(kc => UnityEngine.Input.GetKey(kc).Equals(true));
         }
 
+        /// <summary>
+        /// Returns true if any input with this binding is currently pressed but was not pressed last frame
+        /// </summary>
         public bool IsKeyHit(string binding)
         {
-            return UnityEngine.Input.GetKeyDown(GetKeyCode(binding));
+            IEnumerable<KeyCode> keyCodes = GetKeyCodes(binding);
+            return keyCodes.Any(kc => UnityEngine.Input.GetKeyDown(kc).Equals(true));
         }
 
+        /// <summary>
+        /// Returns true if any input with this binding is currently released but was pressed last frame
+        /// </summary>
         public bool IsKeyReleased(string binding)
         {
-            return UnityEngine.Input.GetKeyUp(GetKeyCode(binding));
+            IEnumerable<KeyCode> keyCodes = GetKeyCodes(binding);
+            return keyCodes.Any(kc => UnityEngine.Input.GetKeyUp(kc).Equals(true));
         }
 
+        /// <summary>
+        /// Returns true if no inputs with this binding are currently being pressed / moved / touched 
+        /// </summary>
         public bool IsNeutral()
         {
             foreach (string binding in GetKeyBindings().Bindings.Keys)
@@ -54,18 +86,28 @@ namespace Assets.Source.Input
             return true;
         }
 
-        private KeyCode GetKeyCode(string binding)
+        // Gets the list of key codes that this input binding is bound to 
+        private IEnumerable<KeyCode> GetKeyCodes(string binding)
         {
-            if (GetKeyBindings().Bindings.TryGetValue(binding, out KeyCodeValue keyCodeValue))
+            if (GetKeyBindings().Bindings.TryGetValue(binding, out IEnumerable<KeyCodeValue> keyCodeValues))
             {
-                if (Enum.TryParse(keyCodeValue.KeyCode, out KeyCode keyCode))
+                foreach (KeyCodeValue keyCodeValue in keyCodeValues)
                 {
-                    return keyCode;
+                    if (Enum.TryParse(keyCodeValue.KeyCode, out KeyCode keyCode))
+                    {
+                        yield return keyCode;
+                    }
+                    else
+                    {
+                        throw new InvalidConfigurationException<KeyboardBindings>
+                            ($"Key binding value '{keyCodeValue.KeyCode}' is not a valid keyboard KeyCode.");
+                    }
                 }
-                throw new InvalidConfigurationException<KeyboardBindings>
-                    ($"Key binding value '{keyCodeValue.KeyCode}' is not a valid keyboard KeyCode.");
             }
-            throw new InvalidConfigurationException<KeyboardBindings>($"Unable to find key binding for {binding}");
+            else
+            { 
+                throw new InvalidConfigurationException<KeyboardBindings>($"Unable to find key bindings for {binding}");
+            }
         }
 
     }

@@ -1,11 +1,11 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Interfaces;
 using Assets.Source.Components.Enemy;
 using Assets.Source.Constants;
+using Assets.Source.Director.Interfaces;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Source.Components.Director.Testing.TestLevel
+namespace Assets.Source.Director.Testing.TestLevel
 {
     class TestLevelPhase2 : ILevelPhase
     {
@@ -13,10 +13,10 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
         {
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             
-            GameObject enemy1 = ComponentBase.InstantiatePrefab(enemy);
+            GameObject enemy1 = ComponentBase.InstantiateLevelPrefab(enemy);
             enemy1.transform.position = new Vector3(0, .5f, 1);
 
-            GameObject enemy2 = ComponentBase.InstantiatePrefab(enemy);
+            GameObject enemy2 = ComponentBase.InstantiateLevelPrefab(enemy);
             enemy2.transform.position = new Vector3(0, .5f, 1);
         }
         
@@ -32,7 +32,7 @@ namespace Assets.Source.Components.Director.Testing.TestLevel
         public void PhaseComplete(ILevelContext context)
         {
             Debug.Log("Phase 2 complteed.  You are a god among men.");
-            context.BeginPhase<TestLevelPhase3>();
+            context.BeginPhase(new TestLevelPhase3());
         }
 
     }

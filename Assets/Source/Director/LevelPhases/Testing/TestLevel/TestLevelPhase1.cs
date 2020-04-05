@@ -1,5 +1,6 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Components.Enemy;
+using Assets.Source.Components.Spawner;
 using Assets.Source.Constants;
 using Assets.Source.Director.Interfaces;
 using UnityEngine;
@@ -10,8 +11,17 @@ namespace Assets.Source.Director.Testing.TestLevel
     // i was thinking numbers but that will make it harder to add things in between phases
     public class TestLevelPhase1 : ILevelPhase
     {
+        private GameObject asteroidSpawner;
+
         public void PhaseBegin(ILevelContext context)
         {
+            GameObject asteroidPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Asteroid}");
+
+            // Create an asteroid spawner which will generate a random asteroid ever buncha milliseconds
+            asteroidSpawner = ComponentBase.InstantiateLevelPrefab(new GameObject("AsteroidSpawner", typeof(AutoSpawnerComponent)));
+            ComponentBase.GetRequiredComponent<AutoSpawnerComponent>(asteroidSpawner).Initialize(500, asteroidPrefab);
+
+
             // This method is used to spawn enemies, initialize the phase, etc
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
             
@@ -34,6 +44,7 @@ namespace Assets.Source.Director.Testing.TestLevel
 
         public void PhaseComplete(ILevelContext context)
         {
+            GameObject.Destroy(asteroidSpawner);
             Debug.Log("Phase 1 completed, you killed the guy!");
             context.BeginPhase(new TestLevelPhase2());
         }

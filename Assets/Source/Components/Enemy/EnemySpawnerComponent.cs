@@ -76,7 +76,7 @@ namespace Assets.Source.Components.Enemy
         {
             AdjustSpawnPosition();
 
-            enemy = InstantiateLevelPrefab(enemyPrafabToSpawn, transform.position, transform);
+            enemy = InstantiatePrefab(enemyPrafabToSpawn, transform.position, transform);
 
             if (--spawnCount == 0)
             {

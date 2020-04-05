@@ -1,4 +1,5 @@
-﻿using Assets.Source.Components.Projectile.Base;
+﻿using Assets.Source.Components.Camera;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -11,6 +12,14 @@ namespace Assets.Source.Components.Projectile
         private readonly float MOVE_SPEED = 6f;
 
         protected override int BaseDamage => 10;
+
+        private CameraEffectComponent cameraEffect;
+
+        public override void ComponentAwake()
+        {
+            cameraEffect = GetRequiredComponent<CameraEffectComponent>(GetRequiredObject("PlayerVCam"));
+            base.ComponentAwake();
+        }
 
         public override void ComponentStart()
         {
@@ -25,6 +34,7 @@ namespace Assets.Source.Components.Projectile
 
         public override void ComponentOnDestroy()
         {
+            cameraEffect.TriggerImpulse1();
             GameObject playerBulletExplosion = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/PlayerBulletExplosion");
             InstantiateLevelPrefab(playerBulletExplosion, transform.position);
             base.ComponentOnDestroy();

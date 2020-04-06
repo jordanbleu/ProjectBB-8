@@ -1,6 +1,6 @@
 ﻿using Assets.Source.Components.Actor;
-using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -9,10 +9,11 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ComponentBase
+    public class PlayerBehavior : ProjectileComponentBase
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
+        private readonly float dashDistance = 1.5f; //TODO: make this a constant somewhere
 
         // Components
         private Rigidbody2D rigidBody;
@@ -32,7 +33,14 @@ namespace Assets.Source.Components.Player
 
         // Physics
         private Vector2 externalVelocity;
+        private bool isDashingRight = false;
+        private bool isDashingLeft = false;
+        private float dashLocation;
+        private float dashDelay = 2.0f;
+        private float dashDelayRemaining = 0.0f;
 
+
+        protected override int BaseDamage => 100;
 
         public override void ComponentAwake()
         {
@@ -73,19 +81,35 @@ namespace Assets.Source.Components.Player
 
             rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
 
-            #region Dashing Simple Implementation
-            //Very simple implementation of dashing, not final product
-            //This version just teleports the shit a little to the left/right
-            //Final version should include actual movement
-
-            float dashDistance = .5f; //TODO: make this a constant somewhere
-            if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
+            #region Dashing
+            if(dashDelayRemaining <= 0.0f)
             {
-                rigidBody.position += Vector2.left * dashDistance;
+                if ((InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT) || isDashingRight) && !isDashingLeft)
+                {
+                    Debug.Log("player is dashing right");
+                    if (!isDashingRight)
+                    {
+                        dashLocation = transform.position.x + dashDistance;
+                        isDashingRight = !isDashingRight;
+                        dashDelayRemaining = dashDelay;
+                    }
+                    DashRight();
+                }
+                else if ((InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT) || isDashingLeft) && !isDashingRight)
+                {
+                    Debug.Log("player is dashing left");
+                    if (!isDashingLeft)
+                    {
+                        dashLocation = transform.position.x - dashDistance;
+                        isDashingLeft = !isDashingLeft;
+                        dashDelayRemaining = dashDelay;
+                    }
+                    DashLeft();
+                }
             }
-            if (InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT))
+            else
             {
-                rigidBody.position += Vector2.right * dashDistance;
+                dashDelayRemaining -= Time.deltaTime;
             }
             #endregion
 
@@ -141,6 +165,7 @@ namespace Assets.Source.Components.Player
 
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
+            string collisionName = collision.otherCollider.gameObject.name;
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
@@ -173,5 +198,30 @@ namespace Assets.Source.Components.Player
             }
         }
 
+        private void DashRight()
+        {
+            externalVelocity = externalVelocity.Copy(x: dashDistance + externalVelocity.x);
+            Debug.Log("DashVelocity: " + externalVelocity);
+
+            if(transform.position.x > dashLocation)
+            {
+                Debug.Log("PLayer stopped dashing");
+                isDashingRight = false;
+                externalVelocity.x = 0f;
+            }
+        }
+
+        private void DashLeft()
+        {
+            externalVelocity = externalVelocity.Copy(x: -dashDistance - externalVelocity.x);
+            Debug.Log("DashVelocity: " + externalVelocity);
+
+            if (transform.position.x < dashLocation)
+            {
+                Debug.Log("PLayer stopped dashing");
+                isDashingRight = false;
+                externalVelocity.x = 0f;
+            }
+        }
     }
 }

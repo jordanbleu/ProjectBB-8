@@ -28,7 +28,6 @@ namespace Assets.Source.Components.Projectile
 
         public override void DestroyProjectile(Collision2D collision)
         {
-            Debug.Log($"Asteroid Collided with {collision.gameObject} and was destroyed");
             InstantiatePrefab(explosionObject, transform.position);
             Destroy(gameObject);
             // No need to call base since we already destroyed the object here

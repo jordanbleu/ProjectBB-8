@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Components.Base;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using UnityEngine;
 

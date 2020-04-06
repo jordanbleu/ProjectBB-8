@@ -86,6 +86,8 @@ namespace Assets.Source.Components.Player
             //This version just teleports the shit a little to the left/right
             //Final version should include actual movement
 
+            // todo: This should not set position directly, it should use velocity.  This curently breaks the player barrier
+
             float dashDistance = .5f; //TODO: make this a constant somewhere
             if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
             {
@@ -99,8 +101,7 @@ namespace Assets.Source.Components.Player
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
             {
-                GameObject bullet = InstantiateInLevel(bulletPrefab);
-                bullet.transform.position = transform.position;
+                FireBlaster();
             }
 
             if (InputManager.IsKeyPressed(InputConstants.K_PAUSE))
@@ -109,7 +110,23 @@ namespace Assets.Source.Components.Player
                 menuSelector.ShowMenu<PauseMenuComponent>();
             }
         }
-        
+
+        // Player pressed left mouse button and shot a bullet
+        private void FireBlaster()
+        {
+            if (actorBehavior.BlasterAmmo > 0)
+            {
+                GameObject bullet = InstantiateInLevel(bulletPrefab);
+                bullet.transform.position = transform.position;
+                actorBehavior.BlasterAmmo--;
+            }
+            else 
+            {
+                // todo: add a toast notification
+                Debug.Log("~~ You outta ammmo, fam ~~");
+            }
+        }
+
         private void UpdateActorStatus()
         {
             // todo: this is just placeholder stuff

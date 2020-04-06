@@ -23,7 +23,7 @@ namespace Assets.Source.Components.Projectile
             RigidBody.velocity = new Vector2(random.NextFloatInRange(-0.5f, 0.5f), random.NextFloatInRange(-0.1f, -MAX_SPEED));
             explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/AsteroidExplosion");
 
-            float scale = UnityEngine.Random.Range(1f, 2f);
+            float scale = UnityEngine.Random.Range(1f, 1.2f);
             transform.localScale = transform.localScale.Copy(x:scale, y:scale);
 
             spinSpeed = UnityEngine.Random.Range(-2, 2);
@@ -41,7 +41,7 @@ namespace Assets.Source.Components.Projectile
         {
             Debug.Log($"Asteroid Collided with {collision.gameObject} and was destroyed");
             
-            GameObject explosion = InstantiateLevelPrefab(explosionObject, transform.position);
+            GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
             
             // Scale size of the explosion to be the same as the asteroids scale
 

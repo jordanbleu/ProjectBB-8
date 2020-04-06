@@ -54,7 +54,7 @@ namespace Assets.Source.Components.Spawner
             {
                 float x = UnityEngine.Random.Range(minPosition.x, maxPosition.x);
                 float y = UnityEngine.Random.Range(maxPosition.y, maxPosition.y);
-                InstantiateLevelPrefab(spawnObject, new Vector3(x, y, 0));
+                InstantiateInLevel(spawnObject, new Vector3(x, y, 0));
             }
         }
 

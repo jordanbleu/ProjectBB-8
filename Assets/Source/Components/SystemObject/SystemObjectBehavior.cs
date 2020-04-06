@@ -26,7 +26,6 @@ namespace Assets.Source.Components.SystemObject
         {
             // todo:  This should be set via a settings value 
             InputManager = new InputManager(new KeyboardInputListener());
-
         }
 
         public void Update()

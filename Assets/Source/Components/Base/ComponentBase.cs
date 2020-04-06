@@ -1,8 +1,10 @@
-﻿using Assets.Source.Components.Exception;
+﻿using Assets.Source.Components.Director.Base;
+using Assets.Source.Components.Exception;
 using Assets.Source.Components.SystemObject;
 using Assets.Source.Components.TextWriter;
 using Assets.Source.Constants;
 using Assets.Source.Input;
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -207,7 +209,7 @@ namespace Assets.Source.Components.Base
         /// <returns></returns>
         public static bool ComponentExists<T>() where T : UnityEngine.Component
         {
-            return Object.FindObjectsOfType<T>().Any();
+            return FindObjectsOfType<T>().Any();
         }
 
         #endregion
@@ -299,6 +301,44 @@ namespace Assets.Source.Components.Base
             return canvasObject;
         }
 
+        #endregion
+
+        #region Level
+        /// <summary>
+        /// Find the Level object, and ensures it has an attached Director component.  This object should serve as the parent 
+        /// for all level specific instances, including asteroids, enemies, etc
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject FindLevelObject()
+        {
+            DirectorComponent[] directors = UnityEngine.Object.FindObjectsOfType<DirectorComponent>();
+            return directors.Single().gameObject;
+        }
+
+        /// <summary>
+        /// Helper method that will instantate an object within the level object
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InstantiateInLevel(GameObject prefab, Vector3? position = null)
+        {
+            Vector3 pos = position ?? Vector3.zero;
+            Transform parent = FindLevelObject().transform;
+            return InstantiatePrefab(prefab, pos, parent);
+        }
+
+        /// <summary>
+        /// Creates a new game object with the specified components as a child of the level object
+        /// </summary>
+        /// <returns></returns>
+        public static GameObject InstantiateInLevel(string name, Vector3 position, params Type[] components)
+        {
+            GameObject inst = new GameObject(name, components);
+            inst.transform.parent = FindLevelObject().transform;
+            inst.transform.position = position;
+            return inst;
+        }
+
+        
         #endregion
     }
 }

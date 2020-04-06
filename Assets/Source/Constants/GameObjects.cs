@@ -15,7 +15,7 @@
 
         public const string KamikazeEnemy = "KamikazeEnemy";
 
-        public const string Enemy = "Enemy";
+        public const string ShooterEnemy = "ShooterEnemy";
         
         public const string TextWriter = "TextWriter";
         public const string TextWriterPipeline = "TextWriterPipeline";

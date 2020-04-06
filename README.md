@@ -15,7 +15,6 @@
 Team:
 Jordan Bleu
 Nick Pientka
-Sam Grieser
 
 ```
 

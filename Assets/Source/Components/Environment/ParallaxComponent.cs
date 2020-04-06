@@ -39,7 +39,7 @@ namespace Assets.Source.Components.Environment
 
             foreach (ParallaxInfo parallaxInfo in parallaxInfos)
             {
-                GameObject parallaxGroupPrefab = InstantiatePrefab(parallaxGroupResource, transform.position);
+                GameObject parallaxGroupPrefab = InstantiatePrefab(parallaxGroupResource, transform.position, transform);
                 parallaxGroupPrefab.name = $"{parallaxInfo.name}Group";
 
                 ParallaxGroupComponent parallaxGroupComponent = parallaxGroupPrefab.GetComponent<ParallaxGroupComponent>();

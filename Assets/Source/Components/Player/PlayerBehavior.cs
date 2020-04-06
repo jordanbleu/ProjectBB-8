@@ -1,6 +1,7 @@
 ﻿using Assets.Source.Components.Actor;
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Projectile.Base;
+using Assets.Source.Components.Director.Base;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -26,10 +27,13 @@ namespace Assets.Source.Components.Player
 
         // Hierarchy References
         private GameObject cameraObject;
+        
 
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
+        private DirectorComponent levelDirector;
+
 
         // Physics
         private Vector2 externalVelocity;
@@ -55,6 +59,7 @@ namespace Assets.Source.Components.Player
 
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
+            levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
 
             base.ComponentAwake();
         }
@@ -79,7 +84,10 @@ namespace Assets.Source.Components.Player
 
             animator.SetInteger("horizontal_move", Mathf.RoundToInt(horizontalMoveDelta));
 
-            rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
+            float totalHorizontalVelocity = horizontalMoveDelta + externalVelocity.x;
+            float totalVerticalVelocity = verticalMoveDelta + externalVelocity.y;
+
+            rigidBody.velocity = rigidBody.velocity.Copy(totalHorizontalVelocity, totalVerticalVelocity);
 
             #region Dashing
             if(dashDelayRemaining <= 0.0f)
@@ -115,7 +123,7 @@ namespace Assets.Source.Components.Player
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
             {
-                GameObject bullet = InstantiatePrefab(bulletPrefab);
+                GameObject bullet = InstantiateInLevel(bulletPrefab);
                 bullet.transform.position = transform.position;
             }
 
@@ -125,18 +133,18 @@ namespace Assets.Source.Components.Player
                 menuSelector.ShowMenu<PauseMenuComponent>();
             }
         }
-
+        
         private void UpdateActorStatus()
         {
             // todo: this is just placeholder stuff
             if (actorBehavior.Health <= 0)
             {
-                InstantiatePrefab(explosionPrefab, transform.position);
+                InstantiateInLevel(explosionPrefab, transform.position);
                 menuSelector.ShowMenu<GameOverMenuComponent>();
                 Destroy(gameObject);
             }
         }
-
+        
         private void UpdateExternalVelocity()
         {
             // Normalize

@@ -11,7 +11,7 @@
 
         bool IsKeyReleased(string binding);
 
-        bool IsKeyDown(string binding);
+        bool IsKeyHeld(string binding);
 
         bool IsKeyHit(string binding);
 

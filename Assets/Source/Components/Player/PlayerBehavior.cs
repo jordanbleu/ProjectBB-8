@@ -19,6 +19,7 @@ namespace Assets.Source.Components.Player
         private Rigidbody2D rigidBody;
         private ActorBehavior actorBehavior;
         private Animator animator;
+        private AudioSource audioSource;
 
         // Prefab references
         private GameObject bulletPrefab;
@@ -27,12 +28,13 @@ namespace Assets.Source.Components.Player
         // Hierarchy References
         private GameObject cameraObject;
         
-
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
         private DirectorComponent levelDirector;
 
+        // Audio Clips
+        private AudioClip blasterSound;
 
         // Physics
         private Vector2 externalVelocity;
@@ -43,6 +45,7 @@ namespace Assets.Source.Components.Player
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             animator = GetRequiredComponent<Animator>();
+            audioSource = GetRequiredComponent<AudioSource>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
@@ -52,6 +55,9 @@ namespace Assets.Source.Components.Player
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
             levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
+
+            blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
+
 
             base.ComponentAwake();
         }
@@ -116,6 +122,7 @@ namespace Assets.Source.Components.Player
         {
             if (actorBehavior.BlasterAmmo > 0)
             {
+                audioSource.PlayOneShot(blasterSound);
                 GameObject bullet = InstantiateInLevel(bulletPrefab);
                 bullet.transform.position = transform.position;
                 actorBehavior.BlasterAmmo--;

@@ -22,6 +22,7 @@ namespace Assets.Source.Components.Enemy.Base
         protected ActorBehavior actorBehavior;
         protected GameObject player;
 
+
         public override void ComponentAwake()
         {
             //todo: design a better way to have a reference to the play since every spawned enemy will have to try and "find" the player
@@ -29,6 +30,7 @@ namespace Assets.Source.Components.Enemy.Base
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+
 
             base.ComponentAwake();
         }

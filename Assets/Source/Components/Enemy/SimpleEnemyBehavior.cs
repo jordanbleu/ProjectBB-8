@@ -24,10 +24,18 @@ namespace Assets.Source.Components.Enemy
         private float currentShootCooldown;
         private float currentStunCooldown = 0.0f;
 
+        private AudioSource audioSource;
+        private AudioClip explosionSound;
+        private AudioClip blasterSound;
+
         protected override int BaseDamage => 30;
 
         public override void ComponentAwake()
         {
+            audioSource = GetRequiredComponent<AudioSource>();
+            explosionSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Explosion/smallImpact");
+            blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Enemy/enemyBlaster");
+
             enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.EnemyBullet}");
             currentShootCooldown = SHOOT_COOLDOWN;
             base.ComponentAwake();
@@ -85,6 +93,7 @@ namespace Assets.Source.Components.Enemy
 
                 if (ShouldShoot())
                 {
+                    audioSource.PlayOneShot(blasterSound);
                     GameObject bullet = InstantiateInLevel(enemyBulletPrefab);
                     bullet.transform.position = transform.position.Copy();
                 }
@@ -93,6 +102,8 @@ namespace Assets.Source.Components.Enemy
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
+            audioSource.PlayOneShot(explosionSound);
+
             if (!collision.otherCollider.gameObject.name.Equals(enemyBulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;

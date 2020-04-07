@@ -13,6 +13,10 @@ namespace Assets.Source.Components.Enemy
     /// </summary>
     public class KamikazeEnemyBehavior : EnemyAIBase, IProjectileReactor
     {
+        private AudioClip explosionSound;
+        private AudioSource audioSource;
+
+
         private readonly float MOVE_SPEED = 1.35f;
         private readonly float MOVEMENT_THRESHOLD = 0.025f; //how close the enemy needs to be to the player before it will stop moving, can't be 0
         private readonly float STUN_DURATION = 0.5f; //the time after being hit by a projectile in which the enemy is stunned
@@ -23,6 +27,9 @@ namespace Assets.Source.Components.Enemy
 
         public override void ComponentAwake()
         {
+            audioSource = GetRequiredComponent<AudioSource>();
+            explosionSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Explosion/smallImpact");
+
             base.ComponentAwake();
         }
 
@@ -88,6 +95,8 @@ namespace Assets.Source.Components.Enemy
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
+            audioSource.PlayOneShot(explosionSound);
+
             if (collision.otherCollider.gameObject.name.Equals(GameObjects.Player))
             {
                 actorBehavior.Health = 0;

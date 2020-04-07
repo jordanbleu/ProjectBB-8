@@ -11,7 +11,7 @@ namespace Assets.Source.Components.Spawner
     /// <summary>
     /// Used to spawn prefabs intermittently in random positions.  
     /// </summary>
-    public class AutoSpawnerComponent : DelayedUpdateBaseComponent
+    public class AutoSpawnerComponent : DelayComponentBase
     {
         [SerializeField]
         private GameObject spawnObject;

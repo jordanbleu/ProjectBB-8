@@ -6,6 +6,7 @@ using Assets.Source.Constants;
 using Assets.Source.Input;
 using System;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Source.Components.Base
@@ -106,13 +107,13 @@ namespace Assets.Source.Components.Base
         /// </summary>
         protected GameObject GetRequiredChild(string name)
         {
-            return GetRequiredChild(gameObject, name);
+            return GetRequiredChild(name, gameObject);
         }
 
         /// <summary>
         /// Gets a required child game object off the specified game object, or throws an exception if not found
         /// </summary>
-        public static GameObject GetRequiredChild(GameObject otherObject, string name)
+        public static GameObject GetRequiredChild(string name, GameObject otherObject)
         {
             Transform tranformObject = otherObject.transform.Find(name)
                 ?? throw new MissingRequiredChildException(otherObject, name);
@@ -299,6 +300,20 @@ namespace Assets.Source.Components.Base
                 canvasObject.name = GameObjects.Canvas;
             }
             return canvasObject;
+        }
+
+        /// <summary>
+        /// Fades in a Snackbar style notification for the user.  The notification object will activate itself, display itself, then 
+        /// disable itself again
+        /// </summary>
+        /// <param name="notificationMessage">Message to display on notification</param>
+        protected void Warning(string notificationMessage) 
+        {
+            GameObject canvasObject = FindOrCreateCanvas();
+            GameObject snackbarObject = GetRequiredChild("SnackbarNotification", canvasObject);
+            TextMeshProUGUI textMeshComponent = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("Text", snackbarObject));
+            textMeshComponent.SetText(notificationMessage);
+            snackbarObject.SetActive(true);
         }
 
         #endregion

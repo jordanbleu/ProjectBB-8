@@ -58,7 +58,6 @@ namespace Assets.Source.Components.Player
 
             blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 
-
             base.ComponentAwake();
         }
 
@@ -115,6 +114,11 @@ namespace Assets.Source.Components.Player
                 // Opens the pause menu
                 menuSelector.ShowMenu<PauseMenuComponent>();
             }
+
+            if (InputManager.IsKeyPressed(InputConstants.K_MENU_LEFT)) 
+            {
+                Warning("booty");
+            }
         }
 
         // Player pressed left mouse button and shot a bullet
@@ -129,8 +133,7 @@ namespace Assets.Source.Components.Player
             }
             else 
             {
-                // todo: add a toast notification
-                Debug.Log("~~ You outta ammmo, fam ~~");
+                Warning("No Ammo");
             }
         }
 

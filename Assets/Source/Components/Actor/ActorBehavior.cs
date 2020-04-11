@@ -17,7 +17,7 @@ namespace Assets.Source.Components.Actor
 
         // todo: make this not show in the inspector eventually
         [SerializeField]
-        private int _health;
+        private int _health = 100;
         public int Health 
         {            
             get => _health; 
@@ -25,7 +25,15 @@ namespace Assets.Source.Components.Actor
         }
 
 
-        public int BlasterAmmo { get; set; } = 150;
+        [SerializeField]
+        private int _blasterAmmo = 50;
+        public int BlasterAmmo 
+        {
+            get => _blasterAmmo; 
+            set => _blasterAmmo = value; 
+        }
+
+        
 
         #region Player Stats
 
@@ -38,7 +46,7 @@ namespace Assets.Source.Components.Actor
         public override void ComponentUpdate()
         {
             // Temporary way to show the ammo 
-            var tmp = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild(FindOrCreateCanvas(), "AmmoPlaceholder"));
+            var tmp = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("AmmoPlaceholder", FindOrCreateCanvas()));
             tmp.SetText(BlasterAmmo.ToString());
             base.ComponentUpdate();
         }

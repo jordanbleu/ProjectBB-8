@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Director.Interfaces;
+using Assets.Source.Director.LevelPhases.Sandbox;
 using Assets.Source.Director.Testing.TestLevel;
 using System;
 
@@ -14,7 +15,7 @@ namespace Assets.Source.Director.Enums
         public enum Level
         {
             TestLevel = 0,
-            Level_01  = 1,
+            EmptySandBox  = 1,
             Level_02  = 2,
         }
 
@@ -25,8 +26,9 @@ namespace Assets.Source.Director.Enums
             switch (level)
             {
                 case Level.TestLevel:
-                    return new TestLevelPhase1() as ILevelPhase;
-                case Level.Level_01:
+                    return new TestLevelPhase1();
+                case Level.EmptySandBox:
+                    return new EmptyLevelPhase();
                 case Level.Level_02:
                 default:
                     throw new ArgumentException($"The specified level {level.ToString()} does not return a " +

@@ -58,7 +58,6 @@ namespace Assets.Source.Components.Player
 
             blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 
-
             base.ComponentAwake();
         }
 
@@ -129,8 +128,7 @@ namespace Assets.Source.Components.Player
             }
             else 
             {
-                // todo: add a toast notification
-                Debug.Log("~~ You outta ammmo, fam ~~");
+                Warning("No Ammo");
             }
         }
 
@@ -176,6 +174,12 @@ namespace Assets.Source.Components.Player
             if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
+
+                // Warn player if health is less than 10%
+                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.1f)
+                {
+                    Warning("Low Health");
+                }
 
                 // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
 

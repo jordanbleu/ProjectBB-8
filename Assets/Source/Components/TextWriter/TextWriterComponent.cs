@@ -22,12 +22,10 @@ namespace Assets.Source.Components.TextWriter
         private AudioSource audioSource;
         private AudioClip beep;
 
-
-
         public override void ComponentAwake()
         {
             audioSource = GetRequiredComponent<AudioSource>();
-            beep = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/DialogueBeeps/dialogueBeep_default");
+            beep = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/UI/DialogueBeeps/dialogueBeep_default");
 
             GameObject textObject = GetRequiredChild(TEXT_OBJECT_NAME);
 

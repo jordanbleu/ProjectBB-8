@@ -14,14 +14,18 @@ namespace Assets.Source.Components.Enemy
     {
         private readonly float MOVE_SPEED = 1.35f;
         private readonly float MOVEMENT_THRESHOLD = 0.025f; //how close the enemy needs to be to the player before it will stop moving, can't be 0
-        private readonly float STUN_DURATION = 0.5f; //the time after being hit by a projectile in which the enemy is stunned
 
         private float currentStunCooldown = 0.0f;
+        private AudioClip explosionSound;
+        private AudioSource audioSource;
 
         protected override int BaseDamage => 50;
 
         public override void ComponentAwake()
         {
+            audioSource = GetRequiredComponent<AudioSource>();
+            explosionSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Explosion/smallImpact");
+
             base.ComponentAwake();
         }
 
@@ -84,7 +88,7 @@ namespace Assets.Source.Components.Enemy
                 rigidBody.velocity = rigidBody.velocity.Copy(horizontalMoveDelta, verticalMoveDelta) + externalVelocity;
             }
         }
-
+        
         /// <summary>
         /// Uses an exponential equation to calculate how fast the enemy should move towards the player.
         /// This helps give the enemy a more realistic feel to it as it will catch up fast but slow down the approach once closer to the player.
@@ -99,6 +103,7 @@ namespace Assets.Source.Components.Enemy
 
         public override void ReactToHit(Collision2D collision, int baseDamage)
         {
+            audioSource.PlayOneShot(explosionSound);
             //we don't need to do anything here since kamikaze dies on impact of anything
             //if we want to make it so that this enemy can take multiple hits from the players bullets
             //then we should ignore collisions from player bullets in ReactToProjectileCollision

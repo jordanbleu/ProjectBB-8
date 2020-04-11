@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Components.Base;
+using Assets.Source.Constants;
 using Assets.Source.Input.Constants;
 using Assets.Source.TextWriterStyle.Base;
 using Assets.Source.TextWriterStyle.Factory;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Assets.Source.Components.TextWriter
 {
-    public class TextWriterComponent : DelayedUpdateBaseComponent
+    public class TextWriterComponent : DelayComponentBase
     {
         // Resource Names
         private const string TEXT_OBJECT_NAME = "Text";
@@ -18,8 +19,14 @@ namespace Assets.Source.Components.TextWriter
         private TextMeshProUGUI textMeshComponent;
         private TextWriterStyleFactory styleFactory;
 
+        private AudioSource audioSource;
+        private AudioClip beep;
+
         public override void ComponentAwake()
         {
+            audioSource = GetRequiredComponent<AudioSource>();
+            beep = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/UI/DialogueBeeps/dialogueBeep_default");
+
             GameObject textObject = GetRequiredChild(TEXT_OBJECT_NAME);
 
             textMeshComponent = GetRequiredComponent<TextMeshProUGUI>(textObject);
@@ -54,7 +61,7 @@ namespace Assets.Source.Components.TextWriter
 
         public override void DelayedUpdate()
         {
-            if (!string.IsNullOrEmpty(text))
+            if (!string.IsNullOrEmpty(text) && !IsComplete)
             {
                 IsComplete = (charIndex >= text.Length);
 
@@ -109,6 +116,11 @@ namespace Assets.Source.Components.TextWriter
                         chars.Append(nextChar);
                     }
 
+                }
+
+                if (beep != null)
+                {
+                    audioSource.PlayOneShot(beep);
                 }
                 charIndex++;
             }

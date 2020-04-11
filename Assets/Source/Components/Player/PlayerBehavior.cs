@@ -2,6 +2,7 @@
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.UI;
+using Assets.Source.Components.Director.Base;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -32,6 +33,11 @@ namespace Assets.Source.Components.Player
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
+        private DirectorComponent levelDirector;
+
+        // Audio
+        private AudioClip blasterSound;
+        private AudioSource audioSource;
 
         // Physics
         private Vector2 externalVelocity;
@@ -44,6 +50,7 @@ namespace Assets.Source.Components.Player
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             animator = GetRequiredComponent<Animator>();
+            audioSource = GetRequiredComponent<AudioSource>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
@@ -52,10 +59,13 @@ namespace Assets.Source.Components.Player
 
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
+            levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
 
             actorDash = gameObject.AddComponent<ActorDash>();
             actorDash.CooldownTime = DASH_COOLDOWN;
             actorDash.DashDistance = DASH_DISTANCE;
+
+            blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 
             base.ComponentAwake();
         }
@@ -112,8 +122,7 @@ namespace Assets.Source.Components.Player
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
             {
-                GameObject bullet = InstantiateInLevel(bulletPrefab);
-                bullet.transform.position = transform.position;
+                FireBlaster();
             }
 
             if (InputManager.IsKeyPressed(InputConstants.K_PAUSE))
@@ -122,7 +131,23 @@ namespace Assets.Source.Components.Player
                 menuSelector.ShowMenu<PauseMenuComponent>();
             }
         }
-        
+
+        // Player pressed left mouse button and shot a bullet
+        private void FireBlaster()
+        {
+            if (actorBehavior.BlasterAmmo > 0)
+            {
+                audioSource.PlayOneShot(blasterSound);
+                GameObject bullet = InstantiateInLevel(bulletPrefab);
+                bullet.transform.position = transform.position;
+                actorBehavior.BlasterAmmo--;
+            }
+            else 
+            {
+                Warning("No Ammo");
+            }
+        }
+
         private void UpdateActorStatus()
         {
             // todo: this is just placeholder stuff
@@ -166,6 +191,12 @@ namespace Assets.Source.Components.Player
             if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
             {
                 actorBehavior.Health -= baseDamage;
+
+                // Warn player if health is less than 10%
+                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.1f)
+                {
+                    Warning("Low Health");
+                }
 
                 // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
 

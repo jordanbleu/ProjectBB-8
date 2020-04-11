@@ -461,6 +461,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 4650650455879844300, guid: d3e813749664ffc42ba2731b61d2fc53,
+        type: 3}
+      propertyPath: _blasterAmmo
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4650650455879844300, guid: d3e813749664ffc42ba2731b61d2fc53,
+        type: 3}
+      propertyPath: _health
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 4650650455879844301, guid: d3e813749664ffc42ba2731b61d2fc53,
         type: 3}
       propertyPath: m_Constraints
@@ -545,6 +555,11 @@ PrefabInstance:
         type: 3}
       propertyPath: restrictedArea.Width
       value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8860130149736868588, guid: d3e813749664ffc42ba2731b61d2fc53,
+        type: 3}
+      propertyPath: m_audioClip
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d3e813749664ffc42ba2731b61d2fc53, type: 3}

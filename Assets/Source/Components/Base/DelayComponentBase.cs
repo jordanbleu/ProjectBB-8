@@ -7,7 +7,7 @@ namespace Assets.Source.Components.Base
     /// allows the ability to apply a dynamic delay in processing each frame.  To utilize this 
     /// feature, override the DelayedStep method instead of Step
     /// </summary>
-    public abstract class DelayedUpdateBaseComponent : ComponentBase
+    public abstract class DelayComponentBase : ComponentBase
     {
         /// <summary>
         /// Override this to set the delay in milliseconds

@@ -23,6 +23,8 @@
         /// </summary>
         public static string PrefabsFolder => $"Prefabs";
 
+        public static string SoundFXFolder => $"Sounds/SoundFX";
+
         /// <summary>
         /// Points to the environment folder within the prefabs folder for more speicifc prefabs
         /// </summary>

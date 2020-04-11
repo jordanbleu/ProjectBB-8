@@ -21,12 +21,14 @@ namespace Assets.Source.Components.Enemy.Base
         protected ActorBehavior actorBehavior;
         protected GameObject player;
 
+
         public override void ComponentAwake()
         {
             player = GetRequiredObject(GameObjects.Actors.Player);
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+
 
             base.ComponentAwake();
         }

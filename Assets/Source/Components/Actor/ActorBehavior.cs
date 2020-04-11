@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Components.Base;
+using TMPro;
 using UnityEngine;
 
 namespace Assets.Source.Components.Actor
@@ -13,12 +14,42 @@ namespace Assets.Source.Components.Actor
     /// </summary>
     public class ActorBehavior : ComponentBase
     {
+
+        // todo: make this not show in the inspector eventually
         [SerializeField]
-        private int _health;
+        private int _health = 100;
         public int Health 
         {            
             get => _health; 
             set => _health = value; 
         }
+
+
+        [SerializeField]
+        private int _blasterAmmo = 50;
+        public int BlasterAmmo 
+        {
+            get => _blasterAmmo; 
+            set => _blasterAmmo = value; 
+        }
+
+        
+
+        #region Player Stats
+
+        public int MaxHealth { get; set; } = 100;
+
+        public int MaxBlasterAmmo { get; set; } = 150;
+        #endregion
+
+        // todo: delete this mess
+        public override void ComponentUpdate()
+        {
+            // Temporary way to show the ammo 
+            var tmp = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("AmmoPlaceholder", FindOrCreateCanvas()));
+            tmp.SetText(BlasterAmmo.ToString());
+            base.ComponentUpdate();
+        }
+
     }
 }

@@ -19,17 +19,29 @@ namespace Assets.Source.Components.Enemy
         private readonly float MOVEMENT_THRESHOLD = 0.01f; //how close the enemy needs to be to the player before it will stop moving, can't be 0
         private readonly float STUN_COOLDOWN = 750f; //the time after being hit by a projectile in which the enemy is stunned
 
+        // Timers
         private IntervalTimerComponent shootTimer;
         private IntervalTimerComponent stunTimer;
 
         private GameObject enemyBulletPrefab;
+
         private Vector2 distanceToPlayer;
+
+        // Audio
+        private AudioSource audioSource;
+        private AudioClip explosionSound;
+        private AudioClip blasterSound;
 
         protected override int BaseDamage => 30;
 
         public override void ComponentAwake()
         {
+            audioSource = GetRequiredComponent<AudioSource>();
+            explosionSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Explosion/smallImpact");
+            blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Enemy/enemyBlaster");
+
             enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.EnemyBullet}");
+
             base.ComponentAwake();
         }
 
@@ -105,6 +117,7 @@ namespace Assets.Source.Components.Enemy
 
                 if (ShouldShoot())
                 {
+                    audioSource.PlayOneShot(blasterSound);
                     GameObject bullet = InstantiateInLevel(enemyBulletPrefab);
                     bullet.transform.position = transform.position.Copy();
                     shootTimer.Reset();
@@ -143,6 +156,8 @@ namespace Assets.Source.Components.Enemy
 
         public override void ReactToHit(Collision2D collision, int baseDamage)
         {
+            audioSource.PlayOneShot(explosionSound);
+
             string collisionName = collision.otherCollider.gameObject.name;
             if (!collisionName.Equals(enemyBulletPrefab.name))
             {

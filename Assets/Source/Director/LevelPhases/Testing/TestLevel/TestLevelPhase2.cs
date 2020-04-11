@@ -18,6 +18,12 @@ namespace Assets.Source.Director.Testing.TestLevel
 
             GameObject enemy2 = ComponentBase.InstantiateInLevel(enemy);
             enemy2.transform.position = new Vector3(-1, 3f, 0);
+
+            for (int i = 0; i < 5; i++) {
+                var inst = ComponentBase.InstantiateInLevel(enemy);
+                inst.transform.position = new Vector3(i * 0.5f, i * 0.5f);
+            }
+
         }
         
         public void PhaseUpdate(ILevelContext context)

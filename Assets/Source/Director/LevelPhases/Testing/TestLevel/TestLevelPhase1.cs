@@ -15,17 +15,17 @@ namespace Assets.Source.Director.Testing.TestLevel
 
         public void PhaseBegin(ILevelContext context)
         {
-            GameObject asteroidPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Asteroid}");
+            GameObject asteroidPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.Asteroid}");
             
             // Create an asteroid spawner which will generate a random asteroid ever buncha milliseconds
             asteroidSpawner = ComponentBase.InstantiateInLevel("AsteroidSpawner", Vector3.zero, typeof(AutoSpawnerComponent));
             ComponentBase.GetRequiredComponent<AutoSpawnerComponent>(asteroidSpawner).Initialize(500, asteroidPrefab);
 
             // This method is used to spawn enemies, initialize the phase, etc
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.ShooterEnemy}");
             
             GameObject inst = ComponentBase.InstantiateInLevel(enemy);
-            inst.transform.position = new Vector3(0, .5f, 1); 
+            inst.transform.position = new Vector3(0, 1.5f, 1); 
         }
 
 

@@ -87,7 +87,7 @@ namespace Assets.Source.Components.Enemy
         {
             //use formation and some magic to spawn, align, number, and group enemies together
             //assume odd number
-            GameObject enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Enemy}");
+            GameObject enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.ShooterEnemy}");
             SpriteRenderer spriteRenderer = enemyPrafabToSpawn.GetComponent<SpriteRenderer>();
             float width = spriteRenderer.size.x;
             float height = spriteRenderer.size.y;

@@ -1,7 +1,6 @@
 ﻿using Assets.Source.Components.Actor;
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Projectile.Base;
-using Assets.Source.Components.Director.Base;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
@@ -14,12 +13,14 @@ namespace Assets.Source.Components.Player
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
-        private readonly float dashDistance = 1.5f; //TODO: make this a constant somewhere
+        private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
+        private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
 
         // Components
         private Rigidbody2D rigidBody;
         private ActorBehavior actorBehavior;
         private Animator animator;
+        private ActorDash actorDash;
 
         // Prefab references
         private GameObject bulletPrefab;
@@ -28,21 +29,13 @@ namespace Assets.Source.Components.Player
         // Hierarchy References
         private GameObject cameraObject;
         
-
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
-        private DirectorComponent levelDirector;
-
 
         // Physics
         private Vector2 externalVelocity;
-        private bool isDashingRight = false;
-        private bool isDashingLeft = false;
-        private float dashLocation;
-        private float dashDelay = 2.0f;
-        private float dashDelayRemaining = 0.0f;
-
+        private bool isInvulnerable = false;
 
         protected override int BaseDamage => 100;
 
@@ -52,14 +45,17 @@ namespace Assets.Source.Components.Player
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             animator = GetRequiredComponent<Animator>();
 
-            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
+            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
             cameraObject = GetRequiredObject("PlayerVCam");
 
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
-            levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
+
+            actorDash = gameObject.AddComponent<ActorDash>();
+            actorDash.CooldownTime = DASH_COOLDOWN;
+            actorDash.DashDistance = DASH_DISTANCE;
 
             base.ComponentAwake();
         }
@@ -74,6 +70,7 @@ namespace Assets.Source.Components.Player
 
         private void UpdatePlayerControls()
         {
+            isInvulnerable = actorDash.IsDashing;
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
             float horizontalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_RIGHT) * MOVE_SPEED) -
@@ -90,34 +87,26 @@ namespace Assets.Source.Components.Player
             rigidBody.velocity = rigidBody.velocity.Copy(totalHorizontalVelocity, totalVerticalVelocity);
 
             #region Dashing
-            if(dashDelayRemaining <= 0.0f)
+            if (actorDash.IsDashing)
             {
-                if ((InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT) || isDashingRight) && !isDashingLeft)
-                {
-                    Debug.Log("player is dashing right");
-                    if (!isDashingRight)
-                    {
-                        dashLocation = transform.position.x + dashDistance;
-                        isDashingRight = !isDashingRight;
-                        dashDelayRemaining = dashDelay;
-                    }
-                    DashRight();
-                }
-                else if ((InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT) || isDashingLeft) && !isDashingRight)
-                {
-                    Debug.Log("player is dashing left");
-                    if (!isDashingLeft)
-                    {
-                        dashLocation = transform.position.x - dashDistance;
-                        isDashingLeft = !isDashingLeft;
-                        dashDelayRemaining = dashDelay;
-                    }
-                    DashLeft();
-                }
+                externalVelocity = actorDash.Dash(externalVelocity);
             }
             else
             {
-                dashDelayRemaining -= Time.deltaTime;
+                if (InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT))
+                {
+                    if (!actorDash.TrySetupDashRight())
+                    {
+                        //make some noise or animation to help signify the player can't dash yet?
+                    }
+                }
+                else if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
+                {
+                    if (!actorDash.TrySetupDashLeft())
+                    {
+                        //make some noise or animation to help signify the player can't dash yet?
+                    }
+                }
             }
             #endregion
 
@@ -174,7 +163,7 @@ namespace Assets.Source.Components.Player
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
             string collisionName = collision.otherCollider.gameObject.name;
-            if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
+            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
             {
                 actorBehavior.Health -= baseDamage;
 
@@ -203,32 +192,6 @@ namespace Assets.Source.Components.Player
                 {
                     externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
                 }
-            }
-        }
-
-        private void DashRight()
-        {
-            externalVelocity = externalVelocity.Copy(x: dashDistance + externalVelocity.x);
-            Debug.Log("DashVelocity: " + externalVelocity);
-
-            if(transform.position.x > dashLocation)
-            {
-                Debug.Log("PLayer stopped dashing");
-                isDashingRight = false;
-                externalVelocity.x = 0f;
-            }
-        }
-
-        private void DashLeft()
-        {
-            externalVelocity = externalVelocity.Copy(x: -dashDistance - externalVelocity.x);
-            Debug.Log("DashVelocity: " + externalVelocity);
-
-            if (transform.position.x < dashLocation)
-            {
-                Debug.Log("PLayer stopped dashing");
-                isDashingRight = false;
-                externalVelocity.x = 0f;
             }
         }
     }

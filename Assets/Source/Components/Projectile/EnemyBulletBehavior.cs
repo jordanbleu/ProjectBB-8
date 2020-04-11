@@ -21,7 +21,7 @@ namespace Assets.Source.Components.Projectile
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
             string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(GameObjects.Enemy))
+            if (!collisionName.Equals(GameObjects.Actors.ShooterEnemy) && !collisionName.Equals(GameObjects.Actors.KamikazeEnemy))
             {
                 Destroy(gameObject);
             }

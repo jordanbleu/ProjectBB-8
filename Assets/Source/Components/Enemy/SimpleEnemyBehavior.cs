@@ -1,8 +1,8 @@
 ﻿using System;
 using Assets.Source.Components.Enemy.Base;
+using Assets.Source.Components.Timer;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
-using Assets.Source.Utilities;
 using UnityEngine;
 
 namespace Assets.Source.Components.Enemy
@@ -14,13 +14,13 @@ namespace Assets.Source.Components.Enemy
     public class SimpleEnemyBehavior : EnemyAIBase
     {
         private readonly float MOVE_SPEED = 2.0f;
-        private readonly float SHOOT_COOLDOWN = 1.5f; //the amount of time allowed between firing shots
+        private readonly float SHOOT_COOLDOWN = 1500f; //the amount of time allowed between firing shots
         private readonly float SHOOT_THRESHOLD = .6f; //how close the enemy needs to be to the player to shoot
         private readonly float MOVEMENT_THRESHOLD = 0.01f; //how close the enemy needs to be to the player before it will stop moving, can't be 0
-        private readonly float STUN_COOLDOWN = 0.4f; //the time after being hit by a projectile in which the enemy is stunned
+        private readonly float STUN_COOLDOWN = 750f; //the time after being hit by a projectile in which the enemy is stunned
 
-        private CooldownTimer shootTimer;
-        private CooldownTimer stunTimer;
+        private IntervalTimerComponent shootTimer;
+        private IntervalTimerComponent stunTimer;
 
         private GameObject enemyBulletPrefab;
         private Vector2 distanceToPlayer;
@@ -29,7 +29,7 @@ namespace Assets.Source.Components.Enemy
 
         public override void ComponentAwake()
         {
-            enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.EnemyBullet}");
+            enemyBulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.EnemyBullet}");
             base.ComponentAwake();
         }
 
@@ -51,17 +51,26 @@ namespace Assets.Source.Components.Enemy
 
         private void InitializeTimers()
         {
-            shootTimer = gameObject.AddComponent<CooldownTimer>();
-            shootTimer.CooldownTime = SHOOT_COOLDOWN;
-            shootTimer.Start();
+            shootTimer = gameObject.AddComponent<IntervalTimerComponent>();
+            shootTimer.UpdateInterval(SHOOT_COOLDOWN);
+            shootTimer.IsActive = true;
+            shootTimer.AutoReset = false;
 
-            stunTimer = gameObject.AddComponent<CooldownTimer>();
-            stunTimer.CooldownTime = STUN_COOLDOWN;
+            stunTimer = gameObject.AddComponent<IntervalTimerComponent>();
+            stunTimer.UpdateInterval(STUN_COOLDOWN);
+            stunTimer.IsActive = false;
+            stunTimer.AutoReset = false;
+            stunTimer.OnIntervalReached.AddListener(OnStunTimerIntervalReached);
+        }
+
+        private void OnStunTimerIntervalReached()
+        {
+            shootTimer.IsActive = true;
         }
 
         private void UpdateActorBehavior()
         {
-            if (stunTimer.Running)
+            if (stunTimer.IsActive)
             {
                 rigidBody.velocity = rigidBody.velocity.Copy(0f, 0f) + externalVelocity;
             }
@@ -98,7 +107,7 @@ namespace Assets.Source.Components.Enemy
                 {
                     GameObject bullet = InstantiateInLevel(enemyBulletPrefab);
                     bullet.transform.position = transform.position.Copy();
-                    shootTimer.Restart();
+                    shootTimer.Reset();
                 }
             }
         }
@@ -106,12 +115,15 @@ namespace Assets.Source.Components.Enemy
         private bool ShouldShoot()
         {
             bool shouldFire = false;
-            Vector3 playerLocation = GetPlayerLocation();
 
-            //always cool down the shoot timer but only shoot once close enough
-            if (!shootTimer.Running && Math.Abs(playerLocation.x) < Math.Abs(transform.position.x) + SHOOT_THRESHOLD)
+            //always cool down the shoot timer (except while stunned) but only shoot once close enough
+            if (!stunTimer.IsActive)
             {
-                shouldFire = true;
+                bool playerWithinShootingRange = Math.Abs(GetPlayerLocation().x) < Math.Abs(transform.position.x) + SHOOT_THRESHOLD;
+                if (!shootTimer.IsActive && playerWithinShootingRange)
+                {
+                    shouldFire = true;
+                }
             }
 
             return shouldFire;
@@ -135,7 +147,8 @@ namespace Assets.Source.Components.Enemy
             if (!collisionName.Equals(enemyBulletPrefab.name))
             {
                 actorBehavior.Health -= baseDamage;
-                stunTimer.Restart();
+                stunTimer.Reset();
+                shootTimer.IsActive = false;
 
                 //since the enemy can't respond to being hit like the player can, reduce the impact
                 // Hit from the left side

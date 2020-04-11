@@ -23,7 +23,7 @@ namespace Assets.Source.Components.Enemy.Base
 
         public override void ComponentAwake()
         {
-            player = GetRequiredObject(GameObjects.Player);
+            player = GetRequiredObject(GameObjects.Actors.Player);
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");

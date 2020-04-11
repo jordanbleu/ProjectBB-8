@@ -24,9 +24,9 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1102626745214228403}
-  m_LocalRotation: {x: -0, y: -0, z: -0.005552898, w: 0.9999846}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0.0039738826, w: 0.99999213}
+  m_LocalPosition: {x: 0, y: 0, z: 1.09}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 1102626745974001991}
   m_RootOrder: 0
@@ -45,21 +45,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_LightType: 3
   m_BlendStyleIndex: 0
-  m_FalloffIntensity: 0.619
-  m_Color: {r: 0.8962264, g: 0.19023676, b: 0.19023676, a: 1}
-  m_Intensity: 1
-  m_LightVolumeOpacity: 0
+  m_FalloffIntensity: 0.554
+  m_Color: {r: 0.8773585, g: 0.720877, b: 0.18623178, a: 1}
+  m_Intensity: 2.28
+  m_LightVolumeOpacity: 0.135
   m_ApplyToSortingLayers: 00000000
   m_LightCookieSprite: {fileID: 0}
   m_UseNormalMap: 0
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0
-  m_ShadowIntensity: 0
+  m_ShadowIntensity: 0.1
   m_ShadowVolumeIntensity: 0
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 1.462913
+  m_PointLightOuterRadius: 0.3333444
   m_PointLightDistance: 3
   m_PointLightQuality: 1
   m_ShapeLightParametricSides: 5
@@ -103,7 +103,7 @@ Transform:
   m_GameObject: {fileID: 1102626745974002041}
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
   m_LocalPosition: {x: -0, y: 1.11, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 1102626745214228402}
   m_Father: {fileID: 0}
@@ -148,7 +148,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: eba7485b4f1f61645bafd0ec6cf43a3d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 46f43f0df25f47b4087abb33fa932d16, type: 3}
   m_Color: {r: 0.4339623, g: 0.41123044, b: 0.4073514, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -209,6 +209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 50
+  _blasterAmmo: 50
 --- !u!114 &4243209231412891819
 MonoBehaviour:
   m_ObjectHideFlags: 0

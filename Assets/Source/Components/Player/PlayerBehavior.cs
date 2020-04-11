@@ -140,7 +140,7 @@ namespace Assets.Source.Components.Player
                 audioSource.PlayOneShot(blasterSound);
                 GameObject bullet = InstantiateInLevel(bulletPrefab);
                 bullet.transform.position = transform.position;
-                actorBehavior.BlasterAmmo--;
+                actorBehavior.UseAmmoAndSetText();
             }
             else 
             {

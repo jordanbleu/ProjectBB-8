@@ -17,7 +17,7 @@ namespace Assets.Source.Components.Enemy
         private readonly float SHOOT_COOLDOWN = 1500f; //the amount of time allowed between firing shots
         private readonly float SHOOT_THRESHOLD = .6f; //how close the enemy needs to be to the player to shoot
         private readonly float MOVEMENT_THRESHOLD = 0.01f; //how close the enemy needs to be to the player before it will stop moving, can't be 0
-        private readonly float STUN_COOLDOWN = 750f; //the time after being hit by a projectile in which the enemy is stunned
+        private readonly float STUN_COOLDOWN = 500f; //the time after being hit by a projectile in which the enemy is stunned
 
         // Timers
         private IntervalTimerComponent shootTimer;
@@ -169,23 +169,23 @@ namespace Assets.Source.Components.Enemy
                 // Hit from the left side
                 if (collision.otherCollider.transform.position.x <= transform.position.x)
                 {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + .4f);
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + .5f);
                 }
                 // Hit from the right side
                 else
                 {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - .4f);
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - .5f);
                 }
 
                 // Hit from the ass
                 if (collision.otherCollider.transform.position.y <= transform.position.y)
                 {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + .4f);
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + .5f);
                 }
                 // Hit from the right side
                 else
                 {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - .4f);
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - .5f);
                 }
             }
         }

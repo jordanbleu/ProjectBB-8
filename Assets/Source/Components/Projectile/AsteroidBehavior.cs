@@ -39,8 +39,6 @@ namespace Assets.Source.Components.Projectile
 
         public override void DestroyProjectile(Collision2D collision)
         {
-            Debug.Log($"Asteroid Collided with {collision.gameObject} and was destroyed");
-            
             GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
             
             // Scale size of the explosion to be the same as the asteroids scale

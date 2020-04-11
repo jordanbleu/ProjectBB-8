@@ -2,6 +2,7 @@
 using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Extensions;
+using Assets.Source.Constants;
 
 namespace Assets.Source.Components.Projectile
 {
@@ -19,7 +20,11 @@ namespace Assets.Source.Components.Projectile
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
-            Destroy(gameObject);
+            string collisionName = collision.otherCollider.gameObject.name;
+            if (!collisionName.Equals(GameObjects.Actors.ShooterEnemy) && !collisionName.Equals(GameObjects.Actors.KamikazeEnemy))
+            {
+                Destroy(gameObject);
+            }
         }
     }
 }

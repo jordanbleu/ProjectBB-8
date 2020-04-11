@@ -33,12 +33,12 @@ namespace Assets.Source.Components.Enemy
 
         public override void ComponentAwake()
         {
-            player = GetRequiredObject(GameObjects.Player);
+            player = GetRequiredObject(GameObjects.Actors.Player);
             distanceToPlayer = transform.position.y - player.transform.position.y;
 
             if (enemyPrafabToSpawn == null)
             {
-                enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.ShooterEnemy}");
+                enemyPrafabToSpawn = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.ShooterEnemy}");
             }
 
             base.ComponentAwake();

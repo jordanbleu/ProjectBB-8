@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using Assets.Source.Components.Base;
 using Assets.Source.Constants;
 using Assets.Source.Components.Actor;
 using Assets.Source.Extensions;
 using Assets.Source.Components.Projectile.Base;
+using Assets.Source.Components.Reactor.Interfaces;
 
 namespace Assets.Source.Components.Enemy.Base
 {
@@ -11,12 +11,11 @@ namespace Assets.Source.Components.Enemy.Base
     /// The base shared logic between all enemies. Also turns an enemy ship into a "projectile" so that if the player
     /// runs into an enemy they will collide
     /// </summary>
-    public abstract class EnemyAIBase : ProjectileComponentBase
+    public abstract class EnemyAIBase : ProjectileComponentBase, IProjectileReactor
     {
         private readonly float STABILIZATION_RATE = 0.01f;
 
-        private GameObject explosionPrefab;
-
+        protected GameObject explosionPrefab;
         protected Vector2 externalVelocity;
         protected Rigidbody2D rigidBody;
         protected ActorBehavior actorBehavior;
@@ -25,8 +24,7 @@ namespace Assets.Source.Components.Enemy.Base
 
         public override void ComponentAwake()
         {
-            //todo: design a better way to have a reference to the play since every spawned enemy will have to try and "find" the player
-            player = GetRequiredObject(GameObjects.Player);
+            player = GetRequiredObject(GameObjects.Actors.Player);
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
@@ -60,6 +58,11 @@ namespace Assets.Source.Components.Enemy.Base
             return Vector3.zero; //todo: fix this
         }
 
+        protected void AvoidOtherEnemies()
+        {
+
+        }
+
         protected void UpdateExternalVelocity()
         {
             if (externalVelocity.x > 0)
@@ -83,6 +86,20 @@ namespace Assets.Source.Components.Enemy.Base
             // Prevents overshoot
             if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
+        }
+
+        public abstract void ReactToHit(Collision2D collision, int baseDamage);
+
+        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
+        {
+            ReactToHit(collision, baseDamage);
+        }
+
+        public abstract void ReactToProjectileCollision(Collision2D collision);
+
+        public override void DestroyProjectile(Collision2D collision)
+        {
+            ReactToProjectileCollision(collision);
         }
     }
 }

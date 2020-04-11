@@ -11,7 +11,7 @@ namespace Assets.Source.Director.Testing.TestLevel
     {
         public void PhaseBegin(ILevelContext context)
         {
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.KamikazeEnemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.KamikazeEnemy}");
             
             GameObject enemy1 = ComponentBase.InstantiateInLevel(enemy);
             enemy1.transform.position = new Vector3(1, 2f, 0);
@@ -31,7 +31,7 @@ namespace Assets.Source.Director.Testing.TestLevel
 
         public void PhaseComplete(ILevelContext context)
         {
-            Debug.Log("Phase 2 complteed.  You are a god among men.");
+            Debug.Log("Phase 2 complteed.  You are a god among mortals.");
             context.BeginPhase(new TestLevelPhase3());
         }
 

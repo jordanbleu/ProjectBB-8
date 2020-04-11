@@ -1,8 +1,8 @@
 ﻿using Assets.Source.Components.Actor;
-using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
-using Assets.Source.Components.Director.Base;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.UI;
+using Assets.Source.Components.Director.Base;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
@@ -10,16 +10,18 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ComponentBase
+    public class PlayerBehavior : ProjectileComponentBase
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
+        private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
+        private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
 
         // Components
         private Rigidbody2D rigidBody;
         private ActorBehavior actorBehavior;
         private Animator animator;
-        private AudioSource audioSource;
+        private ActorDash actorDash;
 
         // Prefab references
         private GameObject bulletPrefab;
@@ -33,12 +35,15 @@ namespace Assets.Source.Components.Player
         private CanvasMenuSelectorComponent menuSelector;
         private DirectorComponent levelDirector;
 
-        // Audio Clips
+        // Audio
         private AudioClip blasterSound;
+        private AudioSource audioSource;
 
         // Physics
         private Vector2 externalVelocity;
+        private bool isInvulnerable = false;
 
+        protected override int BaseDamage => 100;
 
         public override void ComponentAwake()
         {
@@ -47,7 +52,7 @@ namespace Assets.Source.Components.Player
             animator = GetRequiredComponent<Animator>();
             audioSource = GetRequiredComponent<AudioSource>();
 
-            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.PlayerBullet}");
+            bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
 
             cameraObject = GetRequiredObject("PlayerVCam");
@@ -55,6 +60,10 @@ namespace Assets.Source.Components.Player
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
             levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
+
+            actorDash = gameObject.AddComponent<ActorDash>();
+            actorDash.CooldownTime = DASH_COOLDOWN;
+            actorDash.DashDistance = DASH_DISTANCE;
 
             blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 
@@ -71,6 +80,7 @@ namespace Assets.Source.Components.Player
 
         private void UpdatePlayerControls()
         {
+            isInvulnerable = actorDash.IsDashing;
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
             float horizontalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_RIGHT) * MOVE_SPEED) -
@@ -86,21 +96,27 @@ namespace Assets.Source.Components.Player
 
             rigidBody.velocity = rigidBody.velocity.Copy(totalHorizontalVelocity, totalVerticalVelocity);
 
-            #region Dashing Simple Implementation
-            //Very simple implementation of dashing, not final product
-            //This version just teleports the shit a little to the left/right
-            //Final version should include actual movement
-
-            // todo: This should not set position directly, it should use velocity.  This curently breaks the player barrier
-
-            float dashDistance = .5f; //TODO: make this a constant somewhere
-            if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
+            #region Dashing
+            if (actorDash.IsDashing)
             {
-                rigidBody.position += Vector2.left * dashDistance;
+                externalVelocity = actorDash.Dash(externalVelocity);
             }
-            if (InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT))
+            else
             {
-                rigidBody.position += Vector2.right * dashDistance;
+                if (InputManager.IsKeyPressed(InputConstants.K_DASH_RIGHT))
+                {
+                    if (!actorDash.TrySetupDashRight())
+                    {
+                        //make some noise or animation to help signify the player can't dash yet?
+                    }
+                }
+                else if (InputManager.IsKeyPressed(InputConstants.K_DASH_LEFT))
+                {
+                    if (!actorDash.TrySetupDashLeft())
+                    {
+                        //make some noise or animation to help signify the player can't dash yet?
+                    }
+                }
             }
             #endregion
 
@@ -124,7 +140,7 @@ namespace Assets.Source.Components.Player
                 audioSource.PlayOneShot(blasterSound);
                 GameObject bullet = InstantiateInLevel(bulletPrefab);
                 bullet.transform.position = transform.position;
-                actorBehavior.BlasterAmmo--;
+                actorBehavior.UseAmmoAndSetText();
             }
             else 
             {
@@ -171,7 +187,8 @@ namespace Assets.Source.Components.Player
 
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
-            if (!collision.otherCollider.gameObject.name.Equals(bulletPrefab.name))
+            string collisionName = collision.otherCollider.gameObject.name;
+            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
             {
                 actorBehavior.Health -= baseDamage;
 
@@ -208,6 +225,5 @@ namespace Assets.Source.Components.Player
                 }
             }
         }
-
     }
 }

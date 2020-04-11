@@ -2,18 +2,13 @@
 using Assets.Source.Extensions;
 using Assets.Source.Mathematics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Source.Components.Actor
 {
     public class ActorRestrictorComponent : ComponentBase
     {
-
-        // Square the defines the area that surrounds this object
+        // Square that defines the area that surrounds this object
         [SerializeField]
         [Header("The Blue Square")]
         private Square myArea = new Square(0.5f,0.5f);
@@ -24,7 +19,6 @@ namespace Assets.Source.Components.Actor
         private Square restrictedArea = new Square(4, 4);
 
         private float precision = 0.25f;
-
         private Rigidbody2D rigidBody;
 
         public override void ComponentAwake()
@@ -35,10 +29,10 @@ namespace Assets.Source.Components.Actor
 
         private void LateUpdate()
         {
-            float left = transform.position.x - myArea.Width;
-            float right = transform.position.x + myArea.Width;
-            float top = transform.position.y + myArea.Height;
-            float bottom = transform.position.y - myArea.Height;
+            float left = transform.position.x - myArea.Width / 2; //dividing by 2 makes this more accurate since position minus width is not left side
+            float right = transform.position.x + myArea.Width / 2;
+            float top = transform.position.y + myArea.Height / 2;
+            float bottom = transform.position.y - myArea.Height / 2;
 
             if (left + (precision * Math.Sign(rigidBody.velocity.x)) < -restrictedArea.Width)
             {
@@ -49,7 +43,6 @@ namespace Assets.Source.Components.Actor
                 rigidBody.velocity = rigidBody.velocity.Copy(x: 0);
             }
 
-
             if (top + (precision * Math.Sign(rigidBody.velocity.y)) > restrictedArea.Height)
             {
                 rigidBody.velocity = rigidBody.velocity.Copy(y: 0);
@@ -58,8 +51,28 @@ namespace Assets.Source.Components.Actor
             {
                 rigidBody.velocity = rigidBody.velocity.Copy(y: 0);
             }
+        }
 
+        /// <summary>
+        /// Calculates if the next frame the actor will be out of based based on the given velocity rather than the current vel
+        /// </summary>
+        /// <param name="xVel">The predicted velocity</param>
+        /// <returns>True if the predicted location of the trasform will hit out of bounds</returns>
+        public bool DidHitBorder(float xVel)
+        {
+            float left = transform.position.x - myArea.Width / 2;
+            float right = transform.position.x + myArea.Width / 2;
 
+            if (left + (precision * Math.Sign(xVel)) < -restrictedArea.Width)
+            {
+                return true;
+            }
+            else if (right + (precision * Math.Sign(xVel)) > restrictedArea.Width)
+            {
+                return true;
+            }
+
+            return false;
         }
 
         private void OnDrawGizmosSelected()
@@ -75,11 +88,6 @@ namespace Assets.Source.Components.Actor
             Gizmos.DrawLine(transform.position + (Vector3)myArea.TopRight,   transform.position + (Vector3)myArea.BottomRight);
             Gizmos.DrawLine(transform.position + (Vector3)myArea.BottomRight,transform.position + (Vector3)myArea.BottomLeft);
             Gizmos.DrawLine(transform.position + (Vector3)myArea.BottomLeft, transform.position + (Vector3)myArea.TopLeft);
-
-
         }
-
-
-
     }
 }

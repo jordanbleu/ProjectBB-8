@@ -1,5 +1,4 @@
 ﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Director.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using UnityEngine;
 
@@ -37,9 +36,6 @@ namespace Assets.Source.Components.Projectile.Base
             DestroyProjectile(collision);
         }
 
-
-
         public virtual void DestroyProjectile(Collision2D collision) { }
-
     }
 }

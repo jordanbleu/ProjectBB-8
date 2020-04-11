@@ -11,7 +11,7 @@ public class AsteroidLevelBehavior : ComponentBase
     private GameObject asteroidPrefab;
     public override void ComponentAwake()
     {
-        asteroidPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Asteroid}");
+        asteroidPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.Asteroid}");
         base.ComponentAwake();
     }
 

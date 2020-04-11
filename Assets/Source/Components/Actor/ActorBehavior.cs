@@ -14,7 +14,6 @@ namespace Assets.Source.Components.Actor
     /// </summary>
     public class ActorBehavior : ComponentBase
     {
-
         // todo: make this not show in the inspector eventually
         [SerializeField]
         private int _health = 100;
@@ -24,7 +23,6 @@ namespace Assets.Source.Components.Actor
             set => _health = value; 
         }
 
-
         [SerializeField]
         private int _blasterAmmo = 50;
         public int BlasterAmmo 
@@ -33,23 +31,28 @@ namespace Assets.Source.Components.Actor
             set => _blasterAmmo = value; 
         }
 
-        
+        private TextMeshProUGUI ammoText;
 
         #region Player Stats
-
         public int MaxHealth { get; set; } = 100;
 
         public int MaxBlasterAmmo { get; set; } = 150;
         #endregion
 
-        // todo: delete this mess
-        public override void ComponentUpdate()
+        public override void ComponentAwake()
         {
-            // Temporary way to show the ammo 
-            var tmp = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("AmmoPlaceholder", FindOrCreateCanvas()));
-            tmp.SetText(BlasterAmmo.ToString());
-            base.ComponentUpdate();
+            GameObject hud = GetRequiredChild("HUD", FindOrCreateCanvas());
+            GameObject ammoDisplay = GetRequiredChild("AmmoDisplay", hud);
+            GameObject border = GetRequiredChild("Border", ammoDisplay);
+            ammoText = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("AmmoPlaceholder", border));
+
+            base.ComponentAwake();
         }
 
+        public void UseAmmoAndSetText()
+        {
+            BlasterAmmo--;
+            ammoText.SetText($"x{BlasterAmmo}");
+        }
     }
 }

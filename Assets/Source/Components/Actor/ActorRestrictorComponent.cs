@@ -27,9 +27,31 @@ namespace Assets.Source.Components.Actor
             base.ComponentAwake();
         }
 
+        /// <summary>
+        /// Calculates if the next frame the actor will be out of based based on the given velocity rather than the current vel
+        /// </summary>
+        /// <param name="xVel">The predicted velocity</param>
+        /// <returns>True if the predicted location of the trasform will hit out of bounds</returns>
+        public bool DidHitBorder(float xVel)
+        {
+            float left = transform.position.x - myArea.Width / 2;
+            float right = transform.position.x + myArea.Width / 2;
+
+            if (left + (precision * Math.Sign(xVel)) < -restrictedArea.Width)
+            {
+                return true;
+            }
+            else if (right + (precision * Math.Sign(xVel)) > restrictedArea.Width)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
         private void LateUpdate()
         {
-            float left = transform.position.x - myArea.Width / 2; //dividing by 2 makes this more accurate since position minus width is not left side
+            float left = transform.position.x - myArea.Width / 2;
             float right = transform.position.x + myArea.Width / 2;
             float top = transform.position.y + myArea.Height / 2;
             float bottom = transform.position.y - myArea.Height / 2;
@@ -51,28 +73,6 @@ namespace Assets.Source.Components.Actor
             {
                 rigidBody.velocity = rigidBody.velocity.Copy(y: 0);
             }
-        }
-
-        /// <summary>
-        /// Calculates if the next frame the actor will be out of based based on the given velocity rather than the current vel
-        /// </summary>
-        /// <param name="xVel">The predicted velocity</param>
-        /// <returns>True if the predicted location of the trasform will hit out of bounds</returns>
-        public bool DidHitBorder(float xVel)
-        {
-            float left = transform.position.x - myArea.Width / 2;
-            float right = transform.position.x + myArea.Width / 2;
-
-            if (left + (precision * Math.Sign(xVel)) < -restrictedArea.Width)
-            {
-                return true;
-            }
-            else if (right + (precision * Math.Sign(xVel)) > restrictedArea.Width)
-            {
-                return true;
-            }
-
-            return false;
         }
 
         private void OnDrawGizmosSelected()

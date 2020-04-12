@@ -41,19 +41,6 @@ namespace Assets.Source.Components.Actor
             base.ComponentAwake();
         }
 
-        private void SetupDashTimer()
-        {
-            dashTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            dashTimer.UpdateInterval(CooldownTime);
-            dashTimer.AutoReset = false;
-            dashTimer.OnIntervalReached.AddListener(OnIntervalReached);
-        }
-
-        private void OnIntervalReached()
-        {
-            CanDash = true;
-        }
-
         /// <summary>
         /// Because the ActorDash can't assign external velocity the actor needs to call this method when trying to dash.
         /// This determines if a Dash if available and if it is then the dash component is setup and ready.
@@ -110,6 +97,11 @@ namespace Assets.Source.Components.Actor
             return new Vector2(0, 0);
         }
 
+        public float GetTimerCurrentTime()
+        {
+            return dashTimer.CurrentTime;
+        }
+
         private Vector2 DashLeft(Vector2 externalVelocity)
         {
             if (transform.position.x < dashEndLocation)
@@ -152,6 +144,19 @@ namespace Assets.Source.Components.Actor
             dashTimer.Reset();
 
             return externalVelocity.Copy(x: 0);
+        }
+
+        private void SetupDashTimer()
+        {
+            dashTimer = gameObject.AddComponent<IntervalTimerComponent>();
+            dashTimer.UpdateInterval(CooldownTime);
+            dashTimer.AutoReset = false;
+            dashTimer.OnIntervalReached.AddListener(OnIntervalReached);
+        }
+
+        private void OnIntervalReached()
+        {
+            CanDash = true;
         }
     }
 }

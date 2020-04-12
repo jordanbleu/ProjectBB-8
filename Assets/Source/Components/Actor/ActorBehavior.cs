@@ -1,6 +1,7 @@
 ﻿using Assets.Source.Components.Base;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Source.Components.Actor
 {
@@ -31,28 +32,10 @@ namespace Assets.Source.Components.Actor
             set => _blasterAmmo = value; 
         }
 
-        private TextMeshProUGUI ammoText;
-
         #region Player Stats
         public int MaxHealth { get; set; } = 100;
 
         public int MaxBlasterAmmo { get; set; } = 150;
         #endregion
-
-        public override void ComponentAwake()
-        {
-            GameObject hud = GetRequiredChild("HUD", FindOrCreateCanvas());
-            GameObject ammoDisplay = GetRequiredChild("AmmoDisplay", hud);
-            GameObject border = GetRequiredChild("Border", ammoDisplay);
-            ammoText = GetRequiredComponent<TextMeshProUGUI>(GetRequiredChild("AmmoPlaceholder", border));
-
-            base.ComponentAwake();
-        }
-
-        public void UseAmmoAndSetText()
-        {
-            BlasterAmmo--;
-            ammoText.SetText($"x{BlasterAmmo}");
-        }
     }
 }

@@ -2,11 +2,14 @@
 using Assets.Source.Components.Camera;
 using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.UI;
-using Assets.Source.Components.Director.Base;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
 using UnityEngine;
+using TMPro;
+using UnityEngine.UI;
+using System.Collections;
+using Assets.Source.Components.Timer;
 
 namespace Assets.Source.Components.Player
 {
@@ -16,6 +19,14 @@ namespace Assets.Source.Components.Player
         private readonly float STABILIZATION_RATE = 0.01f;
         private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
         private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
+        private readonly float SHOOT_COOLDOWN = 350.0f;
+
+        //Hud components
+        private TextMeshProUGUI ammoText;
+        private Image healthImage;
+        private Image dashCooldownIndicator;
+        private HealthBarComponent HealthBarComponent;
+        private Image bulletCooldownIndicator;
 
         // Components
         private Rigidbody2D rigidBody;
@@ -33,7 +44,6 @@ namespace Assets.Source.Components.Player
         // Other object's Components
         private CameraEffectComponent cameraEffector;
         private CanvasMenuSelectorComponent menuSelector;
-        private DirectorComponent levelDirector;
 
         // Audio
         private AudioClip blasterSound;
@@ -43,10 +53,14 @@ namespace Assets.Source.Components.Player
         private Vector2 externalVelocity;
         private bool isInvulnerable = false;
 
+        // Timers
+        private IntervalTimerComponent shootTimer;
+
         protected override int BaseDamage => 100;
 
         public override void ComponentAwake()
         {
+            SetupTimers();
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             animator = GetRequiredComponent<Animator>();
@@ -59,7 +73,6 @@ namespace Assets.Source.Components.Player
 
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
-            levelDirector = GetRequiredComponent<DirectorComponent>(FindLevelObject());
 
             actorDash = gameObject.AddComponent<ActorDash>();
             actorDash.CooldownTime = DASH_COOLDOWN;
@@ -67,7 +80,32 @@ namespace Assets.Source.Components.Player
 
             blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 
+            GameObject hud = GetRequiredChild("HUD", FindOrCreateCanvas());
+
+            GameObject ammoDisplay = GetRequiredChild("AmmoDisplay", hud);
+            GameObject ammoPlaceholder = GetRequiredChild("AmmoPlaceholder", ammoDisplay);
+            GameObject ammoCooldownObject = GetRequiredChild("CooldownIndicator", ammoDisplay);
+            ammoText = GetRequiredComponent<TextMeshProUGUI>(ammoPlaceholder);
+            bulletCooldownIndicator = GetRequiredComponent<Image>(ammoCooldownObject);
+
+            GameObject healthDisplay = GetRequiredChild("HealthBarDisplay", hud);
+            GameObject health = GetRequiredChild("Health", healthDisplay);
+            healthImage = GetRequiredComponent<Image>(health);
+            HealthBarComponent = GetRequiredComponent<HealthBarComponent>(health);
+
+            GameObject dashDisplay = GetRequiredChild("DashDisplay", hud);
+            GameObject dashCooldownObject = GetRequiredChild("CooldownIndicator", dashDisplay);
+            dashCooldownIndicator = GetRequiredComponent<Image>(dashCooldownObject);
+
             base.ComponentAwake();
+        }
+
+        private void SetupTimers()
+        {
+            shootTimer = gameObject.AddComponent<IntervalTimerComponent>();
+            shootTimer.UpdateInterval(SHOOT_COOLDOWN);
+            shootTimer.IsActive = true;
+            shootTimer.AutoReset = false;
         }
 
         public override void ComponentUpdate()
@@ -76,6 +114,49 @@ namespace Assets.Source.Components.Player
             UpdateActorStatus();
             UpdateExternalVelocity();
             base.ComponentUpdate();
+        }
+
+        public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
+        {
+            string collisionName = collision.otherCollider.gameObject.name;
+            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
+            {
+                //actorBehavior.Health -= baseDamage;
+                StartCoroutine("ReduceHealth", baseDamage);
+                HealthBarComponent.Animator.SetBool("Highlight", true);
+
+                // Warn player if health is less than 10%
+                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.1f)
+                {
+                    Warning("Low Health");
+                }
+
+                // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
+
+                // Hit from the left side
+                if (collision.otherCollider.transform.position.x < transform.position.x)
+                {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1f);
+                    cameraEffector.Trigger_Impact_Left();
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1f);
+                    cameraEffector.Trigger_Impact_Right();
+                }
+
+                // Hit from the ass
+                if (collision.otherCollider.transform.position.y < transform.position.y)
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + 1f);
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
+                }
+            }
         }
 
         private void UpdatePlayerControls()
@@ -122,7 +203,10 @@ namespace Assets.Source.Components.Player
 
             if (InputManager.IsKeyPressed(InputConstants.K_ATTACK_PRIMARY))
             {
-                FireBlaster();
+                if (!shootTimer.IsActive)
+                {
+                    FireBlaster();
+                }
             }
 
             if (InputManager.IsKeyPressed(InputConstants.K_PAUSE))
@@ -140,7 +224,9 @@ namespace Assets.Source.Components.Player
                 audioSource.PlayOneShot(blasterSound);
                 GameObject bullet = InstantiateInLevel(bulletPrefab);
                 bullet.transform.position = transform.position;
-                actorBehavior.UseAmmoAndSetText();
+                actorBehavior.BlasterAmmo--;
+
+                shootTimer.Reset();
             }
             else 
             {
@@ -150,15 +236,20 @@ namespace Assets.Source.Components.Player
 
         private void UpdateActorStatus()
         {
-            // todo: this is just placeholder stuff
-            if (actorBehavior.Health <= 0)
-            {
-                InstantiateInLevel(explosionPrefab, transform.position);
-                menuSelector.ShowMenu<GameOverMenuComponent>();
-                Destroy(gameObject);
-            }
+            //this has to be done here rather than actorBehavior
+            //cuz actorbehavior is also used by other instances so we ended up updating the hud from the enemy
+            ammoText.SetText($"x{actorBehavior.BlasterAmmo}");
+
+            float currentDashCooldownTime = actorDash.GetTimerCurrentTime();
+            dashCooldownIndicator.fillAmount = (currentDashCooldownTime == 0.0f)
+                ? 0.0f
+                : 1 - currentDashCooldownTime / actorDash.CooldownTime;
+
+            bulletCooldownIndicator.fillAmount = (shootTimer.CurrentTime == 0.0f)
+                ? 0.0f
+                : 1 - shootTimer.CurrentTime / SHOOT_COOLDOWN;
         }
-        
+
         private void UpdateExternalVelocity()
         {
             // Normalize
@@ -185,45 +276,35 @@ namespace Assets.Source.Components.Player
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
         }
 
-        public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
+        private IEnumerator ReduceHealth(int damage)
         {
-            string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
+            int framesToFinish = 35; //should probly get this from the animation somehow? the animation is 35 frames rn
+            float startingPercent = (float)actorBehavior.Health / actorBehavior.MaxHealth;
+
+            actorBehavior.Health -= damage;
+
+            float endingPercent = (actorBehavior.Health <= 0) ? 0.0f : (float)actorBehavior.Health / actorBehavior.MaxHealth;
+            float percentPerFrame = (startingPercent - endingPercent) / framesToFinish;
+
+            int currentFrame = 0;
+            while(currentFrame != framesToFinish)
             {
-                actorBehavior.Health -= baseDamage;
-
-                // Warn player if health is less than 10%
-                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.1f)
-                {
-                    Warning("Low Health");
-                }
-
-                // todo: Once we have enemies, we should add a weight value to them which will affect the hard coded values below
-
-                // Hit from the left side
-                if (collision.otherCollider.transform.position.x < transform.position.x)
-                {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + 1f);
-                    cameraEffector.Trigger_Impact_Left();
-                }
-                // Hit from the right side
-                else
-                {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - 1f);
-                    cameraEffector.Trigger_Impact_Right();
-                }
-
-                // Hit from the ass
-                if (collision.otherCollider.transform.position.y < transform.position.y)
-                {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + 1f);
-                }
-                // Hit from the right side
-                else
-                {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - 1f);
-                }
+                healthImage.fillAmount -= percentPerFrame;
+                currentFrame++;
+                yield return null;
             }
+
+            //the only thing i don't like about this is that then there is a
+            //lag between when you get shot and should die and actually get destroyed
+            //but it fits better with the animation so idk what the best solution is
+            if (actorBehavior.Health <= 0)
+            {
+                InstantiateInLevel(explosionPrefab, transform.position);
+                menuSelector.ShowMenu<GameOverMenuComponent>();
+                Destroy(gameObject);
+            }
+
+            yield return null;
         }
     }
 }

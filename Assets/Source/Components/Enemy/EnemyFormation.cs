@@ -126,7 +126,7 @@ namespace Assets.Source.Components.Enemy
                 }
                 sb.AppendLine();
             }
-            Debug.Log(sb.ToString());
+            //Debug.Log(sb.ToString());
         }
     }
 }

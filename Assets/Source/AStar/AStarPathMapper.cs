@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Assets.Source.Components.NavigationMesh;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using UnityEngine;
 
 namespace Assets.Source.AStar
 {
@@ -69,9 +70,6 @@ namespace Assets.Source.AStar
                     // Crawl backwards to retrieve the total path
                     return TraceFinalPath(startNode, targetNode);
                 }
-
-                var booty = FindNeighborNodes(currentNode, true).ToList();
-
 
                 foreach (Node neighbor in FindNeighborNodes(currentNode, allowDiagonalMovement))
                 {

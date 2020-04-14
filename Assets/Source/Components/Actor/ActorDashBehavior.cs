@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Actor
 {
-    public class ActorDash : ComponentBase
+    public class ActorDashBehavior : ComponentBase
     {
         /// <summary>
         /// Returns true if the actor has the dash available
@@ -100,6 +100,16 @@ namespace Assets.Source.Components.Actor
         public float GetTimerCurrentTime()
         {
             return dashTimer.CurrentTime;
+        }
+
+        public float GetInterval()
+        {
+            return dashTimer.GetInterval();
+        }
+
+        public bool IsActive()
+        {
+            return dashTimer.IsActive;
         }
 
         private Vector2 DashLeft(Vector2 externalVelocity)

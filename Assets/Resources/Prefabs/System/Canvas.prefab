@@ -1757,6 +1757,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4417983853635384112}
+  - component: {fileID: 2982187769401558504}
   m_Layer: 5
   m_Name: AmmoDisplay
   m_TagString: Untagged
@@ -1787,6 +1788,18 @@ RectTransform:
   m_AnchoredPosition: {x: 7.5, y: -37}
   m_SizeDelta: {x: 200.27, y: 100}
   m_Pivot: {x: 0, y: 1}
+--- !u!114 &2982187769401558504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4417983853635384113}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 840f122f0f0c8451ca35db591a909e83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4417983853957059783
 GameObject:
   m_ObjectHideFlags: 0
@@ -3366,7 +3379,7 @@ GameObject:
   - component: {fileID: 4533309162302264866}
   - component: {fileID: 2713642350246132525}
   m_Layer: 5
-  m_Name: AmmoPlaceholder
+  m_Name: AmmoCount
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3521,6 +3534,7 @@ GameObject:
   - component: {fileID: 6406724240765526531}
   - component: {fileID: 2022975983840003202}
   - component: {fileID: 8906905373143248116}
+  - component: {fileID: 6158749618477619682}
   m_Layer: 5
   m_Name: CooldownIndicator
   m_TagString: Untagged
@@ -3583,6 +3597,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &6158749618477619682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8415847084927423090}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d9f81bffb13df4bb58b7b001a8cadd1f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8737553045718944406
 GameObject:
   m_ObjectHideFlags: 0

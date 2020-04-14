@@ -48,10 +48,6 @@ namespace Assets.Source.Components.Enemy
         public override void ReactToHit(Collision2D collision, int baseDamage)
         {
             audioSource.PlayOneShot(explosionSound);
-            //we don't need to do anything here since kamikaze dies on impact of anything
-            //if we want to make it so that this enemy can take multiple hits from the players bullets
-            //then we should ignore collisions from player bullets in ReactToProjectileCollision
-            //then add the logic back in here to reduce the health of this enemy and knock them back from the impact
         }
 
         public override void ReactToProjectileCollision(Collision2D collision)

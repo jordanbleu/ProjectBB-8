@@ -66,5 +66,10 @@ namespace Assets.Source.Components.Timer
             CurrentTime = 0.0f;
             IsActive = true;
         }
+
+        public float GetInterval()
+        {
+            return interval;
+        }
     }
 }

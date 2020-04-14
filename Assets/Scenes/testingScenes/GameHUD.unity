@@ -678,6 +678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2713642350246132525, guid: 709046d28d257474c8fe1e4253c621c6,
         type: 3}
+      propertyPath: m_textInfo.wordCount
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2713642350246132525, guid: 709046d28d257474c8fe1e4253c621c6,

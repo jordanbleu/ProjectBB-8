@@ -1,13 +1,14 @@
 ﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
 using Assets.Source.Components.Player;
-using Assets.Source.Components.UI.Base;
+using Assets.Source.Constants;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Source.Components.UI
 {
-    public class AmmoCountBehavior : HUDBase
+    public class AmmoCountBehavior : ComponentBase
     {
         private ActorBehavior actorBehavior;
         private PlayerBehavior playerBehavior;
@@ -23,9 +24,11 @@ namespace Assets.Source.Components.UI
             GameObject ammoCount = GetRequiredChild("AmmoCount");
             ammoCountText = GetRequiredComponent<TextMeshProUGUI>(ammoCount);
 
-            actorBehavior = GetPlayerActorBehavior();
-            playerBehavior = GetPlayerBehavior();
+            GameObject player = GetRequiredObject(GameObjects.Actors.Player);
+            actorBehavior = GetRequiredComponent<ActorBehavior>(player);
+            playerBehavior = GetRequiredComponent<PlayerBehavior>(player);
 
+            ammoCountText.SetText($"x{actorBehavior.BlasterAmmo}");
             presentedAmmoCount = actorBehavior.BlasterAmmo;
 
             base.ComponentStart();

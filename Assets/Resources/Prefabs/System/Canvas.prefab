@@ -3534,7 +3534,7 @@ GameObject:
   - component: {fileID: 6406724240765526531}
   - component: {fileID: 2022975983840003202}
   - component: {fileID: 8906905373143248116}
-  - component: {fileID: 6158749618477619682}
+  - component: {fileID: 404681967385197334}
   m_Layer: 5
   m_Name: CooldownIndicator
   m_TagString: Untagged
@@ -3597,7 +3597,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &6158749618477619682
+--- !u!114 &404681967385197334
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

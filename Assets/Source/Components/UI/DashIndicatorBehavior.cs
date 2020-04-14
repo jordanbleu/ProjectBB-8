@@ -1,16 +1,19 @@
 ﻿using Assets.Source.Components.Actor;
-using Assets.Source.Components.UI.Base;
+using Assets.Source.Components.Base;
+using Assets.Source.Constants;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Source.Components.UI
 {
-    public class DashCooldownBehavior : HUDBase
+    public class DashIndicatorBehavior : ComponentBase
     {
         private ActorDashBehavior actorDashBehavior;
         private Image cooldownImage;
 
         public override void ComponentStart()
         {
+            GameObject player = GetRequiredObject(GameObjects.Actors.Player);
             actorDashBehavior = GetRequiredComponent<ActorDashBehavior>(player);
             cooldownImage = GetRequiredComponent<Image>();
 

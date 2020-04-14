@@ -1,69 +1,45 @@
 ﻿using Assets.Source.Components.Actor;
-using Assets.Source.Components.UI.Base;
+using Assets.Source.Components.Base;
+using Assets.Source.Constants;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Source.Components.UI
 {
-    public class HealthBarComponent : HUDBase
+    public class HealthBarComponent : ComponentBase
     {
-        private readonly float LERP_THRESHOLD = .025f;
-
-        private Animator Animator;
-        private ActorBehavior ActorBehavior;
+        private Animator animator;
+        private ActorBehavior actorBehavior;
         private Image healthImage;
         private int presentedHealth;
 
         public override void ComponentStart()
         {
-            Animator = GetRequiredComponent<Animator>();
+            animator = GetRequiredComponent<Animator>();
             healthImage = GetRequiredComponent<Image>();
-            ActorBehavior = GetPlayerActorBehavior();
+            GameObject player = GetRequiredObject(GameObjects.Actors.Player);
+            actorBehavior = GetRequiredComponent<ActorBehavior>(player);
 
-            presentedHealth = ActorBehavior.Health;
+            presentedHealth = actorBehavior.Health;
 
             base.ComponentStart();
         }
 
         public override void ComponentUpdate()
         {
-            if(ActorBehavior.Health != presentedHealth)
+            if(actorBehavior.Health < presentedHealth)
             {
-                RunHealthAnimation();
+                animator.SetBool("highlight", true);
+                presentedHealth--;
             }
             else
             {
-                StopHealthAnimation();
+                animator.SetBool("highlight", false);
             }
+
+            healthImage.fillAmount = (float)presentedHealth / actorBehavior.MaxHealth;
+
             base.ComponentUpdate();
-        }
-
-        public void StopHealthAnimation()
-        {
-            Animator.SetBool("highlight", false);
-        }
-
-        public void RunHealthAnimation()
-        {
-            Animator.SetBool("highlight", true);
-
-            float startingPercent = (float)presentedHealth / ActorBehavior.MaxHealth;
-            float endingPercent = (ActorBehavior.Health <= 0) ? 0.0f : (float)ActorBehavior.Health / ActorBehavior.MaxHealth;
-            float percentReductionLerped = Mathf.Lerp(startingPercent, endingPercent, 0.01f);
-            int lerpedHealth = (int)(percentReductionLerped * 100);
-
-            //because lerping will never reach its target we need to have some close threshold
-            //once reached we set the visual to be exactly right
-            if (percentReductionLerped - LERP_THRESHOLD < ActorBehavior.Health)
-            {
-                presentedHealth = ActorBehavior.Health;
-                healthImage.fillAmount = lerpedHealth == 0 ? 0 : (float) presentedHealth / ActorBehavior.MaxHealth;
-            }
-            else
-            {
-                presentedHealth = lerpedHealth;
-                healthImage.fillAmount = percentReductionLerped;
-            }
         }
     }
 }

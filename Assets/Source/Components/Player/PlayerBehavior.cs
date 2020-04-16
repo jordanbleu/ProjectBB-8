@@ -55,6 +55,7 @@ namespace Assets.Source.Components.Player
             actorBehavior = GetRequiredComponent<ActorBehavior>();
             animator = GetRequiredComponent<Animator>();
             audioSource = GetRequiredComponent<AudioSource>();
+            actorDashBehavior = GetRequiredComponent<ActorDashBehavior>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.PlayerBullet}");
             explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
@@ -64,7 +65,6 @@ namespace Assets.Source.Components.Player
             cameraEffector = GetRequiredComponent<CameraEffectComponent>(cameraObject);
             menuSelector = GetRequiredComponent<CanvasMenuSelectorComponent>(FindOrCreateCanvas());
 
-            actorDashBehavior = gameObject.AddComponent<ActorDashBehavior>();
             actorDashBehavior.CooldownTime = DASH_COOLDOWN;
             actorDashBehavior.DashDistance = DASH_DISTANCE;
 

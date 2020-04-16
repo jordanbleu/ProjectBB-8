@@ -27,10 +27,18 @@ namespace Assets.Source.Components.UI
 
         public override void ComponentUpdate()
         {
-            if(actorBehavior.Health < presentedHealth)
+            if(actorBehavior.Health != presentedHealth)
             {
                 animator.SetBool("highlight", true);
-                presentedHealth--;
+
+                if(actorBehavior.Health < presentedHealth)
+                {
+                    presentedHealth--;
+                }
+                else
+                {
+                    presentedHealth++;
+                }
             }
             else
             {

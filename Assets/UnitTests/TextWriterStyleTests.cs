@@ -91,5 +91,17 @@ namespace UnitTests
             });
         }
 
+        [Test]
+        public void EndColorStyle_Works()
+        {
+            MockTextWriterStyleFactory mockFactory = new MockTextWriterStyleFactory();
+
+            TextWriterStyleBase command = mockFactory.Create("endcolor");
+
+            StringBuilder sb = new StringBuilder();
+
+            string result = command.Evaluate(null, sb, -1, null);
+            Assert.AreEqual(sb.ToString(), "</color>");
+        }
     }
 }

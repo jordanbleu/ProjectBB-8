@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _health: 50
+  _blasterAmmo: 50
 --- !u!95 &4650650455879844307
 Animator:
   serializedVersion: 3

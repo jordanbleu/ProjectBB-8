@@ -1,6 +1,7 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Components.Enemy;
 using Assets.Source.Components.Spawner;
+using Assets.Source.Components.Timer;
 using Assets.Source.Constants;
 using Assets.Source.Director.Interfaces;
 using UnityEngine;
@@ -11,10 +12,18 @@ namespace Assets.Source.Director.Testing.TestLevel
     // i was thinking numbers but that will make it harder to add things in between phases
     public class TestLevelPhase1 : ILevelPhase
     {
-        private GameObject asteroidSpawner;
+        private bool intervalReached = false;
 
+        private GameObject asteroidSpawner;
+        private GameObject intervalTimerObject;
+
+        private GameObject flyingVFormationPrefab;
+        private GameObject flyingVObject;
+        
         public void PhaseBegin(ILevelContext context)
         {
+            flyingVFormationPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/Formations/{GameObjects.Formations.FlyingV}");
+
             GameObject asteroidPrefab = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.Asteroid}");
             
             // Create an asteroid spawner which will generate a random asteroid ever buncha milliseconds
@@ -25,7 +34,18 @@ namespace Assets.Source.Director.Testing.TestLevel
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.ShooterEnemy}");
             
             GameObject inst = ComponentBase.InstantiateInLevel(enemy);
-            inst.transform.position = new Vector3(0, 1.5f, 1); 
+            inst.transform.position = new Vector3(0, 1.5f, 1);
+
+            // A formation will spawn after a while 
+            intervalTimerObject = new GameObject("FormationSpawnTimer");
+            
+            intervalTimerObject.AddComponent<IntervalTimerComponent>();
+            IntervalTimerComponent timer = ComponentBase.GetRequiredComponent<IntervalTimerComponent>(intervalTimerObject);            
+            timer.UpdateInterval(3000);
+            timer.OnIntervalReached.AddListener(SpawnFormation);
+            timer.SelfDestruct = true;
+            timer.IsActive = true;
+
         }
 
 
@@ -33,11 +53,14 @@ namespace Assets.Source.Director.Testing.TestLevel
         {
             // This method is used for spawning more enemies, or checking if the phase is completed
 
-            // Check to see if any enemies exist 
-            if (!ComponentBase.ComponentExists<SimpleEnemyBehavior>())
+            if (intervalReached)
             {
-                // todo: prevent from calling complete phase directly
-                context.FlagAsComplete();            
+                // Check to see if any enemies exist 
+                if (!ComponentBase.ComponentExists<SimpleEnemyBehavior>() && flyingVObject == null)
+                {
+                    // todo: prevent from calling complete phase directly
+                    context.FlagAsComplete();
+                }
             }
         }
 
@@ -46,6 +69,14 @@ namespace Assets.Source.Director.Testing.TestLevel
             GameObject.Destroy(asteroidSpawner);
             Debug.Log("Phase 1 completed, you killed the guy!");
             context.BeginPhase(new TestLevelPhase2());
+        }
+
+        // After the interval has completed, spawn a grunt formation
+        private void SpawnFormation() 
+        {
+            intervalReached = true;
+            flyingVObject = ComponentBase.InstantiateInLevel(flyingVFormationPrefab);
+
         }
 
     }

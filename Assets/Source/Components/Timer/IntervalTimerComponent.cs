@@ -10,11 +10,16 @@ namespace Assets.Source.Components.Timer
     /// </summary>
     public class IntervalTimerComponent : ComponentBase
     {
-        /// <summary>
-        /// The time in milliseconds the interval timer counts down before invoking the unity event
-        /// </summary>
+        [Tooltip("The time in milliseconds the interval timer counts down before invoking the unity event")]
         [SerializeField]
         private float interval = 500f;
+
+        [Tooltip("If true, the interval timer will destroy itself after a single interval")]
+        [SerializeField]
+        private bool _selfDestruct = false;
+        
+        public bool SelfDestruct { get => _selfDestruct; set => _selfDestruct = value; }
+
 
         /// <summary>
         /// If true this timer will reset after invoking the unity event,
@@ -44,6 +49,12 @@ namespace Assets.Source.Components.Timer
                 if (CurrentTime >= interval)
                 {
                     OnIntervalReached?.Invoke();
+
+                    if (_selfDestruct)
+                    {
+                        Destroy(gameObject);
+                    }
+
                     Reset();
                     IsActive = AutoReset;
                 }
@@ -52,6 +63,10 @@ namespace Assets.Source.Components.Timer
             base.ComponentUpdate();
         }
 
+        /// <summary>
+        /// Resets the current interval timer and sets the interval time 
+        /// </summary>
+        /// <param name="interval"></param>
         public void UpdateInterval(float interval)
         {
             Reset();

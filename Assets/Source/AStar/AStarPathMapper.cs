@@ -1,9 +1,6 @@
-﻿using Assets.Source.Components.NavigationMesh;
-using System;
+﻿using Assets.Source.Components.Pathing;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Source.AStar
@@ -172,9 +169,13 @@ namespace Assets.Source.AStar
             }
         }
 
+        // Gets the actual total distance in worlds space between two points
+        private float GetPhysicalDistance(Node node1, Node node2) => Vector2.Distance(node1.Center, node2.Center);
+
         // recursively seek out a valid non-solid node
         private Node FindNearestOpenNode(Node node, Node originalNode = null, List<Node> visited = null)
         {
+            // If this node is solid, return it 
             if (!node.IsSolid)
             {
                 return node;
@@ -183,16 +184,21 @@ namespace Assets.Source.AStar
             // If sourceNode is null, that means this is the first layer of recursion
             var sourceNode = originalNode ?? node;
 
+            // Begin keeping track of visited neighbors
             if (visited == null)
             {
                 visited = new List<Node>();
             }
             visited.Add(node);
 
+            // Grab each surrounding nodes around this node, but order by its physical distance
+            // ordering it like that assures us that the first node we check will be the closest to us
             var neighbors = FindNeighborNodes(node, true)
                             .Where(n => visited != null && !visited.Contains(n))
-                            .OrderBy(n => GetDistance(n, sourceNode));
+                            .OrderBy(n => GetPhysicalDistance(n, sourceNode));
 
+            // Check each neighbor for its nearest non-solid node
+            // Remember, this will return the node itself if the node isn't solid
             foreach (Node neighbor in neighbors)
             {
                 var firstNonSolidNode = FindNearestOpenNode(neighbor, sourceNode, visited);

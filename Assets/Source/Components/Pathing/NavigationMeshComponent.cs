@@ -3,7 +3,7 @@ using Assets.Source.Components.Base;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Source.Components.NavigationMesh
+namespace Assets.Source.Components.Pathing
 {
     public class NavigationMeshComponent : ComponentBase
     {
@@ -22,6 +22,10 @@ namespace Assets.Source.Components.NavigationMesh
             "without clipping the edge of corners.")]
         [SerializeField]
         private float tileSize = 0.5f;
+
+        [Tooltip("Solids not on this layer will be ignored")]
+        [SerializeField]
+        private LayerMask solidLayers = ~0;
 
         [Tooltip("Recalculates the entire navigation mesh every frame.  Leave this on if things in your " +
             "level move around, or set to false if the level is static for a performance boost.")]
@@ -55,7 +59,8 @@ namespace Assets.Source.Components.NavigationMesh
 
         // Returns true if any solid exists in a radius of 'tileSize' around the specified center position
         private bool TileContainsSolid(Vector2 center) => Physics2D.OverlapArea(new Vector2(center.x - (tileSize / 2), center.y - (tileSize / 2)),
-                                                                                new Vector2(center.x + (tileSize / 2), center.y + (tileSize / 2))) != null;
+                                                                                new Vector2(center.x + (tileSize / 2), center.y + (tileSize / 2)),
+                                                                                solidLayers) != null;
 
         
 

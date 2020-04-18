@@ -33,7 +33,7 @@ namespace Assets.Source.Components.Timer
         /// </summary>
         public bool IsActive { get; set; } = true;
 
-        private float CurrentTime = 0.0f;
+        public float CurrentTime { get; private set; } = 0.0f;
 
         public override void ComponentUpdate()
         {
@@ -65,6 +65,11 @@ namespace Assets.Source.Components.Timer
         {
             CurrentTime = 0.0f;
             IsActive = true;
+        }
+
+        public float GetInterval()
+        {
+            return interval;
         }
     }
 }

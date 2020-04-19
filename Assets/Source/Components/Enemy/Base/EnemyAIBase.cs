@@ -27,7 +27,7 @@ namespace Assets.Source.Components.Enemy.Base
             player = GetRequiredObject(GameObjects.Actors.Player);
             rigidBody = GetRequiredComponent<Rigidbody2D>();
             actorBehavior = GetRequiredComponent<ActorBehavior>();
-            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/EnemyExplosion");
 
 
             base.ComponentAwake();

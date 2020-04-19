@@ -58,7 +58,7 @@ namespace Assets.Source.Components.Player
             actorDashBehavior = GetRequiredComponent<ActorDashBehavior>();
 
             bulletPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/{GameObjects.Projectiles.PlayerBullet}");
-            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/Explosion_1");
+            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/EnemyExplosion");
 
             cameraObject = GetRequiredObject("PlayerVCam");
 

@@ -47,11 +47,11 @@ namespace Assets.Source.Components.Enemy
 
         public override void ReactToHit(Collision2D collision, int baseDamage)
         {
-            audioSource.PlayOneShot(explosionSound);
         }
 
         public override void ReactToProjectileCollision(Collision2D collision)
         {
+            audioSource.PlayOneShot(explosionSound);
             InstantiatePrefab(explosionPrefab, transform.position);
             Destroy(gameObject);
         }

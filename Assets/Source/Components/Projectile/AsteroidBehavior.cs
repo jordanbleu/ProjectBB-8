@@ -2,7 +2,6 @@
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace Assets.Source.Components.Projectile
@@ -34,7 +33,7 @@ namespace Assets.Source.Components.Projectile
         public override void ComponentUpdate()
         {
             transform.Rotate(0,0, spinSpeed);
-            base.ComponentOnEnable();
+            base.ComponentUpdate();
         }
 
         public override void DestroyProjectile(Collision2D collision)

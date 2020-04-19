@@ -29,16 +29,11 @@ namespace Assets.Source.Components.Projectile
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
-            Destroy(gameObject);
-        }
-
-        public override void ComponentOnDestroy()
-        {
             // todo:  Eventaully to get the game to feel more satisfying we'll need to add impulse effects
             //cameraEffect.TriggerImpulse1(); 
             GameObject playerBulletExplosion = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/PlayerBulletExplosion");
             InstantiateInLevel(playerBulletExplosion, transform.position);
-            base.ComponentOnDestroy();
+            Destroy(gameObject);
         }
     }
 }

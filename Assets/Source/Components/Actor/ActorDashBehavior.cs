@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Assets.Source.Components.Actor
 {
-    public class ActorDash : ComponentBase
+    public class ActorDashBehavior : ComponentBase
     {
         /// <summary>
         /// Returns true if the actor has the dash available
@@ -39,19 +39,6 @@ namespace Assets.Source.Components.Actor
             actorRestrictor = GetRequiredComponent<ActorRestrictorComponent>();
 
             base.ComponentAwake();
-        }
-
-        private void SetupDashTimer()
-        {
-            dashTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            dashTimer.UpdateInterval(CooldownTime);
-            dashTimer.AutoReset = false;
-            dashTimer.OnIntervalReached.AddListener(OnIntervalReached);
-        }
-
-        private void OnIntervalReached()
-        {
-            CanDash = true;
         }
 
         /// <summary>
@@ -110,6 +97,21 @@ namespace Assets.Source.Components.Actor
             return new Vector2(0, 0);
         }
 
+        public float GetTimerCurrentTime()
+        {
+            return dashTimer.CurrentTime;
+        }
+
+        public float GetInterval()
+        {
+            return dashTimer.GetInterval();
+        }
+
+        public bool IsActive()
+        {
+            return dashTimer.IsActive;
+        }
+
         private Vector2 DashLeft(Vector2 externalVelocity)
         {
             if (transform.position.x < dashEndLocation)
@@ -152,6 +154,19 @@ namespace Assets.Source.Components.Actor
             dashTimer.Reset();
 
             return externalVelocity.Copy(x: 0);
+        }
+
+        private void SetupDashTimer()
+        {
+            dashTimer = gameObject.AddComponent<IntervalTimerComponent>();
+            dashTimer.UpdateInterval(CooldownTime);
+            dashTimer.AutoReset = false;
+            dashTimer.OnIntervalReached.AddListener(OnIntervalReached);
+        }
+
+        private void OnIntervalReached()
+        {
+            CanDash = true;
         }
     }
 }

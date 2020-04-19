@@ -15,7 +15,8 @@ namespace Assets.UnitTests.Mock.TextWriterStyle
             
             // Actual real world implementations
             // All Text styles should contain one or more unit tests
-            { "color", typeof(ColorStyle) }
+            { "color", typeof(ColorStyle) },
+            { "endcolor", typeof(EndColorStyle) }
         };
     }
 }

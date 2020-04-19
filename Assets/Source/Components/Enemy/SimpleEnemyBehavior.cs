@@ -23,14 +23,15 @@ namespace Assets.Source.Components.Enemy
         private IntervalTimerComponent shootTimer;
         private IntervalTimerComponent stunTimer;
 
+        // Prefabs
         private GameObject enemyBulletPrefab;
-
-        private Vector2 distanceToPlayer;
 
         // Audio
         private AudioSource audioSource;
         private AudioClip explosionSound;
         private AudioClip blasterSound;
+
+        private Vector2 distanceToPlayer;
 
         protected override int BaseDamage => 30;
 
@@ -60,6 +61,44 @@ namespace Assets.Source.Components.Enemy
             UpdateExternalVelocity();
             base.ComponentUpdate();
         }
+
+        public override void ReactToHit(Collision2D collision, int baseDamage)
+        {
+            audioSource.PlayOneShot(explosionSound);
+
+            string collisionName = collision.otherCollider.gameObject.name;
+            if (!collisionName.Equals(enemyBulletPrefab.name))
+            {
+                actorBehavior.Health -= baseDamage;
+                stunTimer.Reset();
+                shootTimer.IsActive = false;
+
+                //since the enemy can't respond to being hit like the player can, reduce the impact
+                // Hit from the left side
+                if (collision.otherCollider.transform.position.x <= transform.position.x)
+                {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + .5f);
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - .5f);
+                }
+
+                // Hit from the ass
+                if (collision.otherCollider.transform.position.y <= transform.position.y)
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + .5f);
+                }
+                // Hit from the right side
+                else
+                {
+                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - .5f);
+                }
+            }
+        }
+
+        public override void ReactToProjectileCollision(Collision2D collision) { }
 
         private void InitializeTimers()
         {
@@ -125,6 +164,18 @@ namespace Assets.Source.Components.Enemy
             }
         }
 
+        /// <summary>
+        /// Uses an exponential equation to calculate how fast the enemy should move towards the player.
+        /// This helps give the enemy a more realistic feel to it as it will catch up fast but slow down the approach once closer to the player.
+        /// </summary>
+        /// <param name="currentDistance">The current distace from the player</param>
+        /// <returns></returns>
+        private float AdjustSpeedExponential(float currentDistance)
+        {
+            float expDistance = Mathf.Exp(currentDistance) - 0.65f;
+            return Mathf.Clamp(expDistance, 0, MOVE_SPEED);
+        }
+
         private bool ShouldShoot()
         {
             bool shouldFire = false;
@@ -141,55 +192,5 @@ namespace Assets.Source.Components.Enemy
 
             return shouldFire;
         }
-
-        /// <summary>
-        /// Uses an exponential equation to calculate how fast the enemy should move towards the player.
-        /// This helps give the enemy a more realistic feel to it as it will catch up fast but slow down the approach once closer to the player.
-        /// </summary>
-        /// <param name="currentDistance">The current distace from the player</param>
-        /// <returns></returns>
-        private float AdjustSpeedExponential(float currentDistance)
-        {
-            float expDistance = Mathf.Exp(currentDistance) - 0.65f;
-            return Mathf.Clamp(expDistance, 0, MOVE_SPEED);
-        }
-
-        public override void ReactToHit(Collision2D collision, int baseDamage)
-        {
-            audioSource.PlayOneShot(explosionSound);
-
-            string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(enemyBulletPrefab.name))
-            {
-                actorBehavior.Health -= baseDamage;
-                stunTimer.Reset();
-                shootTimer.IsActive = false;
-
-                //since the enemy can't respond to being hit like the player can, reduce the impact
-                // Hit from the left side
-                if (collision.otherCollider.transform.position.x <= transform.position.x)
-                {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x + .5f);
-                }
-                // Hit from the right side
-                else
-                {
-                    externalVelocity = externalVelocity.Copy(x: externalVelocity.x - .5f);
-                }
-
-                // Hit from the ass
-                if (collision.otherCollider.transform.position.y <= transform.position.y)
-                {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.x + .5f);
-                }
-                // Hit from the right side
-                else
-                {
-                    externalVelocity = externalVelocity.Copy(y: externalVelocity.y - .5f);
-                }
-            }
-        }
-
-        public override void ReactToProjectileCollision(Collision2D collision) { }
     }
 }

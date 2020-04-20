@@ -20,6 +20,11 @@
 
         }
 
+        public static class Formations
+        {
+            public const string FlyingV = "FlyingVFormation";
+        }
+
         public const string SystemObject = "SystemObject";
         public const string Canvas = "Canvas";
         public const string TextWriter = "TextWriter";

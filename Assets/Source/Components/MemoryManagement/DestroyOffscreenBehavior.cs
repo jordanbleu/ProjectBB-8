@@ -1,13 +1,13 @@
 ﻿using Assets.Source.Components.Base;
 using Assets.Source.Components.Director.Base;
 
-namespace Assets.Source.Components.Actor
+namespace Assets.Source.Components.MemoryManagement
 {
     /// <summary>
     /// Attach this component to anything to automatically destroy it if it is outside the 
     /// director's boundaries
     /// </summary>
-    public class DestroyObjectIfOffscreenBehavior : ComponentBase
+    public class DestroyOffscreenBehavior : ComponentBase
     {
         private DirectorComponent director;
 

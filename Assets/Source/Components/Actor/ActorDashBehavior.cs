@@ -20,11 +20,14 @@ namespace Assets.Source.Components.Actor
 
         public float DashDistance { get; set; } = 1.5f;
         public float CooldownTime { get; set; } = 2000.0f; //default to 2 seconds
+        public int MaxDashesAvailable { get; set; } = 1;
 
         //External Components
         private IntervalTimerComponent dashTimer;
         private ActorRestrictorComponent actorRestrictor;
+        private ParticleSystem dashParticles;
 
+        private int dashesAvailable;
         private float dashEndLocation;
         private enum DashDirections
         {
@@ -38,7 +41,16 @@ namespace Assets.Source.Components.Actor
             SetupDashTimer();
             actorRestrictor = GetRequiredComponent<ActorRestrictorComponent>();
 
+            GameObject dashEffect = GetRequiredChild("DashEffect");
+            dashParticles = GetRequiredComponent<ParticleSystem>(dashEffect);
+
             base.ComponentAwake();
+        }
+
+        public override void ComponentStart()
+        {
+            dashesAvailable = MaxDashesAvailable;
+            base.ComponentStart();
         }
 
         /// <summary>
@@ -126,6 +138,10 @@ namespace Assets.Source.Components.Actor
                     return EndDash(externalVelocity);
                 }
 
+                ParticleSystem.ShapeModule shapeModule = dashParticles.shape;
+                shapeModule.rotation = shapeModule.rotation.Copy(y: 90.0f);
+                dashParticles.Play();
+
                 return externalVelocity.Copy(x: xVel);
             }
         }
@@ -143,15 +159,23 @@ namespace Assets.Source.Components.Actor
                 {
                     return EndDash(externalVelocity);
                 }
+
+                ParticleSystem.ShapeModule shapeModule = dashParticles.shape;
+                shapeModule.rotation = shapeModule.rotation.Copy(y: 270.0f);
+                dashParticles.Play();
+
                 return externalVelocity.Copy(x: xVel);
             }
         }
 
         private Vector2 EndDash(Vector2 externalVelocity)
         {
-            CanDash = !CanDash;
             IsDashing = !IsDashing;
-            dashTimer.Reset();
+            if(--dashesAvailable == 0){
+                CanDash = !CanDash;
+                dashesAvailable = MaxDashesAvailable;
+                dashTimer.Reset();
+            }
 
             return externalVelocity.Copy(x: 0);
         }

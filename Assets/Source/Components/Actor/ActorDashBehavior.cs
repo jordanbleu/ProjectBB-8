@@ -20,7 +20,7 @@ namespace Assets.Source.Components.Actor
 
         public float DashDistance { get; set; } = 1.5f;
         public float CooldownTime { get; set; } = 2000.0f; //default to 2 seconds
-        public int MaxDashesAvailable { get; set; } = 1;
+        public int MaxDashesAvailable { get; set; } = 2;
 
         //External Components
         private IntervalTimerComponent dashTimer;

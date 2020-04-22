@@ -17,7 +17,6 @@ namespace Assets.Source.Components.Player
         private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
         private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
         private readonly float SHOOT_COOLDOWN = 350.0f;
-        private readonly int MAX_DASHES_AVAILABLE = 2;
 
         // Components
         private Rigidbody2D rigidBody;
@@ -68,7 +67,6 @@ namespace Assets.Source.Components.Player
 
             actorDashBehavior.CooldownTime = DASH_COOLDOWN;
             actorDashBehavior.DashDistance = DASH_DISTANCE;
-            actorDashBehavior.MaxDashesAvailable = MAX_DASHES_AVAILABLE;
 
             blasterSound = GetRequiredResource<AudioClip>($"{ResourcePaths.SoundFXFolder}/Player/playerBlaster");
 

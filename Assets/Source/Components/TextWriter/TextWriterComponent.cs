@@ -50,7 +50,7 @@ namespace Assets.Source.Components.TextWriter
         public int Delay { get; set; } = DEFAULT_DELAY;
 
         // The text we are typing out right now
-        private string text = "{color:hex=#FF0000}Red {color:hex=#00FF00}Green {color:hex=#0000FF}Bleu.  {color:hex=#FFFFFF}Todays date is {currentDate}.";
+        private string text = "{setposition:left}{color:hex=#FF0000}Red {color:hex=#00FF00}Green {color:hex=#0000FF}Bleu.  {color:hex=#FFFFFF}Todays date is {currentDate}.";
         //private string text = @"Todays date is: {currentDate}.";
 
         // our currently typed characters

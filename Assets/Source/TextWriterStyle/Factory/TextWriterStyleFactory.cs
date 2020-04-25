@@ -17,7 +17,8 @@ namespace Assets.Source.TextWriterStyle.Factory
                     {
                         { "color", typeof(ColorStyle) },
                         { "currentdate", typeof(CurrentDateStyle) },
-                        { "endcolor", typeof(EndColorStyle) }
+                        { "endcolor", typeof(EndColorStyle) },
+                        { "setposition", typeof(SetPositionStyle) }
                     };
                 }
                 return _commandRepository;

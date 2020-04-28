@@ -15,7 +15,7 @@ namespace UnitTests
             MockTextWriterStyleFactory mockFactory = new MockTextWriterStyleFactory();
 
             TextWriterStyleBase command = mockFactory.Create("helloworld");
-            string result = command.Evaluate(null, null, -1, null);
+            string result = command.Evaluate(null, null, null, -1, null);
             Assert.AreEqual(result, "HELLO WORLD!");
         }
 
@@ -25,7 +25,7 @@ namespace UnitTests
             MockTextWriterStyleFactory mockFactory = new MockTextWriterStyleFactory();
 
             TextWriterStyleBase command = mockFactory.Create("helloworld:asdf=123");
-            string result = command.Evaluate(null, null, -1, null);
+            string result = command.Evaluate(null, null, null, -1, null);
             Assert.AreEqual(result, "HELLO WORLD!");
         }
 
@@ -36,7 +36,7 @@ namespace UnitTests
             MockTextWriterStyleFactory mockFactory = new MockTextWriterStyleFactory();
 
             TextWriterStyleBase command = mockFactory.Create("helloWorldArgs:firstName=Jordan,lastName=Bleu");
-            string result = command.Evaluate(null, null, -1, null);
+            string result = command.Evaluate(null, null, null, -1, null);
             Assert.AreEqual(result, "Hello Jordan Bleu!");
         }
 
@@ -71,7 +71,7 @@ namespace UnitTests
             // This style should append to the builder not the text
             StringBuilder builder = new StringBuilder();
 
-            string result = command.Evaluate(null, builder, -1, null);            
+            string result = command.Evaluate(null, null, builder, -1, null);            
             Assert.AreEqual(builder.ToString(), $"<{hex}>");       
         }
 
@@ -100,7 +100,7 @@ namespace UnitTests
 
             StringBuilder sb = new StringBuilder();
 
-            string result = command.Evaluate(null, sb, -1, null);
+            string result = command.Evaluate(null, null, sb, -1, null);
             Assert.AreEqual(sb.ToString(), "</color>");
         }
     }

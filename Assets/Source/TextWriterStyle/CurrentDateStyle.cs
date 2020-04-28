@@ -1,4 +1,5 @@
-﻿using Assets.Source.TextWriterStyle.Base;
+﻿using Assets.Source.Components.TextWriter;
+using Assets.Source.TextWriterStyle.Base;
 using System;
 using System.Text;
 using TMPro;
@@ -13,7 +14,7 @@ namespace Assets.Source.TextWriterStyle
         /// <para>format (OPTIONAL): the format string for the returned date.</para>
         /// </summary>
         /// <returns>a date string in the requested format (or the default format if non is specified)</returns>
-        public override string Evaluate(TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
+        public override string Evaluate(TextWriterComponent textWriter, TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
         {
             if (ContainsArgument("format"))
             {

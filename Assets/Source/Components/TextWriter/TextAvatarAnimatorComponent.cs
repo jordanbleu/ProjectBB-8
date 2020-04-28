@@ -8,6 +8,14 @@ namespace Assets.Source.Components.TextWriter
         private TextWriterComponent textWriter;
         private Animator animator;
 
+        public enum Avatars
+        {
+            None = -1,
+            badFace = 0,
+            sexyNurse_normalSpeak = 1
+        }
+
+        public Avatars Avatar { get; set; } = Avatars.None;
         public override void ComponentAwake()
         {
             // Grab a reference to the text writer, which we hook into and check if its typing
@@ -19,6 +27,8 @@ namespace Assets.Source.Components.TextWriter
 
         public override void ComponentUpdate()
         {
+            animator.SetInteger("avatar_id", (int)Avatar);
+
             if (textWriter.IsComplete)
             {
                 // This is weird but it resets the animation and 

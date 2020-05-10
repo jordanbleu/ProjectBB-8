@@ -1,4 +1,5 @@
-﻿using Assets.Source.TextWriterStyle.Exception;
+﻿using Assets.Source.Components.TextWriter;
+using Assets.Source.TextWriterStyle.Exception;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,7 +19,7 @@ namespace Assets.Source.TextWriterStyle.Base
         /// returned will be added to the text mesh component
         /// </summary>
         /// <returns>String that will be conatenated by the magic type writer</returns>
-        public abstract string Evaluate(TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText);
+        public abstract string Evaluate(TextWriterComponent textWriter, TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText);
 
         /// <summary>
         /// Override this method to check for the existence / validitity of our parsed <seealso cref="arguments"/>.

@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <strings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <string name="test1">This is test 1</string>
-  <string name="test2">This is test 2</string>
-  <string name="test3">{color:hex=#FF00FF}This is test 3</string>
-  <string name="test4">{color:hex=#FF00FF}This is test 4{endcolor}</string>
+  <string name="test1">{avatar:id=sexyNurse_normalSpeak}This is test 1</string>
+  <string name="test2">{avatar:id=badFace}This is test 2</string>
+  <string name="test3">{avatar:id=sexyNurse_normalSpeak}{color:hex=#FF00FF}This is test 3</string>
+  <string name="test4">{avatar:id=badFace}{color:hex=#FF00FF}This is test 4{endcolor}</string>
 </strings>

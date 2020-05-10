@@ -1,4 +1,5 @@
-﻿using Assets.Source.Extensions;
+﻿using Assets.Source.Components.TextWriter;
+using Assets.Source.Extensions;
 using Assets.Source.TextWriterStyle.Base;
 using Assets.Source.TextWriterStyle.Exception;
 using System.Text;
@@ -30,7 +31,7 @@ namespace Assets.Source.TextWriterStyle
         }
 
 
-        public override string Evaluate(TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
+        public override string Evaluate(TextWriterComponent textWriter, TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
         {
             string hex = GetArgumentValue("hex");
 

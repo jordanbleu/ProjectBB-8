@@ -19,6 +19,8 @@ namespace Assets.Source.Components.TextWriter
         private TextMeshProUGUI textMeshComponent;
         private TextWriterStyleFactory styleFactory;
 
+        private TextAvatarAnimatorComponent textAvatarAnimatorComponent;
+
         private AudioSource audioSource;
         private AudioClip beep;
 
@@ -31,6 +33,8 @@ namespace Assets.Source.Components.TextWriter
 
             textMeshComponent = GetRequiredComponent<TextMeshProUGUI>(textObject);
             textMeshComponent.SetText(string.Empty);
+
+            textAvatarAnimatorComponent = GetRequiredComponent<TextAvatarAnimatorComponent>(GetRequiredChild("Image"));
 
             styleFactory = new TextWriterStyleFactory();
 
@@ -103,7 +107,7 @@ namespace Assets.Source.Components.TextWriter
                         {
                             // Execute the command
                             TextWriterStyleBase commandObject = styleFactory.Create(command.ToString());
-                            string result = commandObject.Evaluate(textMeshComponent, chars, charIndex + 1, text);
+                            string result = commandObject.Evaluate(this, textMeshComponent, chars, charIndex + 1, text);
 
                             if (!string.IsNullOrEmpty(result))
                             {
@@ -169,6 +173,8 @@ namespace Assets.Source.Components.TextWriter
         // don't do this irl
         private void KillSelf()
         {
+            // Move the Item out of view to prevent flickering of the text writers during destroy
+            transform.position = new Vector3(-9000, -9000, 0);
             OnItemCompleted(null);
             Destroy(gameObject);
         }
@@ -201,6 +207,11 @@ namespace Assets.Source.Components.TextWriter
             string textPart2 = text.Substring(charIndex + 1, text.Length - charIndex - 1);
 
             text = $"{textPart1}{result}{textPart2}";
+        }
+
+        public void SetAvatar(TextAvatarAnimatorComponent.Avatars avatar) 
+        {
+            textAvatarAnimatorComponent.Avatar = avatar;
         }
     }
 }

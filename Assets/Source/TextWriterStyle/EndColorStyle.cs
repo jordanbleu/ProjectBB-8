@@ -1,4 +1,5 @@
-﻿using Assets.Source.TextWriterStyle.Base;
+﻿using Assets.Source.Components.TextWriter;
+using Assets.Source.TextWriterStyle.Base;
 using System.Text;
 using TMPro;
 
@@ -11,7 +12,7 @@ namespace Assets.Source.TextWriterStyle
             base.Initialize();
         }
 
-        public override string Evaluate(TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
+        public override string Evaluate(TextWriterComponent textWriter, TextMeshProUGUI textMeshComponent, StringBuilder currentText, int currentIndex, string fullText)
         {
             // Appending the string instantly appends the text
             currentText.Append($"</color>");

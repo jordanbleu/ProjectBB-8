@@ -1,7 +1,18 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <strings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <string name="test1">{avatar:id=sexyNurse_normalSpeak}This is test 1</string>
-  <string name="test2">{avatar:id=badFace}This is test 2</string>
-  <string name="test3">{avatar:id=sexyNurse_normalSpeak}{color:hex=#FF00FF}This is test 3</string>
-  <string name="test4">{avatar:id=badFace}{color:hex=#FF00FF}This is test 4{endcolor}</string>
+  <string name="tacos">{avatar:id=major_normalSpeak}Ay yo whats up fam im the major, r8 my mustache</string>
+  <string name="thisDoesntMatterYet">{avatar:id=technician_normalSpeak}Nice mustache, fam.  I'm the space ship technician.</string>
+  <string name="test1">{avatar:id=sexyNurse_normalSpeak}Hey there big boy, I really like your glasses</string>
+  <string name="test2">{avatar:id=player_glassesSpeak}Thank you baybeee I enjoy your tasteful cleavage.</string>
+  <string name="test3">{avatar:id=player_glassesSpeak}It really brings a lot of attention to your {color:hex=#FF00FF}...eyes</string>
+  <string name="test4">{avatar:id=sexyNurse_normalSpeak}{color:hex=#FF00FF}Thank you so much for saying that about my eyes.  I'd love to see your eyes too!{endcolor}</string>
+  <string name="test5">{avatar:id=player_normalSpeak}No problem, ma'am.  Here is what my eyes look like.</string>
+  <string name="test6">{avatar:id=sexyNurse_normalSpeak}Well, hot dog! Those really are some eyes!</string>
+  <string name="test7">{avatar:id=player_normalSpeak}They sure are, now watch how fast i can put my glasses back on...</string>
+  <string name="test8">{avatar:id=player_glassesSpeak}...done</string>
+  <string name="test9">{avatar:id=badFace}Hey guys, I'm the shitty placeholder face Jordan made in MS Paint. Sorry to interrupt i just wanted to compliment that guys speed at putting on glasses, Also i'm testing a longer dialogue bit.</string>
+  <string name="test10">{avatar:id=player_glassesSpeak}thank you {color:hex=#FFFF00}avatar id=badFace{endcolor}</string>
+  <string name="test11">{avatar:id=None}This concludes the conversation about the guys glasses</string>
+  <string name="test12">{avatar:id=None}This is also testing dialogue without an avatar</string>
+  <string name="test13">{avatar:id=None}Thank you, I love you</string>
 </strings>

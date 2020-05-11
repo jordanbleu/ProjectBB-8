@@ -12,7 +12,11 @@ namespace Assets.Source.Components.TextWriter
         {
             None = -1,
             badFace = 0,
-            sexyNurse_normalSpeak = 1
+            sexyNurse_normalSpeak = 1,
+            player_normalSpeak = 2,
+            player_glassesSpeak = 3,
+            major_normalSpeak = 4,
+            technician_normalSpeak = 5
         }
 
         public Avatars Avatar { get; set; } = Avatars.None;

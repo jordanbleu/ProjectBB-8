@@ -14,7 +14,8 @@ namespace Assets.Source.Components.TextWriter
     {
         // Resource Names
         private const string TEXT_OBJECT_NAME = "Text";
-        private const int DEFAULT_DELAY = 100;
+        
+        private static readonly int DEFAULT_DELAY = 50;
 
         private TextMeshProUGUI textMeshComponent;
         private TextWriterStyleFactory styleFactory;

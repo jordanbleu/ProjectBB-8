@@ -17,10 +17,14 @@ namespace Assets.Source.Components.Timer
         [Tooltip("If true, the interval timer will destroy itself after a single interval")]
         [SerializeField]
         private bool _selfDestruct = false;
-        
         public bool SelfDestruct { get => _selfDestruct; set => _selfDestruct = value; }
 
+        [Tooltip("If true, the actual interval time will be a random range UP TO the interval value")]
+        [SerializeField]
+        private bool _randomize = false;
+        public bool Randomize { get => _randomize; set => _randomize = value; }
 
+        private float maxInterval;
         /// <summary>
         /// If true this timer will reset after invoking the unity event,
         /// otherwise only one unity event will occur until it is reset manually
@@ -40,6 +44,18 @@ namespace Assets.Source.Components.Timer
 
         public float CurrentTime { get; private set; } = 0.0f;
 
+        public override void ComponentAwake()
+        {
+            maxInterval = interval;
+            base.ComponentAwake();
+        }
+
+        public override void ComponentStart()
+        {
+            RandomizeInterval();
+            base.ComponentStart();
+        }
+
         public override void ComponentUpdate()
         {
             if (IsActive)
@@ -49,6 +65,8 @@ namespace Assets.Source.Components.Timer
                 if (CurrentTime >= interval)
                 {
                     OnIntervalReached?.Invoke();
+
+                    RandomizeInterval();
 
                     if (_selfDestruct)
                     {
@@ -67,7 +85,7 @@ namespace Assets.Source.Components.Timer
         /// Resets the current interval timer and sets the interval time 
         /// </summary>
         /// <param name="interval"></param>
-        public void UpdateInterval(float interval)
+        public void SetInterval(float interval)
         {
             Reset();
             this.interval = interval;
@@ -85,6 +103,13 @@ namespace Assets.Source.Components.Timer
         public float GetInterval()
         {
             return interval;
+        }
+
+        private void RandomizeInterval() {
+            if (Randomize)
+            {
+                interval = Mathf.RoundToInt(Random.Range(0, maxInterval));
+            }
         }
     }
 }

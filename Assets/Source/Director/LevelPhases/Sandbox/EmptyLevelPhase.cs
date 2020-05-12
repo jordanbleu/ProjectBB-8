@@ -13,7 +13,7 @@ namespace Assets.Source.Director.LevelPhases.Sandbox
         public void PhaseBegin(ILevelContext context)
         {
             // Nothing
-            //ComponentBase.InitiateDialogueExchange("Testing/test.xml");
+            ComponentBase.InitiateDialogueExchange("Testing/test.xml");
 
         }
 

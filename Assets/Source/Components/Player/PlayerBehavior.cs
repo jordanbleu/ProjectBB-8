@@ -76,7 +76,7 @@ namespace Assets.Source.Components.Player
         private void SetupTimers()
         {
             ShootTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            ShootTimer.UpdateInterval(SHOOT_COOLDOWN);
+            ShootTimer.SetInterval(SHOOT_COOLDOWN);
             ShootTimer.IsActive = true;
             ShootTimer.AutoReset = false;
         }

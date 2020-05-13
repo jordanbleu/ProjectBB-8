@@ -103,12 +103,12 @@ namespace Assets.Source.Components.Enemy
         private void InitializeTimers()
         {
             shootTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            shootTimer.UpdateInterval(SHOOT_COOLDOWN);
+            shootTimer.SetInterval(SHOOT_COOLDOWN);
             shootTimer.IsActive = true;
             shootTimer.AutoReset = false;
 
             stunTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            stunTimer.UpdateInterval(STUN_COOLDOWN);
+            stunTimer.SetInterval(STUN_COOLDOWN);
             stunTimer.IsActive = false;
             stunTimer.AutoReset = false;
             stunTimer.OnIntervalReached.AddListener(OnStunTimerIntervalReached);

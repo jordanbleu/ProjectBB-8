@@ -183,7 +183,7 @@ namespace Assets.Source.Components.Actor
         private void SetupDashTimer()
         {
             dashTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            dashTimer.UpdateInterval(CooldownTime);
+            dashTimer.SetInterval(CooldownTime);
             dashTimer.AutoReset = false;
             dashTimer.OnIntervalReached.AddListener(OnIntervalReached);
         }

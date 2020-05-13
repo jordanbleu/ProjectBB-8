@@ -41,7 +41,7 @@ namespace Assets.Source.Director.Testing.TestLevel
             
             intervalTimerObject.AddComponent<IntervalTimerComponent>();
             IntervalTimerComponent timer = ComponentBase.GetRequiredComponent<IntervalTimerComponent>(intervalTimerObject);            
-            timer.UpdateInterval(3000);
+            timer.SetInterval(3000);
             timer.OnIntervalReached.AddListener(SpawnFormation);
             timer.SelfDestruct = true;
             timer.IsActive = true;

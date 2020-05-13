@@ -1,9 +1,4 @@
 ﻿using Assets.Source.Components.Base;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace Assets.Source.Components.Spawner
@@ -24,6 +19,7 @@ namespace Assets.Source.Components.Spawner
 
         [SerializeField]
         private Vector2 maxPosition = new Vector2(1.5f, 4f);
+
 
         public void Initialize(int spawnDelay, GameObject objectToSpawn, Vector2? minPosition = null, Vector2? maxPosition = null) 
         {

@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <strings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <string name="asdfasdf">{avatar:id=None}Initiating test sequence, beep boop bop</string>
   <string name="tacos">{avatar:id=major_normalSpeak}Ay yo whats up fam im the major, r8 my mustache</string>
   <string name="thisDoesntMatterYet">{avatar:id=technician_normalSpeak}Nice mustache, fam.  I'm the space ship technician.</string>
   <string name="test1">{avatar:id=sexyNurse_normalSpeak}Hey there big boy, I really like your glasses</string>

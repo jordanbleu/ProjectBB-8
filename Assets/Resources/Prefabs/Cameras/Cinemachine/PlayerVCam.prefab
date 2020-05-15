@@ -180,7 +180,7 @@ MonoBehaviour:
   m_BoundingVolume: {fileID: 0}
   m_BoundingShape2D: {fileID: 0}
   m_ConfineScreenEdges: 1
-  m_Damping: 10
+  m_Damping: 0
 --- !u!95 &2246721503216000908
 Animator:
   serializedVersion: 3

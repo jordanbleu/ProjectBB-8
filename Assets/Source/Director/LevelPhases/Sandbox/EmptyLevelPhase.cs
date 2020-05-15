@@ -1,10 +1,4 @@
-﻿using Assets.Source.Components.Base;
-using Assets.Source.Director.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Assets.Source.Director.Interfaces;
 
 namespace Assets.Source.Director.LevelPhases.Sandbox
 {
@@ -13,6 +7,8 @@ namespace Assets.Source.Director.LevelPhases.Sandbox
         public void PhaseBegin(ILevelContext context)
         {
             // Nothing
+            
+            // Uncomment if testing dialogue
             //ComponentBase.InitiateDialogueExchange("Testing/test.xml");
 
         }

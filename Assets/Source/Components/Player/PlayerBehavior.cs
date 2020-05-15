@@ -97,7 +97,7 @@ namespace Assets.Source.Components.Player
                 actorBehavior.Health -= baseDamage;
 
                 // Warn player if health is less than 10%
-                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.1f)
+                if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.3f)
                 {
                     Warning("Low Health");
                 }

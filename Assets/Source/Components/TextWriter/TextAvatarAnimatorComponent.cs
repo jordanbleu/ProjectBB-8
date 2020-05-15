@@ -10,13 +10,13 @@ namespace Assets.Source.Components.TextWriter
 
         public enum Avatars
         {
-            None = -1,
-            badFace = 0,
-            sexyNurse_normalSpeak = 1,
-            player_normalSpeak = 2,
-            player_glassesSpeak = 3,
-            major_normalSpeak = 4,
-            technician_normalSpeak = 5
+            None = 0,
+            badFace = 1,
+            sexyNurse_normalSpeak = 2,
+            player_normalSpeak = 3,
+            player_glassesSpeak = 4,
+            major_normalSpeak = 5,
+            technician_normalSpeak = 6
         }
 
         public Avatars Avatar { get; set; } = Avatars.None;
@@ -33,14 +33,17 @@ namespace Assets.Source.Components.TextWriter
         {
             animator.SetInteger("avatar_id", (int)Avatar);
 
-            if (textWriter.IsComplete)
+            if (textWriter.IsDoneTyping)
             {
-                // This is weird but it resets the animation and 
-                // then stops it immediately.  This ensures that the 
-                // animation ends on the first frame so the avatars face 
-                // doesn't get stuck like :O 
-                animator.Play(string.Empty, 0, 0f);
-                animator.StopPlayback();
+                if (!Avatar.Equals(Avatars.None))
+                {
+                    // This is weird but it resets the animation and 
+                    // then stops it immediately.  This ensures that the 
+                    // animation ends on the first frame so the avatars face 
+                    // doesn't get stuck like :O 
+                    animator.Play(string.Empty, 0, 0f);
+                    animator.StopPlayback();
+                }
             }
             base.ComponentUpdate();
         }

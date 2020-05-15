@@ -4939,8 +4939,8 @@ MonoBehaviour:
     Width: 0.25
     Height: 0.25
   restrictedArea:
-    Width: 3
-    Height: 2
+    Width: 4
+    Height: 3
 --- !u!82 &4066346173285235238
 AudioSource:
   m_ObjectHideFlags: 0

@@ -21,10 +21,14 @@ namespace Assets.Source.Components.TextWriter
         private TextWriterStyleFactory styleFactory;
 
         private TextAvatarAnimatorComponent textAvatarAnimatorComponent;
+        private Animator animator;
 
         private AudioSource audioSource;
         private AudioClip beep;
 
+        // Animation Flags
+        private bool isAnimationReady = false;
+        
         public override void ComponentAwake()
         {
             audioSource = GetRequiredComponent<AudioSource>();
@@ -34,6 +38,7 @@ namespace Assets.Source.Components.TextWriter
 
             textMeshComponent = GetRequiredComponent<TextMeshProUGUI>(textObject);
             textMeshComponent.SetText(string.Empty);
+            animator = GetRequiredComponent<Animator>();
 
             textAvatarAnimatorComponent = GetRequiredComponent<TextAvatarAnimatorComponent>(GetRequiredChild("Image"));
 
@@ -42,12 +47,13 @@ namespace Assets.Source.Components.TextWriter
             base.ComponentAwake();
         }
 
+        // If true, the user pressed the key to skip typing
         private bool isSkipped = false;
 
         /// <summary>
         /// If true, the text writer is finished
         /// </summary>
-        public bool IsComplete { get; private set; } = false;
+        public bool IsDoneTyping { get; private set; } = false;
 
         /// <summary>
         /// The delay between typing characters
@@ -66,68 +72,71 @@ namespace Assets.Source.Components.TextWriter
 
         public override void DelayedUpdate()
         {
-            if (!string.IsNullOrEmpty(text) && !IsComplete)
+            if (isAnimationReady)
             {
-                IsComplete = (charIndex >= text.Length);
-
-                if (!IsComplete)
+                if (!string.IsNullOrEmpty(text) && !IsDoneTyping)
                 {
-                    char nextChar = text[charIndex];
+                    IsDoneTyping = (charIndex >= text.Length);
 
-                    if (nextChar.Equals('{'))
+                    if (!IsDoneTyping)
                     {
-                        // Begin reading the remaining text as a command until we reach the }
-                        StringBuilder command = new StringBuilder();
-                        bool foundEndTag = false;
+                        char nextChar = text[charIndex];
 
-                        while (charIndex < text.Length)
+                        if (nextChar.Equals('{'))
                         {
-                            charIndex++;
-                            char commandChar = text[charIndex];
+                            // Begin reading the remaining text as a command until we reach the }
+                            StringBuilder command = new StringBuilder();
+                            bool foundEndTag = false;
 
-                            if (commandChar.Equals('}'))
+                            while (charIndex < text.Length)
                             {
-                                foundEndTag = true;
-                                break;
+                                charIndex++;
+                                char commandChar = text[charIndex];
+
+                                if (commandChar.Equals('}'))
+                                {
+                                    foundEndTag = true;
+                                    break;
+                                }
+                                else if (commandChar.Equals('{'))
+                                {
+                                    throw new UnityException("Unable to parse command string.  Expected ending } but found another opening {");
+                                }
+                                else
+                                {
+                                    command.Append(text[charIndex]);
+                                }
                             }
-                            else if (commandChar.Equals('{'))
+
+                            if (!foundEndTag)
                             {
-                                throw new UnityException("Unable to parse command string.  Expected ending } but found another opening {");
+                                throw new UnityException("Unable to parse command string.  Expected ending }");
                             }
                             else
                             {
-                                command.Append(text[charIndex]);
+                                // Execute the command
+                                TextWriterStyleBase commandObject = styleFactory.Create(command.ToString());
+                                string result = commandObject.Evaluate(this, textMeshComponent, chars, charIndex + 1, text);
+
+                                if (!string.IsNullOrEmpty(result))
+                                {
+                                    SpliceResult(result, charIndex);
+                                }
                             }
                         }
-
-                        if (!foundEndTag)
+                        else // Just a normal character
                         {
-                            throw new UnityException("Unable to parse command string.  Expected ending }");
+                            chars.Append(nextChar);
                         }
-                        else
-                        {
-                            // Execute the command
-                            TextWriterStyleBase commandObject = styleFactory.Create(command.ToString());
-                            string result = commandObject.Evaluate(this, textMeshComponent, chars, charIndex + 1, text);
 
-                            if (!string.IsNullOrEmpty(result))
-                            {
-                                SpliceResult(result, charIndex);
-                            }
-                        }
                     }
-                    else // Just a normal character
+
+                    if (beep != null)
                     {
-                        chars.Append(nextChar);
+                        audioSource.PlayOneShot(beep);
                     }
-
+                    charIndex++;
                 }
-
-                if (beep != null)
-                {
-                    audioSource.PlayOneShot(beep);
-                }
-                charIndex++;
             }
         }
 
@@ -144,9 +153,9 @@ namespace Assets.Source.Components.TextWriter
 
             if (InputManager.IsKeyPressed(InputConstants.K_MENU_ENTER))
             {
-                if (IsComplete)
+                if (IsDoneTyping)
                 {
-                    KillSelf();
+                    TriggerCloseAnimation();
                 }
                 else
                 {
@@ -171,13 +180,11 @@ namespace Assets.Source.Components.TextWriter
             ItemCompleted?.Invoke(this, e);
         }
 
-        // don't do this irl
-        private void KillSelf()
+        // Call this method to begin the closing animation, which will invoke the IsClosed callback method 
+        // When its done 
+        private void TriggerCloseAnimation() 
         {
-            // Move the Item out of view to prevent flickering of the text writers during destroy
-            transform.position = new Vector3(-9000, -9000, 0);
-            OnItemCompleted(null);
-            Destroy(gameObject);
+            animator.SetTrigger("close");
         }
 
         /// <summary>
@@ -214,5 +221,19 @@ namespace Assets.Source.Components.TextWriter
         {
             textAvatarAnimatorComponent.Avatar = avatar;
         }
+
+        // This is called via animation event.
+        public void OnReady()
+        {
+            isAnimationReady = true;
+        }
+
+        // This is called via an animation event
+        private void OnClosed()
+        {
+            OnItemCompleted(null);
+            Destroy(gameObject);
+        }
+
     }
 }

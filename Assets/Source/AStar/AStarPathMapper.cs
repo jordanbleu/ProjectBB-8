@@ -8,6 +8,7 @@ namespace Assets.Source.AStar
     public class AStarPathMapper
     {
 
+
         private NavigationMeshComponent navigationMesh;
 
         private Node[][] nodes;
@@ -32,7 +33,7 @@ namespace Assets.Source.AStar
             var targetNodePosition = navigationMesh.FindNearestNodeIndex(targetPosition);
             var startNode = nodes[startNodePosition.ix][startNodePosition.iy];
             // For the target node, if the destination is a solid node, find the nearest non-solid neighbor node instead
-            var targetNode = FindNearestOpenNode(nodes[targetNodePosition.ix][targetNodePosition.iy]);
+            var targetNode = FindNearestOpenNode(nodes[targetNodePosition.ix][targetNodePosition.iy], startNode);
 
             // The "open list" is the list of nodes that we need to visit
             var openList = new List<Node>() { startNode };
@@ -68,17 +69,18 @@ namespace Assets.Source.AStar
                     return TraceFinalPath(startNode, targetNode);
                 }
 
-                foreach (Node neighbor in FindNeighborNodes(currentNode, allowDiagonalMovement))
+                foreach (Node neighbor in FindNeighborNodes(currentNode, false))
                 {
                     // Ignore any solid or previously visited nodes
-                    if (neighbor.IsSolid || closedList.Contains(neighbor))
+                    if ((neighbor != targetNode && neighbor.IsSolid) || closedList.Contains(neighbor))
                     {
                         continue;
                     }
 
                     // For this implementation of A*, the GCost is the linear distance between node indices 
                     // Add the distance between currentNode and this particular neighbor 
-                    var moveCost = currentNode.GCost + GetDistance(currentNode, neighbor);
+                    //var moveCost = currentNode.GCost + GetDistance(currentNode, neighbor); //<- This might not be right(?)
+                    var moveCost = currentNode.GCost + GetDistance(currentNode, targetNode);
 
                     // Check if this neighbor node should be where we visit next
                     if (moveCost < neighbor.GCost || !openList.Contains(neighbor))
@@ -101,7 +103,7 @@ namespace Assets.Source.AStar
         }
 
         // Find the linear distance between two indices in the node array
-        private int GetDistance(Node node1, Node node2)
+        private float GetDistance(Node node1, Node node2)
         {
             var x = Mathf.Abs(node1.XIndex - node2.XIndex);
             var y = Mathf.Abs(node2.YIndex - node2.YIndex);
@@ -173,9 +175,9 @@ namespace Assets.Source.AStar
         private float GetPhysicalDistance(Node node1, Node node2) => Vector2.Distance(node1.Center, node2.Center);
 
         // recursively seek out a valid non-solid node
-        private Node FindNearestOpenNode(Node node, Node originalNode = null, List<Node> visited = null)
+        private Node FindNearestOpenNode(Node node, Node startNode, Node originalNode = null, List<Node> visited = null)
         {
-            // If this node is solid, return it 
+            // If this node is non-solid, return it right away
             if (!node.IsSolid)
             {
                 return node;
@@ -195,13 +197,14 @@ namespace Assets.Source.AStar
             // ordering it like that assures us that the first node we check will be the closest to us
             var neighbors = FindNeighborNodes(node, true)
                             .Where(n => visited != null && !visited.Contains(n))
+                            .OrderBy(n => GetPhysicalDistance(n, startNode))
                             .OrderBy(n => GetPhysicalDistance(n, sourceNode));
 
             // Check each neighbor for its nearest non-solid node
             // Remember, this will return the node itself if the node isn't solid
             foreach (Node neighbor in neighbors)
             {
-                var firstNonSolidNode = FindNearestOpenNode(neighbor, sourceNode, visited);
+                var firstNonSolidNode = FindNearestOpenNode(neighbor, startNode, sourceNode, visited);
                 if (firstNonSolidNode != null)
                 {
                     return firstNonSolidNode;

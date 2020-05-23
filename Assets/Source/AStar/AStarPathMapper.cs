@@ -69,7 +69,7 @@ namespace Assets.Source.AStar
                     return TraceFinalPath(startNode, targetNode);
                 }
 
-                foreach (Node neighbor in FindNeighborNodes(currentNode, false))
+                foreach (Node neighbor in FindNeighborNodes(currentNode, allowDiagonalMovement))
                 {
                     // Ignore any solid or previously visited nodes
                     if ((neighbor != targetNode && neighbor.IsSolid) || closedList.Contains(neighbor))

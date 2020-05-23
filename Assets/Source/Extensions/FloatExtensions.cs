@@ -1,4 +1,6 @@
-﻿namespace Assets.Source.Extensions
+﻿using UnityEngine;
+
+namespace Assets.Source.Extensions
 {
     public static class FloatExtensions
     {
@@ -12,8 +14,8 @@
         /// <returns></returns>
         public static bool IsWithin(this float value, float units, float ofValue)
         {
-            var min = ofValue - units;
-            var max = ofValue + units;
+            var min = ofValue - Mathf.Abs(units);
+            var max = ofValue + Mathf.Abs(units);
             return (value >= min) && (value <= max);
         }
     }

@@ -22,18 +22,15 @@ namespace Assets.Source.Components.Pathing
         // Required to perform the AStar algorithm
         private AStarPathMapper pathMapper;
 
-
-        private Vector2? _destination;
         /// <summary>
         /// The pathfinders overall current destination 
         /// </summary>
-        protected Vector2? Destination => _destination;
+        public Vector2? Destination { get; private set; }
 
-        private Vector2? _currentPoint;
         /// <summary>
         /// The current destination that the pathfinder needs to get to
         /// </summary>
-        protected Vector2? CurrentPoint => _currentPoint;
+        public Vector2? CurrentPoint { get; private set; }
 
         public override void ComponentAwake()
         {
@@ -42,15 +39,16 @@ namespace Assets.Source.Components.Pathing
             base.ComponentAwake();
         }
 
-        protected void SeekPath(Vector2 destination)
+        public void SeekPath(Vector2 destination)
         {
-            lastCalculatedPath = pathMapper.FindPath(transform.position, destination);
-            _currentPoint = lastCalculatedPath?.FirstOrDefault()?.Center;
+            Destination = destination;
+            lastCalculatedPath = pathMapper.FindPath(transform.position, destination, true);
+            CurrentPoint = lastCalculatedPath?.FirstOrDefault()?.Center;
         }
 
         private void OnDrawGizmosSelected()
         {
-            if (lastCalculatedPath != null && _currentPoint.HasValue && _destination.HasValue)
+            if (lastCalculatedPath != null && CurrentPoint.HasValue && Destination.HasValue)
             {
                 // the blue circles show the mapped path
                 Gizmos.color = Color.cyan;
@@ -61,11 +59,11 @@ namespace Assets.Source.Components.Pathing
 
                 // The red line is the currently seeked node
                 Gizmos.color = Color.red;
-                Gizmos.DrawLine(transform.position, _currentPoint.Value);
+                Gizmos.DrawLine(transform.position, CurrentPoint.Value);
 
                 // The green circle is the actor's destination
                 Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(_destination.Value, 0.1f);
+                Gizmos.DrawWireSphere(Destination.Value, 0.1f);
             }
         }
     }

@@ -1,30 +1,45 @@
-﻿using Assets.Source.Components.Projectile.Base;
+﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Components.Timer;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
-using System;
 using UnityEngine;
 
 namespace Assets.Source.Components.Enemy
 {
-    public class GruntEnemyBehavior : ProjectileComponentBase, IProjectileReactor
+    /// <summary>
+    /// Grunt enemies are very basic enemies a that are incredibly easy to destroy.  The max health should be kept under 
+    /// the playerbullet's base damage (10) so that it gets destroyed in one shot.  
+    /// </summary>
+    public class GruntEnemyBehavior : ComponentBase, IProjectileReactor
     {
-        protected override int BaseDamage => 10;
         private GameObject explosionObject;
 
         private IntervalTimerComponent intervalTimer;
         private GameObject bullet;
 
+        private ActorBehavior actorBehavior;
         public override void ComponentAwake()
         {
             intervalTimer = GetRequiredComponent<IntervalTimerComponent>();
             intervalTimer.OnIntervalReached.AddListener(ShootIntervalReached);
-            
+
+            actorBehavior = GetRequiredComponent<ActorBehavior>();
+
             explosionObject = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/GruntExplosion");
             bullet = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Projectiles/EnemyBullet");
             
             base.ComponentAwake();
+        }
+
+        public override void ComponentUpdate()
+        {
+            if (actorBehavior.Health <= 0)
+            {
+                Explode();            
+            }
+            base.ComponentUpdate();
         }
 
         private void ShootIntervalReached()
@@ -32,26 +47,21 @@ namespace Assets.Source.Components.Enemy
             InstantiateInLevel(bullet, transform.position.Copy(y: transform.position.y-0.25f));
         }
 
-        public override void DestroyProjectile(Collision2D collision)
-        {
-            if (!collision.collider.gameObject.name.Equals(bullet.name))
-            {
-                GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
-                explosion.transform.localScale = transform.localScale;
-                Destroy(gameObject);
-            }
-        }
-
+        // If the grunt enemy was shot:
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
-            if (!collision.otherCollider.gameObject.name.Equals(bullet.name))
+            if (collision.otherCollider.gameObject.name.Equals(GameObjects.Projectiles.PlayerBullet))
             {
-                GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
-                explosion.transform.localScale = transform.localScale;
-                Destroy(gameObject);
+                // Ideally This will result in a death after one shot
+                actorBehavior.Health -= baseDamage;
             }
         }
 
+        private void Explode() { 
+            GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
+            explosion.transform.localScale = transform.localScale;
+            Destroy(gameObject);
         
+        }
     }
 }

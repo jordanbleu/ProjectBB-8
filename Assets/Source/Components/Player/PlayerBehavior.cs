@@ -1,20 +1,20 @@
 ﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
-using Assets.Source.Components.Projectile.Base;
+using Assets.Source.Components.Timer;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
 using UnityEngine;
-using Assets.Source.Components.Timer;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ProjectileComponentBase
+    public class PlayerBehavior : ComponentBase, IFriendlyTarget
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
-        private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
+        private readonly float DASH_DISTANCE = 1.5f; 
         private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
         private readonly float SHOOT_COOLDOWN = 350.0f;
 
@@ -45,8 +45,6 @@ namespace Assets.Source.Components.Player
 
         // Timers
         public IntervalTimerComponent ShootTimer { get; private set; }
-
-        protected override int BaseDamage => 100;
 
         public override void ComponentAwake()
         {
@@ -240,5 +238,6 @@ namespace Assets.Source.Components.Player
             if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
         }
+
     }
 }

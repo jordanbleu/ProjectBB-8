@@ -26,16 +26,15 @@ namespace Assets.Source.Components.Projectile.Base
         private void OnCollisionEnter2D(Collision2D collision)
         {
             // if the collided gameobject has a collider reactor, tell it to react
-            // (See Player object for example)
             if (collision.gameObject.TryGetComponent(out IProjectileReactor reactor))
             {
                 reactor.ReactToProjectileHit(collision, BaseDamage);
             }
 
-            // Projectiles destroy themselves on contact
-            DestroyProjectile(collision);
+            // Projectiles usually destroy themselves on contact but not always
+            ProjectileCollided(collision);
         }
 
-        public virtual void DestroyProjectile(Collision2D collision) { }
+        public virtual void ProjectileCollided(Collision2D collision) { }
     }
 }

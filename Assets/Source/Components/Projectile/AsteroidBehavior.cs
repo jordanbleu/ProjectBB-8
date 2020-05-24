@@ -36,7 +36,7 @@ namespace Assets.Source.Components.Projectile
             base.ComponentUpdate();
         }
 
-        public override void DestroyProjectile(Collision2D collision)
+        public override void ProjectileCollided(Collision2D collision)
         {
             GameObject explosion = InstantiateInLevel(explosionObject, transform.position);
             

@@ -32,7 +32,7 @@ namespace Assets.Source.Components.Actor
             set => _blasterAmmo = value; 
         }
 
-        #region Player Stats
+        #region Stats
         public int MaxHealth { get; set; } = 100;
 
         public int MaxBlasterAmmo { get; set; } = 150;

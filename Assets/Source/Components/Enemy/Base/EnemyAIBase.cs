@@ -97,7 +97,7 @@ namespace Assets.Source.Components.Enemy.Base
 
         public abstract void ReactToProjectileCollision(Collision2D collision);
 
-        public override void DestroyProjectile(Collision2D collision)
+        public override void ProjectileCollided(Collision2D collision)
         {
             ReactToProjectileCollision(collision);
         }

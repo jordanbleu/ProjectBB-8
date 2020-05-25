@@ -96,7 +96,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af3fc73681ab12498e23f2126d1a6b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 100
+  damageMultiplier: 1
 --- !u!50 &8785020354373910334
 Rigidbody2D:
   serializedVersion: 4
@@ -957,7 +957,9 @@ MonoBehaviour:
   weight: 1
   distanceFromTarget: 1.5
   positionPadding: {x: 0.5, y: 0.5}
-  damageMultiplier: 1
+  movementArea:
+    Width: 4
+    Height: 3
   bulletPrefab: {fileID: 1394819448221332960, guid: 86f795d4d9a3342f0ac53ba550b1b949,
     type: 3}
   explosionPrefab: {fileID: 3164088193274489066, guid: a608dac02e4a6424e9941b41a728e7cc,
@@ -1087,7 +1089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af3fc73681ab12498e23f2126d1a6b1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damageMultiplier: 1
+  damageMultiplier: 2
 --- !u!50 &926389614526573531
 Rigidbody2D:
   serializedVersion: 4

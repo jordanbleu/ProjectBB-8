@@ -203,15 +203,19 @@ namespace Assets.Source.Components.Base
         }
 
         /// <summary>
+        /// If true, the player is viewing text dialog
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsDialogueOpen() => ComponentExists<TextWriterComponent>() || ComponentExists<TextWriterPipelineComponent>();
+
+        /// <summary>
         /// Returns true if the specified component <typeparamref name="T"/> is active 
         /// on the hierarchy currently
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool ComponentExists<T>() where T : UnityEngine.Component
-        {
-            return FindObjectsOfType<T>().Any();
-        }
+        public static bool ComponentExists<T>() where T : Component => FindObjectsOfType<T>().Any();
+        
 
         #endregion
 

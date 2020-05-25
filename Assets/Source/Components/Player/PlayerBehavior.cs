@@ -41,7 +41,7 @@ namespace Assets.Source.Components.Player
 
         // Physics
         private Vector2 externalVelocity;
-        private bool isInvulnerable = false;
+        private bool isInvincible = false;
 
         // Timers
         public IntervalTimerComponent ShootTimer { get; private set; }
@@ -90,9 +90,11 @@ namespace Assets.Source.Components.Player
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
             string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
+            if (!collisionName.Equals(bulletPrefab.name))
             {
-                actorBehavior.Health -= baseDamage;
+                if (!isInvincible) { 
+                    actorBehavior.Health -= baseDamage;
+                }
 
                 // Warn player if health is less than 10%
                 if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.3f)
@@ -130,7 +132,7 @@ namespace Assets.Source.Components.Player
 
         private void UpdatePlayerControls()
         {
-            isInvulnerable = actorDashBehavior.IsDashing;
+            isInvincible = actorDashBehavior.IsDashing;
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
             float horizontalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_RIGHT) * MOVE_SPEED) -

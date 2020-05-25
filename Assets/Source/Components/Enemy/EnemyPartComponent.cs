@@ -2,11 +2,10 @@
 using Assets.Source.Components.Base;
 using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
-using System;
 using System.Linq;
 using UnityEngine;
 
-namespace Assets.Source.Components.AI
+namespace Assets.Source.Components.Enemy
 {
     public class EnemyPartComponent : ComponentBase, IProjectileReactor
     {

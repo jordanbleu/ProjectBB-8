@@ -31,10 +31,12 @@ namespace Assets.Source.Director.Testing.TestLevel
             ComponentBase.GetRequiredComponent<AutoSpawnerComponent>(asteroidSpawner).Initialize(500, asteroidPrefab);
 
             // This method is used to spawn enemies, initialize the phase, etc
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.ShooterEnemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/Enemies/Shooter_AI");
             
             GameObject inst = ComponentBase.InstantiateInLevel(enemy);
             inst.transform.position = new Vector3(0, 1.5f, 1);
+            GameObject inst2 = ComponentBase.InstantiateInLevel(enemy);
+            inst2.transform.position = new Vector3(1, -1, 2);
 
             // A formation will spawn after a while 
             intervalTimerObject = new GameObject("FormationSpawnTimer");

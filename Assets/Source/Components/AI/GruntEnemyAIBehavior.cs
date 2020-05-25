@@ -6,13 +6,13 @@ using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using UnityEngine;
 
-namespace Assets.Source.Components.Enemy
+namespace Assets.Source.Components.AI
 {
     /// <summary>
     /// Grunt enemies are very basic enemies a that are incredibly easy to destroy.  The max health should be kept under 
     /// the playerbullet's base damage (10) so that it gets destroyed in one shot.  
     /// </summary>
-    public class GruntEnemyBehavior : ComponentBase, IProjectileReactor
+    public class GruntEnemyAIBehavior : ComponentBase, IProjectileReactor
     {
         private GameObject explosionObject;
 
@@ -50,7 +50,8 @@ namespace Assets.Source.Components.Enemy
         // If the grunt enemy was shot:
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
-            if (collision.otherCollider.gameObject.name.Equals(GameObjects.Projectiles.PlayerBullet))
+            string collider = collision.otherCollider.gameObject.name;
+            if (collider.Equals(GameObjects.Projectiles.PlayerBullet) || collider.Equals(GameObjects.Projectiles.Asteroid))
             {
                 // Ideally This will result in a death after one shot
                 actorBehavior.Health -= baseDamage;

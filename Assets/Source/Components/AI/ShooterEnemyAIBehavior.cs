@@ -19,7 +19,7 @@ namespace Assets.Source.Components.AI
         [Header("Behavior Setup")]
         [Tooltip("The maximum duration between shots at the player.")]
         [SerializeField]
-        private int shotFrequency = 500;
+        private int shotDelay = 500;
 
         [Tooltip("Maximum movement speed")]
         [SerializeField]
@@ -39,11 +39,6 @@ namespace Assets.Source.Components.AI
             "above.  Larger numbers will make the enemy remain stationary more often.  ")]
         [SerializeField]
         private Vector2 positionPadding = new Vector2(0.5f, 0.5f);
-
-        [Tooltip("The amount of damage the enemy takes in releation to base damage.  Values under 1 " +
-            "decrease damage taken, values over 1 increase it.")]
-        [SerializeField]
-        private float damageTakenMultiplier = 1;
 
         [Tooltip("The movement boundaries.  Generally should be similar or the same to the player's moveable area.")]
         [SerializeField]
@@ -74,8 +69,10 @@ namespace Assets.Source.Components.AI
         // Fields
         private GameObject currentTarget;
         private Vector2 idealPosition;
-        private Vector2 destination; //todo: no public
-        private Vector2 externalVelocity; //todo: no public
+        private Vector2 destination;
+        private Vector2 externalVelocity; 
+        private float damageTakenMultiplier = 1; // todo: probably wont need
+
 
         // Consts
         private readonly float HORIZONTAL_SHOOT_RANGE = 0.5f;
@@ -212,7 +209,7 @@ namespace Assets.Source.Components.AI
         private void CreateTimers()
         {
             shootTimer = gameObject.AddComponent<IntervalTimerComponent>();
-            shootTimer.SetInterval(shotFrequency);
+            shootTimer.SetInterval(shotDelay);
             shootTimer.AutoReset = true;
             shootTimer.Randomize = true;
             shootTimer.OnIntervalReached.AddListener(ShotTimerReached);

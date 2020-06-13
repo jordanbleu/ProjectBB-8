@@ -29,7 +29,7 @@ namespace Assets.Source.Components.Director.Base
 
         public override void ComponentAwake()
         {
-            Context = new LevelContext();
+            Context = new LevelContext(this);
             Context.BeginPhase(LevelRepository.FindStartPhase(level));
             base.ComponentAwake();
         }
@@ -65,9 +65,13 @@ namespace Assets.Source.Components.Director.Base
             
             Gizmos.color = Color.cyan;
             Gizmos.DrawLine(new Vector3(0, -boundaries.Height, 0), new Vector3(0, boundaries.Height, 0));
-            Gizmos.DrawLine(new Vector3(-boundaries.Width, 0, 0), new Vector3(boundaries.Width, 0, 0));
-            
+            Gizmos.DrawLine(new Vector3(-boundaries.Width, 0, 0), new Vector3(boundaries.Width, 0, 0));   
         }
+
+        // Expose this to the level phases.  Probably a smarter way to do this but oh well.
+        public GameObject FindCanvasObject() => FindOrCreateCanvas();
+
+        
 
     }
 }

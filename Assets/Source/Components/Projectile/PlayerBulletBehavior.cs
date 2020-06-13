@@ -1,13 +1,12 @@
 ﻿using Assets.Source.Components.Camera;
 using Assets.Source.Components.Projectile.Base;
-using Assets.Source.Components.Reactor.Interfaces;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using UnityEngine;
 
 namespace Assets.Source.Components.Projectile
 {
-    public class PlayerBulletBehavior : ProjectileComponentBase, IProjectileReactor
+    public class PlayerBulletBehavior : ProjectileComponentBase
     {
         private readonly float MOVE_SPEED = 6f;
 
@@ -27,13 +26,23 @@ namespace Assets.Source.Components.Projectile
             base.ComponentStart();
         }
 
-        public void ReactToProjectileHit(Collision2D collision, int baseDamage)
+        public override void ProjectileCollided(Collision2D collision)
         {
             // todo:  Eventaully to get the game to feel more satisfying we'll need to add impulse effects
-            //cameraEffect.TriggerImpulse1(); 
-            GameObject playerBulletExplosion = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/PlayerBulletExplosion");
-            InstantiateInLevel(playerBulletExplosion, transform.position);
-            Destroy(gameObject);
+            //cameraEffect.TriggerImpulse1();
+            
+            string colliderObjectName = collision.collider.name;
+            string parentColliderObjectName = collision.collider.transform.parent?.name;
+
+            if (!colliderObjectName.Equals(GameObjects.Actors.Player) && parentColliderObjectName != GameObjects.Actors.Player)
+            {
+                GameObject playerBulletExplosion = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/PlayerBulletExplosion");
+                InstantiateInLevel(playerBulletExplosion, transform.position);
+                Destroy(gameObject);
+                base.ProjectileCollided(collision);
+            }
         }
+
+        
     }
 }

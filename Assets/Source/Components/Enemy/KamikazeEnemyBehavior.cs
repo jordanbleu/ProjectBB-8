@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Source.Components.Enemy.Base;
+using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using UnityEngine;
@@ -10,6 +11,7 @@ namespace Assets.Source.Components.Enemy
     /// This enemy doesn't shoot at the player but charges straight at the player trying to smash into them for max damage. It will not
     /// dodge other obstacles or do anything else advanced, but it will rotate to face the enemy at all times.
     /// </summary>
+    [Obsolete("Use SuicideEnemyAIBehavior instead.")]
     public class KamikazeEnemyBehavior : EnemyAIBase
     {
         private readonly float MOVE_SPEED = 1.35f;
@@ -44,16 +46,14 @@ namespace Assets.Source.Components.Enemy
             UpdateExternalVelocity();
             base.ComponentUpdate();
         }
-
-        public override void ReactToHit(Collision2D collision, int baseDamage)
-        {
-        }
-
         public override void ReactToProjectileCollision(Collision2D collision)
         {
-            audioSource.PlayOneShot(explosionSound);
-            InstantiatePrefab(explosionPrefab, transform.position);
-            Destroy(gameObject);
+            if (collision.otherCollider.gameObject.name.Equals(GameObjects.Actors.Player))
+            {
+                audioSource.PlayOneShot(explosionSound);
+                InstantiatePrefab(explosionPrefab, transform.position);
+                Destroy(gameObject);
+            }
         }
 
         private void LookAtPlayer()
@@ -112,6 +112,11 @@ namespace Assets.Source.Components.Enemy
         {
             float expDistance = Mathf.Exp(currentDistance) - 0.4f;
             return Mathf.Clamp(expDistance, 0, MOVE_SPEED);
+        }
+
+        public override void ReactToHit(Collision2D collision, int baseDamage)
+        {
+            throw new NotImplementedException();
         }
     }
 }

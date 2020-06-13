@@ -11,6 +11,14 @@ namespace Assets.Source.Components.Projectile
         private readonly float MOVE_SPEED = 4.0f;
 
         protected override int BaseDamage => 20;
+        private GameObject explosionPrefab;
+
+        public override void ComponentAwake()
+        {
+            explosionPrefab = GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Explosions/EnemyBulletExplosion");            
+
+            base.ComponentAwake();
+        }
 
         public override void ComponentStart()
         {
@@ -20,9 +28,11 @@ namespace Assets.Source.Components.Projectile
 
         public void ReactToProjectileHit(Collision2D collision, int baseDamage)
         {
-            string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(GameObjects.Actors.ShooterEnemy) && !collisionName.Equals(GameObjects.Actors.KamikazeEnemy))
+            string collisionName = collision.otherCollider.gameObject.transform.parent.name;
+
+            if (collisionName.Equals(GameObjects.Actors.Player))
             {
+                InstantiateInLevel(explosionPrefab, transform.position);
                 Destroy(gameObject);
             }
         }

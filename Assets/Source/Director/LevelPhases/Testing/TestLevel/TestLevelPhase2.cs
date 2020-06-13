@@ -1,5 +1,5 @@
-﻿using Assets.Source.Components.Base;
-using Assets.Source.Components.Enemy;
+﻿using Assets.Source.Components.AI;
+using Assets.Source.Components.Base;
 using Assets.Source.Constants;
 using Assets.Source.Director.Interfaces;
 using System.Linq;
@@ -11,7 +11,7 @@ namespace Assets.Source.Director.Testing.TestLevel
     {
         public void PhaseBegin(ILevelContext context)
         {
-            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/{GameObjects.Actors.KamikazeEnemy}");
+            GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/Enemies{GameObjects.Actors.Kamikaze}");
             
             GameObject enemy1 = ComponentBase.InstantiateInLevel(enemy);
             enemy1.transform.position = new Vector3(1, 2f, 0);
@@ -28,7 +28,7 @@ namespace Assets.Source.Director.Testing.TestLevel
         
         public void PhaseUpdate(ILevelContext context)
         {
-            if (!UnityEngine.Object.FindObjectsOfType<KamikazeEnemyBehavior>().Any()) 
+            if (!Object.FindObjectsOfType<SuicideEnemyAIBehavior>().Any()) 
             {
                 context.FlagAsComplete();
             }

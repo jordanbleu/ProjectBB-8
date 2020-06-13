@@ -1,20 +1,20 @@
 ﻿using Assets.Source.Components.Actor;
+using Assets.Source.Components.Base;
 using Assets.Source.Components.Camera;
-using Assets.Source.Components.Projectile.Base;
+using Assets.Source.Components.Timer;
 using Assets.Source.Components.UI;
 using Assets.Source.Constants;
 using Assets.Source.Extensions;
 using Assets.Source.Input.Constants;
 using UnityEngine;
-using Assets.Source.Components.Timer;
 
 namespace Assets.Source.Components.Player
 {
-    public class PlayerBehavior : ProjectileComponentBase
+    public class PlayerBehavior : ComponentBase, IFriendlyTarget
     {
         private readonly float MOVE_SPEED = 2f;
         private readonly float STABILIZATION_RATE = 0.01f;
-        private readonly float DASH_DISTANCE = 1.5f; //TODO: make this a constant somewhere
+        private readonly float DASH_DISTANCE = 1.5f; 
         private readonly float DASH_COOLDOWN = 2000.0f; //milliseconds
         private readonly float SHOOT_COOLDOWN = 350.0f;
 
@@ -41,12 +41,10 @@ namespace Assets.Source.Components.Player
 
         // Physics
         private Vector2 externalVelocity;
-        private bool isInvulnerable = false;
+        private bool isInvincible = false;
 
         // Timers
         public IntervalTimerComponent ShootTimer { get; private set; }
-
-        protected override int BaseDamage => 100;
 
         public override void ComponentAwake()
         {
@@ -92,9 +90,11 @@ namespace Assets.Source.Components.Player
         public void ReactToHit(Collision2D collision, int baseDamage, float partDamageMultiplier)
         {
             string collisionName = collision.otherCollider.gameObject.name;
-            if (!collisionName.Equals(bulletPrefab.name) && !isInvulnerable)
+            if (!collisionName.Equals(bulletPrefab.name))
             {
-                actorBehavior.Health -= baseDamage;
+                if (!isInvincible) { 
+                    actorBehavior.Health -= baseDamage;
+                }
 
                 // Warn player if health is less than 10%
                 if (actorBehavior.Health > 0 && ((float)actorBehavior.Health / actorBehavior.MaxHealth) < 0.3f)
@@ -132,7 +132,7 @@ namespace Assets.Source.Components.Player
 
         private void UpdatePlayerControls()
         {
-            isInvulnerable = actorDashBehavior.IsDashing;
+            isInvincible = actorDashBehavior.IsDashing;
             // This returns a value between -1 and 1, which determines how much the player is moving the analog stick
             // in either direction.  For keyboard it just returns EITHER -1 or 1
             float horizontalMoveDelta = (InputManager.GetAxisValue(InputConstants.K_MOVE_RIGHT) * MOVE_SPEED) -
@@ -240,5 +240,6 @@ namespace Assets.Source.Components.Player
             if (externalVelocity.x.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(x: 0f); }
             if (externalVelocity.y.IsWithin(STABILIZATION_RATE, 0f)) { externalVelocity = externalVelocity.Copy(y: 0f); }
         }
+
     }
 }

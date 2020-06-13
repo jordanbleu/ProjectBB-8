@@ -1,4 +1,5 @@
-﻿using Assets.Source.Components.Director.Base;
+﻿using Assets.Source.Components.Audio;
+using Assets.Source.Components.Director.Base;
 using Assets.Source.Components.Exception;
 using Assets.Source.Components.SystemObject;
 using Assets.Source.Components.TextWriter;
@@ -190,7 +191,7 @@ namespace Assets.Source.Components.Base
         }
 
         /// <summary>
-        /// Call this method to immediately display a string of dialogue text, loaded via XML resource
+        /// Call this method to immediately display a string of dialogue text, loaded via XML resource.  Include the .xml at the end.
         /// </summary>
         /// <param name="stringsFile"></param>
         public static GameObject InitiateDialogueExchange(string stringsFile)
@@ -203,15 +204,19 @@ namespace Assets.Source.Components.Base
         }
 
         /// <summary>
+        /// If true, the player is viewing text dialog
+        /// </summary>
+        /// <returns></returns>
+        public static bool IsDialogueOpen() => ComponentExists<TextWriterComponent>() || ComponentExists<TextWriterPipelineComponent>();
+
+        /// <summary>
         /// Returns true if the specified component <typeparamref name="T"/> is active 
         /// on the hierarchy currently
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool ComponentExists<T>() where T : UnityEngine.Component
-        {
-            return FindObjectsOfType<T>().Any();
-        }
+        public static bool ComponentExists<T>() where T : Component => FindObjectsOfType<T>().Any();
+        
 
         #endregion
 
@@ -328,6 +333,14 @@ namespace Assets.Source.Components.Base
         {
             DirectorComponent[] directors = UnityEngine.Object.FindObjectsOfType<DirectorComponent>();
             return directors.Single().gameObject;
+        }
+
+        /// <summary>
+        /// Gets the music player component
+        /// </summary>
+        /// <returns></returns>
+        public static MusicPlayerComponent GetMusicPlayer() {
+            return GetRequiredComponent<MusicPlayerComponent>(FindLevelObject());        
         }
 
         /// <summary>

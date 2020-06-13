@@ -7,8 +7,10 @@
     {
         public static class Actors
         {
-            public const string KamikazeEnemy = "KamikazeEnemy";
-            public const string ShooterEnemy = "ShooterEnemy";
+            public const string KamikazeEnemy_DO_NOT_USE = "KamikazeEnemy";
+            public const string ShooterEnemy_DO_NOT_USE = "ShooterEnemy";
+            public const string Shooter = "Shooter_AI";
+            public const string Kamikaze = "Kamikaze_AI";
             public const string Player = "Player";
         }
 

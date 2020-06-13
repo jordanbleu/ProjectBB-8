@@ -11,6 +11,7 @@ namespace Assets.Source.Components.Enemy
     /// This enemy is basic enemy that will shoot at the player when close enough and shoots at a regular interval,
     /// it also gets stunned when hit by a projectile and has relatively low health.
     /// </summary>
+    [Obsolete]
     public class SimpleEnemyBehavior : EnemyAIBase
     {
         private readonly float MOVE_SPEED = 2.0f;

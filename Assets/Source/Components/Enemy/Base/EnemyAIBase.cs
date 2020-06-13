@@ -4,6 +4,7 @@ using Assets.Source.Components.Actor;
 using Assets.Source.Extensions;
 using Assets.Source.Components.Projectile.Base;
 using Assets.Source.Components.Reactor.Interfaces;
+using System;
 
 namespace Assets.Source.Components.Enemy.Base
 {
@@ -11,6 +12,7 @@ namespace Assets.Source.Components.Enemy.Base
     /// The base shared logic between all enemies. Also turns an enemy ship into a "projectile" so that if the player
     /// runs into an enemy they will collide
     /// </summary>
+    [Obsolete]
     public abstract class EnemyAIBase : ProjectileComponentBase, IProjectileReactor
     {
         private readonly float STABILIZATION_RATE = 0.01f;
@@ -97,7 +99,7 @@ namespace Assets.Source.Components.Enemy.Base
 
         public abstract void ReactToProjectileCollision(Collision2D collision);
 
-        public override void DestroyProjectile(Collision2D collision)
+        public override void ProjectileCollided(Collision2D collision)
         {
             ReactToProjectileCollision(collision);
         }

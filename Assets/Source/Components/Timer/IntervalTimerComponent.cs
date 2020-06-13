@@ -89,6 +89,7 @@ namespace Assets.Source.Components.Timer
         {
             Reset();
             this.interval = interval;
+            maxInterval = interval;
         }
 
         /// <summary>

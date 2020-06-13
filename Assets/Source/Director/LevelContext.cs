@@ -1,4 +1,7 @@
-﻿using Assets.Source.Director.Interfaces;
+﻿using Assets.Source.Components.Base;
+using Assets.Source.Components.Director.Base;
+using Assets.Source.Director.Interfaces;
+using UnityEngine;
 
 namespace Assets.Source.Director
 {
@@ -6,6 +9,11 @@ namespace Assets.Source.Director
     {
         public ILevelPhase CurrentPhase { get; private set; }
         public bool IsCompleted { get; private set; } = false;
+
+        private DirectorComponent director;
+        public LevelContext(DirectorComponent directorComponent) {
+            director = directorComponent;        
+        }
 
         public void CompletePhase()
         {
@@ -28,5 +36,7 @@ namespace Assets.Source.Director
             IsCompleted = false;
             CurrentPhase.PhaseBegin(this);
         }
+
+        public GameObject FindCanvas() => director.FindCanvasObject();
     }
 }

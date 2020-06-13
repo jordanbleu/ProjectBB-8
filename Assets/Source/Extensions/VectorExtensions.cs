@@ -70,5 +70,23 @@ namespace Assets.Source.Extensions
                 z: z ?? 0
             );
         }
+
+        /// <summary>
+        /// Returns true if <paramref name="otherPosition"/> is within a square of size <paramref name="boundarySize"/>
+        /// of <paramref name="thisPosition"/>
+        /// </summary>
+        public static bool IsWithin(this Vector2 thisPosition, Vector2 boundarySize, Vector2 otherPosition) 
+        {
+            // is x < otherposition-boundaries.x or x > otherposition+boundaries.x
+            if (!thisPosition.x.IsWithin(boundarySize.x, otherPosition.x)) {
+                return false;
+            }
+
+            if (!thisPosition.y.IsWithin(boundarySize.y, otherPosition.y)) {
+                return false;
+            }
+
+            return true;        
+        }
     }
 }

@@ -1,0 +1,32 @@
+﻿<strings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <string name="1">{avatar:id=player_glassesSpeak}Major...</string>
+  <string name="2">{avatar:id=player_glassesSpeak}Major do you read me?</string>
+  <string name="3">{avatar:id=major_normalSpeak}Loud and clear, Commander Pelican.</string>
+  <string name="4">{avatar:id=player_glassesSpeak}I'm approaching the {color:hex=#4B9410}Reptid Colony.{endcolor}  What's this mission about, anyway?</string>
+  <string name="5">{avatar:id=major_normalSpeak}Nothing special.  Our plasma sensors have picked up a large amount of activity in this quadrant.</string>
+  <string name="6">{avatar:id=major_normalSpeak}We don't suspect any foul play.  Should be a pretty boring mission.</string>
+  <string name="7">{avatar:id=player_glassesSpeak}Then why the hell do you need me here?  Can't one of these other idiots do it?</string>
+  <string name="8">{avatar:id=major_normalSpeak}These rookies are fresh out of training.  We figured they could learn a lot from working with a legend like you.</string>
+  <string name="9">{avatar:id=major_normalSpeak}And, besides, it's not like you've been very busy lately.</string>
+  <string name="10">{avatar:id=player_glassesSpeak}Well, they better just stay out of my way.</string>
+  <string name="11">{avatar:id=major_normalSpeak}I'm sure they will do fine, Commander.</string>
+  <string name="12">{avatar:id=major_normalSpeak}Now, I supposed I should introduce you to your two mission advisors.</string>
+  <string name="13">{avatar:id=player_glassesSpeak}Ugh...I've got advisors too?  Do the Galactic Space Pilots have too much money to burn?</string>
+  <string name="14">{avatar:id=major_normalSpeak}Its simply a formality.  Anyway...</string>
+  <string name="15">{avatar:id=major_normalSpeak}Commander Pelican, meet {color:hex=#EB1A45}Lee{endcolor}, Your technical advisor.</string>
+  <string name="16">{avatar:id=technician_normalSpeak}What's happening, commander?  The name is Lee.  I'm here to make sure you don't do anything stupid with that ship of yours.</string>
+  <string name="17">{avatar:id=technician_normalSpeak}Damn thing cost over 9 million credits.</string>
+  <string name="18">{avatar:id=player_glassesSpeak}I'll see what I can do.</string>
+  <string name="19">{avatar:id=major_normalSpeak}Now, Commander, I'd like to introduce you to your health advisor, {color:hex=#FA4EED}Nurse Mary.{endcolor}</string>
+  <string name="20">{avatar:id=sexyNurse_normalSpeak}Commander it's...an honor to meet you.  I've heard so many stories about you</string>
+  <string name="21">{avatar:id=player_glassesSpeak}Nurse Mary, huh...</string>
+  <string name="22">{avatar:id=player_glassesSpeak}Major, how the hell can I trust this woman to keep me alive...</string>
+  <string name="23">{avatar:id=player_glassesSpeak}...when she's so {color:hex=#FA4EED}drop dead gorgeous.{endcolor}</string>
+  <string name="24">{avatar:id=sexyNurse_normalSpeak}Oh, Commander!  I...can't believe such a legendary space pilot like yourself is...flirting with me!</string>
+  <string name="25">{avatar:id=major_normalSpeak}Uhh...right.  Well, uh.  Anyway, back to the mission.  </string>
+  <string name="26">{avatar:id=major_normalSpeak}Like I said before, nothing out of the ordinary.  Simply do a fly by and check things out.</string>
+  <string name="27">{avatar:id=technician_normalSpeak}Might wanna look alive, Commander.  Looks like we've got asteroids ahead.</string>
+  <string name="28">{avatar:id=technician_normalSpeak}You can fly around them or blast them, just keep an eye on your ammo in the top left of your HUD.</string>
+  <string name="29">{avatar:id=technician_normalSpeak}If things get hairy, you can also dash left or right using the dash buttons.</string>
+  <string name="30">{avatar:id=technician_normalSpeak}Good luck out there.</string>
+</strings>

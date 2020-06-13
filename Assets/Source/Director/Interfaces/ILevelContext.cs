@@ -1,4 +1,7 @@
-﻿namespace Assets.Source.Director.Interfaces
+﻿
+using UnityEngine;
+
+namespace Assets.Source.Director.Interfaces
 {
     public interface ILevelContext
     {
@@ -19,7 +22,7 @@
         void UpdatePhase();
 
         /// <summary>
-        /// Calls the current phase's complete method
+        /// Calls the current phase's complete method.  SHOULD ONLY BE CALLED IN THE LEVEL DIRECTOR
         /// </summary>
         void CompletePhase();
 
@@ -34,6 +37,14 @@
         /// should be called when ready
         /// </summary>
         void FlagAsComplete();
+
+        /// <summary>
+        /// Instantiate a game object in the level
+        /// </summary>
+        /// <param name="prefab"></param>
+        /// <param name="position"></param>
+        GameObject FindCanvas();
+
 
     }
 }

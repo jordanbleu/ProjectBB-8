@@ -1,4 +1,6 @@
-﻿using Assets.Source.Components.Base;
+﻿using Assets.Source.Components.AI;
+using Assets.Source.Components.Audio;
+using Assets.Source.Components.Base;
 using Assets.Source.Components.Enemy;
 using Assets.Source.Components.Spawner;
 using Assets.Source.Components.Timer;
@@ -34,9 +36,9 @@ namespace Assets.Source.Director.Testing.TestLevel
             GameObject enemy = ComponentBase.GetRequiredResource<GameObject>($"{ResourcePaths.PrefabsFolder}/Actors/Enemies/Shooter_AI");
             
             GameObject inst = ComponentBase.InstantiateInLevel(enemy);
-            inst.transform.position = new Vector3(0, 1.5f, 1);
+            inst.transform.position = new Vector3(-2, 3f, 3);
             GameObject inst2 = ComponentBase.InstantiateInLevel(enemy);
-            inst2.transform.position = new Vector3(1, -1, 2);
+            inst2.transform.position = new Vector3(2, 3, 4);
 
             // A formation will spawn after a while 
             intervalTimerObject = new GameObject("FormationSpawnTimer");
@@ -48,6 +50,9 @@ namespace Assets.Source.Director.Testing.TestLevel
             timer.SelfDestruct = true;
             timer.IsActive = true;
 
+            // Play some dank tunes
+            ComponentBase.GetMusicPlayer().Loop(MusicPlayerComponent.Song.Prototype);
+
         }
 
 
@@ -58,7 +63,7 @@ namespace Assets.Source.Director.Testing.TestLevel
             if (intervalReached)
             {
                 // Check to see if any enemies exist 
-                if (!ComponentBase.ComponentExists<SimpleEnemyBehavior>() && flyingVObject == null)
+                if (!ComponentBase.ComponentExists<ShooterEnemyAIBehavior>() && flyingVObject == null)
                 {
                     // todo: prevent from calling complete phase directly
                     context.FlagAsComplete();

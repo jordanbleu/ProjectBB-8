@@ -1,4 +1,5 @@
 ﻿using Assets.Source.Director.Interfaces;
+using Assets.Source.Director.LevelPhases.Demo;
 using Assets.Source.Director.LevelPhases.Sandbox;
 using Assets.Source.Director.Testing.TestLevel;
 using System;
@@ -16,7 +17,7 @@ namespace Assets.Source.Director.Enums
         {
             TestLevel = 0,
             EmptySandBox  = 1,
-            Level_02  = 2,
+            DemoLevel  = 2,
         }
 
         public static ILevelPhase FindStartPhase(Level level) 
@@ -29,7 +30,8 @@ namespace Assets.Source.Director.Enums
                     return new TestLevelPhase1();
                 case Level.EmptySandBox:
                     return new EmptyLevelPhase();
-                case Level.Level_02:
+                case Level.DemoLevel:
+                    return new DP_000_IntroFadeIn();
                 default:
                     throw new ArgumentException($"The specified level {level.ToString()} does not return a " +
                         $"start phase in the LevelRespository.FindStartPhase() method.", nameof(level));
